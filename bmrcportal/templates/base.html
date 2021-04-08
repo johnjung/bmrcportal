@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>BMRC Portal</title>
+  <link href="/css/bmrc.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+  <!--CONTAINER-->
+  <div id="container">
+    <!--HEADER-->
+    <div id="header">
+      <h1><a href="/">BMRC Portal</a></h1>
+
+      <p id="breadcrumbs">
+        {% for crumb in breadcrumbs %}
+          {% if loop.last %}
+              <span>{{ crumb[1] }}</span>
+          {% else %}
+              <span><a href="{{ crumb[0] }}">{{ crumb[1] }}</a></span> |
+          {% endif %}
+        {% endfor %}
+      </p>
+    </div>
+
+    <!--SIDEBAR-->
+    <div id="sidebar">
+      <h2>Refine Your Search</h2>
+
+      {% if search_results['search-results-institutions'] %}
+        <div class="facet">
+          <h3><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2Finstitutions%2F&{{ get_url_params(search_results) }}">Institutions (all)</a></h3>
+          <ul>
+            {% for c in search_results['search-results-institutions'] %}
+              <li><a href="/search/?{{ add_facet_to_url_params(c[0], search_results) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if search_results['search-results-topics'] %}
+        <div class="facet">
+          <h3><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2Ftopics%2F&{{ get_url_params(search_results) }}">Topics (all)</a></h3>
+          <ul>
+            {% for c in search_results['search-results-topics'] %}
+              <li><a href="/search/?{{ add_facet_to_url_params(c[0], search_results) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if search_results['search-results-places'] %}
+        <div class="facet">
+          <h3><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2Fplaces%2F&{{ get_url_params(search_results) }}">Place (all)</a></h3>
+          <ul>
+            {% for c in search_results['search-results-places'] %}
+              <li><a href="/search/?{{ add_facet_to_url_params(c[0], search_results) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if search_results['search-results-decades'] %}
+        <div class="facet">
+          <h3><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2Fdecades%2F&{{ get_url_params(search_results) }}">Decade (all)</a></h3>
+          <ul>
+            {% for c in search_results['search-results-decades'] %}
+              <li><a href="/search/?{{ add_facet_to_url_params(c[0], search_results) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  
+    <!--CONTENT-->
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+  
+    <!--FOOTER-->
+    <div id="footer">
+      <p>&#169; 2021. For more information, please contact the Black Metropolis
+  Research Consortium at <a
+  href="mailto:bmrc@uchicago.edu">bmrc@uchicago.edu</a>.  Site co-developed and
+  hosted by <a href="http://www.lib.uchicago.edu/">The University of Chicago
+  Library</a> and the <a href="https://bmrc.lib.uchicago.edu">BMRC.</a> </p>
+    </div>
+  </div>
+</body>
+
+</html>

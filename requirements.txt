@@ -1,0 +1,7 @@
+docopt
+flask
+lxml
+pysocks
+requests
+requests_cache
+requests_toolbelt

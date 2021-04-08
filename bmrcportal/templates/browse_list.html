@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <ul>
+  {% for uri_part, link_text in browse_list %}
+    <li><a href="{{ uri_part }}">{{ link_text }}</a></li>
+  {% endfor %}
+  <ul>
+
+{% endblock %}

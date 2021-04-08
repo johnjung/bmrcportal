@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <ul>
+  {% for uri_part, link_text, count in browse_results %}
+    <li><a href="/browse/{{ uri_part }}">{{ link_text }} ({{ count }})</a></li>
+  {% endfor %}
+  <ul>
+
+{% endblock %}

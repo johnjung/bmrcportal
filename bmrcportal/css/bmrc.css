@@ -1,0 +1,205 @@
+@import url("https://fonts.googleapis.com/css?family=Muli:300,400,700&display=swap");
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*
+ * MAIN
+ */ 
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+    color: rgb(7, 84, 136);
+}
+
+body {
+    font-family: 'Muli', serif;
+    line-height: 1.375rem;
+    padding: 1.375rem;
+}
+div#results_header span.previous_next {
+    float: right;
+}
+div#results_header span.previous_next * {
+    float: left;
+    margin-left: 2px;
+}
+div#results_header a:link,
+div#results_header a:visited,
+div#results_header a:hover,
+div#results_header a:active {
+    background-color: rgb(179, 203, 219);
+    color: black;
+    padding: .25rem .5rem;
+    text-decoration: none;
+}
+div#results_header a.previous,
+div#results_header span.previous {
+    border-radius: .5rem 0 0 .5rem;
+}
+div#results_header a.next,
+div#results_header span.next {
+    border-radius: 0 .5rem .5rem 0;
+}
+div#results_header span.previous,
+div#results_header span.next {
+    background-color: rgb(237, 237, 237);
+    padding: .25rem .5rem;
+}
+div#results_header h1 {
+    display: inline;
+}
+
+div#container {
+    display: grid;
+    grid-column-gap: 2.75rem;
+    grid-template-columns: 25% auto;
+    grid-template-rows: min-content auto min-content;
+    row-gap: 1.375rem;
+}
+div.facet {
+    background-color: rgb(237, 237, 237);
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    padding: .5rem;
+}
+div.facet a:link,
+div.facet a:visited,
+div.facet a:hover,
+div.facet a:active {
+    text-decoration: none;
+}
+div.facet h3 {
+    border-bottom: 2px solid white;
+    margin-bottom: .5rem;
+    padding-bottom: .5rem;
+}
+div.facet ul {
+    margin-bottom: 0;
+}
+div.facet li {
+    padding: .25rem;
+    text-indent: -.25rem;
+}
+div#header {
+    grid-column: 1 / 3;
+}
+div#header div,
+div#header li,
+div#header ul {
+    display: block;
+}
+div#sidebar {
+}
+div#content {
+}
+div#footer {
+    grid-column: 1 / 3;
+}
+
+h1 {
+    font-weight: bold;
+}
+div#header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+div#header h1 a:link,
+div#header h1 a:visited,
+div#header h1 a:hover,
+div#header h1 a:active {
+    text-decoration: none;
+}
+h2 {
+    text-transform: uppercase;
+    margin-bottom: 1.375rem;
+}
+h3 {
+    font-weight: bold;
+    margin-bottom: 1.375rem;
+}
+ol {
+    list-style: decimal;
+}
+p {
+    margin-bottom: 1.375rem;
+}
+p#facets {
+    margin-top: 0.6875rem;
+}
+p#facets span {
+    background-color: rgb(40, 82, 114);
+    border-radius: .5rem;
+    color: white;
+    padding: .25rem .5rem;
+}
+p#facets span a {
+    border-left: 2px solid white;
+    color: inherit;
+    padding-left: .25rem;
+    text-decoration: none;
+}
+p.tags {
+    line-height: 2.75rem;
+}
+span.tag {
+    background-color: rgb(237, 237, 237);
+    border-radius: .5rem;
+    margin-bottom: 1rem;
+    margin-right: .5rem;
+    padding: .5rem;
+    white-space: nowrap;
+}
+ul {
+    margin-bottom: 1.375rem;
+}
+

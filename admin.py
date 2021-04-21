@@ -1,22 +1,26 @@
 #!/usr/bin/env python
 """Usage:
+    admin.py --browse-archives
     admin.py --browse-collections
     admin.py --browse-collection <collection>
-    admin.py --browse-corpnames
     admin.py --browse-decades
-    admin.py --browse-institutions
+    admin.py --browse-organizations
     admin.py --browse-people
     admin.py --browse-places
     admin.py --browse-topics
     admin.py --clear-cache
     admin.py --delete-finding-aid <uri>
     admin.py --delete-all-finding-aids
+    admin.py --get-collection [--doc=<doc> ...] <b> <sort> <limit>
+    admin.py --get-collection-document-matrix
     admin.py --get-finding-aid <uri>
     admin.py --load-finding-aids <dir>
     admin.py --search <search> <start> [--browse <browse>] [--collection <collection>]... 
 """
 
 # search- 
+# admin.py --get-collection [--doc=<doc> ...] [--collection=<collection> ...] <b> <sort> <limit> <count-all-docs>
+# <b> <sort> <limit> <count-all-docs>
 
 # within one or more collections.
 # within 
@@ -30,10 +34,11 @@ import io, json, os, re, sys, textwrap, urllib
 import xml.etree.ElementTree as ElementTree
 import lxml.etree as etree
 from docopt import docopt
-from bmrcportal import (clear_cache, delete_findingaid,
+from bmrcportal import (clear_cache, delete_findingaid, get_collection,
+                        get_collection_document_matrix,
                         get_collections_for_xml, get_decades_for_xml,
                         get_findingaid, get_collections,
-                        get_institutions_for_xml, get_search, load_findingaid,
+                        get_archives_for_xml, get_search, load_findingaid,
                         setup_cache)
 
 ElementTree.register_namespace('', 'urn:isbn:1-931666-22-9')
@@ -75,24 +80,18 @@ if __name__ == '__main__':
         sys.exit()
 
     browse_namespaces = {
+        '--browse-archives': 'https://bmrc.lib.uchicago.edu/archives/',
         '--browse-collection': 'https://bmrc.lib.uchicago.edu/',
         '--browse-collections': 'https://bmrc.lib.uchicago.edu/',
-        '--browse-corpnames': 'https://bmrc.lib.uchicago.edu/corpnames/',
         '--browse-decades': 'https://bmrc.lib.uchicago.edu/decades/',
-        '--browse-institutions': 'https://bmrc.lib.uchicago.edu/institutions/',
+        '--browse-organizations': 'https://bmrc.lib.uchicago.edu/corpnames/',
         '--browse-people': 'https://bmrc.lib.uchicago.edu/people/',
         '--browse-places': 'https://bmrc.lib.uchicago.edu/places/',
         '--browse-topics': 'https://bmrc.lib.uchicago.edu/topics/'
     }
 
-    # load for browses or other commands that require them.
-    for n in browse_namespaces.keys():
-        if args[n]:
-            collections = get_collections(*server_args + (browse_namespaces[n],))
     if args['--delete-all-finding-aids']:
-        collections = get_collections(*server_args + ('https://bmrc.lib.uchicago.edu/institutions/',))
-    if args['--search']:
-        collections = get_collections(*server_args + ('https://bmrc.lib.uchicago.edu/',))
+        collections = get_collections(*server_args + ('https://bmrc.lib.uchicago.edu/archives/',))
 
     if args['--browse-collection']:
         print(json.dumps(collections[args['<collection>']]))
@@ -106,16 +105,30 @@ if __name__ == '__main__':
             for findingaid in findingaids:
                 print('DELETING {}...'.format(findingaid[0]))
                 delete_findingaid(*server_args + (findingaid[0],))
+    elif args['--get-collection']:
+        print(
+            json.dumps(
+                get_collection(
+                    *server_args,
+                    args['--doc'],
+                    args['<b>'],
+                    args['<sort>'],
+                    args['<limit>']
+                )
+            )
+        )
+    elif args['--get-collection-document-matrix']:
+        print(json.dumps(get_collection_document_matrix(*server_args)))
     elif args['--get-finding-aid']:
         xml = get_findingaid(*server_args + (args['<uri>'],))
         # Use ElementTree here, rather than lxml, to output XML with a default
         # namespace.
         print(ElementTree.tostring(xml, encoding='utf8', method='xml').decode('utf-8'))
     elif args['--load-finding-aids']:
-        print('Building corporate name browse...')
-        corpnames = get_collections_for_xml(
+        print('Building organization name browse...')
+        organizations = get_collections_for_xml(
             args['<dir>'],
-            'https://bmrc.lib.uchicago.edu/corpnames/{}',
+            'https://bmrc.lib.uchicago.edu/organizations/{}',
             '//ead:corpname',
             {'ead': 'urn:isbn:1-931666-22-9'}
         )
@@ -124,10 +137,10 @@ if __name__ == '__main__':
             args['<dir>'],
             'https://bmrc.lib.uchicago.edu/decades/{}'
         )
-        print('Building institution browse...')
-        institutions = get_institutions_for_xml(
+        print('Building archives browse...')
+        archives = get_archives_for_xml(
             args['<dir>'],
-            'https://bmrc.lib.uchicago.edu/institutions/{}'
+            'https://bmrc.lib.uchicago.edu/archives/{}'
         )
         print('Building person browse...')
         people = get_collections_for_xml(
@@ -158,7 +171,7 @@ if __name__ == '__main__':
             )),
             {'ead': 'urn:isbn:1-931666-22-9'}
         )
-        browses = {**corpnames, **decades, **institutions, **people, **places, **topics}
+        browses = {**archives, **decades, **organizations, **people, **places, **topics}
 
         transform_xsd = etree.XSLT(
             etree.parse(
@@ -204,10 +217,10 @@ if __name__ == '__main__':
                     )
     elif args['--search']:
         if not args['<collection>']:
-            args['<collection>'] = ['https://bmrc.lib.uchicago.edu/institutions/BMRC+Portal']
+            args['<collection>'] = ['https://bmrc.lib.uchicago.edu/archives/BMRC+Portal']
 
         results = get_search(
-            *server_args + (args['<search>'], args['<start>'], args['<collection>'], args['<browse>'] or '')
+            *server_args + (args['<search>'], 'relevance', args['<start>'], args['<collection>'], args['<browse>'] or '')
         )
 
         print(json.dumps(results))
@@ -227,11 +240,11 @@ if __name__ == '__main__':
 
             # get institution from collections.
             for collection in result['collections']:
-                if collection.startswith('https://bmrc.lib.uchicago.edu/institutions/') \
-                   and not collection == 'https://bmrc.lib.uchicago.edu/institutions/BMRC+Portal':
+                if collection.startswith('https://bmrc.lib.uchicago.edu/archives/') \
+                   and not collection == 'https://bmrc.lib.uchicago.edu/archives/BMRC+Portal':
                     print(
                         urllib.parse.unquote_plus(
-                            collection.replace('https://bmrc.lib.uchicago.edu/institutions/', '')
+                            collection.replace('https://bmrc.lib.uchicago.edu/archives/', '')
                         )
                     )
             print(result['title'])
@@ -243,7 +256,7 @@ if __name__ == '__main__':
             print('\n'.join(textwrap.wrap(result['abstract'])))
             print('')
 
-            # get all collections other than institutions.
+            # get all collections other than archives.
             collection_output = {
                 'corpnames': [],
                 'decades': [],
@@ -254,7 +267,7 @@ if __name__ == '__main__':
 
             for collection in sorted(result['collections']):
                 output = []
-                if not collection.startswith('https://bmrc.lib.uchicago.edu/institutions/') and \
+                if not collection.startswith('https://bmrc.lib.uchicago.edu/archives/') and \
                    len(collections[collection]) > 1:
                     collection_type = collection.split('/')[3]
                     collection_label = urllib.parse.unquote_plus(

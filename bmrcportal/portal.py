@@ -1,8 +1,8 @@
 import jinja2, json, os, urllib, urllib.parse, re, sys
 import lxml.etree as etree
 import xml.etree.ElementTree as ElementTree
-from flask import current_app, Flask, render_template, request, send_from_directory
-from __init__ import get_collections, get_findingaid, get_search
+from flask import current_app, Flask, jsonify, render_template, request, send_from_directory
+from __init__ import get_collection, get_collections, get_findingaid, get_search
 
 app = Flask(__name__, static_url_path='')
 
@@ -30,67 +30,63 @@ def utility_processor():
             params.append(('f', c[0]))
         return urllib.parse.urlencode(params)
 
-    def add_facet_to_url_params(f, search_results):
+    def add_to_url_params(search_results, d):
         """
-        Add a specific facet to the current URL params.
+        Add a parameter to the current url params.
 
         Args:
-           f:              facet URI to add.
            search_results: object returned from MarkLogic.
+           d:              a dictionary, where the keys are parameters to add.
 
         Returns:
            a URL query string.
         """
 
         params = []
+        if search_results['b']:
+            p = ('b', search_results['b'])
+            if not p in params:
+                params.append(p)
         if search_results['q']:
             params.append(('q', search_results['q']))
         for c in search_results['collections-active']:
             params.append(('f', c[0]))
-        params.append(('f', f))
+        for k, v in d.items():
+            params.append((k, v))
         return urllib.parse.urlencode(params)
 
-    def remove_facet_from_url_params(f, search_results):
+    def remove_from_url_params(search_results, d):
         """
         Remove a specific facet from the current URL params.
 
         Args:
-           f:           a query string.
            search_results: object returned from MarkLogic.
+           d:              dictionary, where the key is the parameter to remove.
 
         Returns:
             a URL query string.
         """
         params = []
-        if search_results['q']:
+        if 'b' in d and d['b'] == search_results['b']:
+            pass
+        elif search_results['b']:
+            params.append(('b', search_results['b']))
+        if 'q' in d and d['q'] == search_results['q']:
+            pass
+        elif search_results['q']:
             params.append(('q', search_results['q']))
         for c in search_results['collections-active']:
-            if f == c[0]:
+            if 'f' in d and d['f'] == c[0]:
                 continue
             else:
                 params.append(('f', c[0]))
         return urllib.parse.urlencode(params)
 
-    def remove_q_from_url_params(search_results):
-        """
-        Remove the query from the current URL params.
-
-        Args:
-           search_results: object returned from MarkLogic.
-
-        Returns:
-            a URL query string.
-        """
-        return urllib.parse.urlencode(
-            [('f', c[0]) for c in search_results['collections-active']]
-        )
-
     return dict(
-        add_facet_to_url_params = add_facet_to_url_params,
+        add_to_url_params = add_to_url_params,
         get_url_params = get_url_params,
         quote_plus = quote_plus,
-        remove_facet_from_url_params = remove_facet_from_url_params,
-        remove_q_from_url_params = remove_q_from_url_params
+        remove_from_url_params = remove_from_url_params,
     )
     
 # GLOBAL VARIABLES
@@ -113,6 +109,7 @@ def homepage():
     search_results = get_search(
         *server_args + (
             q,
+            'relevance',
             start,
             collections,
             ''
@@ -121,7 +118,9 @@ def homepage():
 
     return render_template(
         'homepage.html', 
-        breadcrumbs = [],
+        breadcrumbs = [
+            ('/', 'Home')
+        ],
         search_results = search_results
     )
 
@@ -132,11 +131,19 @@ def search():
     b = request.args.get('b', default='', type=str)
     collections = request.args.getlist('f')
     q = request.args.get('q', default='', type=str)
+    sort = request.args.get('sort', default='', type=str)
     start = request.args.get('start', default=1, type=int)
+
+    if sort == '':
+        if q == '':
+            sort = 'alpha'
+        else:
+            sort = 'relevance'
 
     search_results = get_search(
         *server_args + (
             q,
+            sort,
             start,
             collections,
             b
@@ -190,9 +197,29 @@ def view():
         findingaid_html = findingaid_html
     )
 
+@app.route('/sidebar/<string:starts_with>', methods = ['POST'])
+def sidebar(starts_with):
+    # how to get docs? did that come in via POST?
+    docs = request.json['docs']
+
+    collection = get_collection(
+        *server_args + (
+            docs,
+            'https://bmrc.lib.uchicago.edu/{}/'.format(starts_with),
+            'relevance_dsc',
+            3
+        )
+    )
+
+    return jsonify(collection)
+
 @app.route('/css/<path:path>')
 def css(path):
     return send_from_directory('css', path)
+
+@app.route('/js/<path:path>')
+def js(path):
+    return send_from_directory('js', path)
 
 if __name__ == '__main__':
     app.run(debug=True)

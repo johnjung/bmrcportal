@@ -1,5 +1,3 @@
-creating a cool prototype for BMRC
-
 ## Loading Finding Aids
 
 There is a 
@@ -74,28 +72,22 @@ for $x in fn:doc()
 let $title_elements := ($x//ead:titleproper/text())[1]
 return (fn:document-uri($x), fn:normalize-space(fn:string-join($title_elements, ' ')))
 
+COMPARE THESE SITES
 
+https://explore.chicagocollections.org/
+https://amistad-finding-aids.tulane.edu/
+https://researchworks.oclc.org/archivegrid/
+https://archives.lib.duke.edu/
+http://dla.library.upenn.edu/dla/pacscl/index.html
+https://rmoa.unm.edu/
+https://archives-library.wcsu.edu/cao/
+https://cdlib.org/
+http://catalog.rockhall.com/
+https://www.roosevelt.edu/library
+https://www.riamco.org/
+https://findingaids.library.northwestern.edu/
+http://cbmr-webapps.colum.edu/archon/
 
+BOX LINK:
+https://uchicago.box.com/s/xehva2kfd2ra0b5ek95lc4s694phy0uq
 
-Here are some sites though, that I think are promising exemplars for our Top 10:
-Chicago Collections Consortium Explore (of course) - ECC | Discover the History and Culture of Chicago (chicagocollections.org)
-Amistad Research Center at Tulane - ArchivesSpace Public Interface | Amistad Research Center (tulane.edu)
-ArchiveGrid - ArchiveGrid (oclc.org)
-Duke University - Archives & Manuscripts at Duke University Libraries an ArcLight site I think
-Philadelphia Area Archives Research Portal - the PAARP! Philadelphia Area Archives Research Portal (PAARP) (upenn.edu)
-Rocky Mountain Online Archive - Rocky Mountain Online Archive (unm.edu) Kind of basic, but gets it done
-Connecticut's Online Archives - the big CAO - CAO - by ArcLight (wcsu.edu) 
-Online Archive of California - Browse Collections (0-9), Online Archive of California (cdlib.org)
-Just for fun - another ArchivesSpace site - they are cookie cutter to some degree - Battling Tops (Game) | The Strong (museumofplay.org)
-Rock Hall - Rock and Roll Hall of Fame and Museum | Library and Archives | Catalog Search Results (rockhall.com) they use a Fedora/Hydra/Samvera stack I think
-Roosevelt University Archives - University Archives Location, Information and Resources | Roosevelt University - uses Cuadra product
-Rhode Island Archival and Manuscript Collections Online - RIAMCO
-Northwestern uses ArchivesSpace -- the look and functions are identical to the A-SPace sites above. Ditto University of Virginia, Uof Minnesota ArchivesSpace Public Interface | University of Minnesota Archival Collections Guides (umn.edu) and many more...
-
-I can't believe people still are using Archon -- like me at my last workplace. 🙂 Cushing Library (tamu.edu) and CBMR http://cbmr-webapps.colum.edu/archon/ Compare!
-
-Tufts' Digital Library kindly provides their tech stack for your delectation. Show Page // Tufts Digital Library
-
-Anyway, that's all for now. I will continue my analysis of these comparable sites. It's quite instructive! I'm a bit sorry to say that few so far use breadcrumbs. The crumb-like "Return to search results" at top left could help thought if we decide to ditch the whole crumby idea.
-Cheers,
-Laurie

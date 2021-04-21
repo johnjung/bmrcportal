@@ -52,8 +52,8 @@ def get_transformed_xml(fname):
         ) as fh:
             return ElementTree.parse(fh)
 
-def get_institutions_for_xml(dir, uri_format_str):
-    institution_lookup = {
+def get_archives_for_xml(dir, uri_format_str):
+    archive_lookup = {
         'bmrcportal':  'BMRC Portal',
         'bronzeville': 'Bronzeville Historical',
         'cbmr':        'CBMR',
@@ -97,12 +97,12 @@ def get_institutions_for_xml(dir, uri_format_str):
     bmrc_uri = uri_format_str.format(
         urllib.parse.quote_plus('BMRC Portal')
     )
-    institutions = {
+    archives = {
         bmrc_uri: []
     }
 
     for d in os.listdir(dir): 
-        assert d in institution_lookup.keys()
+        assert d in archive_lookup.keys()
 
         for eadid in os.listdir(os.path.join(dir, d)):
             try:
@@ -117,14 +117,14 @@ def get_institutions_for_xml(dir, uri_format_str):
             assert xml.tag == '{urn:isbn:1-931666-22-9}ead'
 
             uri = uri_format_str.format(
-                urllib.parse.quote_plus(institution_lookup[d])
+                urllib.parse.quote_plus(archive_lookup[d])
             )
-            if not uri in institutions:
-                institutions[uri] = []
-            institutions[uri].append(eadid)
-            institutions[bmrc_uri].append(eadid)
+            if not uri in archives:
+                archives[uri] = []
+            archives[uri].append(eadid)
+            archives[bmrc_uri].append(eadid)
 
-    return institutions
+    return archives
 
 def get_collections_for_xml(dir, uri_format_str, xpath, namespaces):
     '''Process finding aids to get Marklogic collection data for browses.
@@ -402,6 +402,89 @@ def load_findingaid(server, username, password, proxy_server, fh, uri, collectio
 
     assert r.status_code in (201, 204)
 
+def get_collection(server, username, password, proxy_server, docs, b, sort, limit):
+    """Get collections and finding aids from Marklogic.
+
+    Args:
+        server:          The Marklogic server, with port number. 
+        username:        Username for Marklogic.
+        password:        Password for Marklogic.
+        proxy_server:    A proxy server for connecting to Marklogic (You may
+                         find this useful for local development.)
+        docs:            Get collections for this list of documents. 
+        b:               Search for collections beginning with this string.
+        sort:            Sort.
+        limit:           Limit.
+
+    Returns:
+        Returns a dictionary, where keys are the short identifier for a
+        collection (e.g. "chm", for the Chicago History Museum.) Each key
+        includes an array of finding aids, where each element itself contains
+        an array with two values. The first is an identifier for the finding
+        aid, and the second is a title string.
+
+        E.g.:
+        {
+            "bronzeville": [
+                [
+                    "bronzeville/finding_aid_identifier_1",
+                    "Bronzeville Finding Aid #1 Title"
+                ],
+                [
+                    "bronzeville/finding_aid_identifier_2",
+                    "Bronzeville Finding Aid #2 Title"
+                ]
+            ],
+            "chm": [
+                [
+                    "chm/finding_aid_identifier_1",
+                    "Chicago History Museum Finding Aid #1 Title"
+                ],
+                [
+                    "chm/finding_aid_identifier_2",
+                    "Chicago History Museum Finding Aid #2 Title"
+                ]
+            ],
+        }
+    """
+    #setup_cache()
+
+    with open(
+        os.path.join(
+            os.path.dirname(__file__),
+            'xquery',
+            'get_collection.xqy'
+        )
+    ) as f:
+        r = requests.post(
+            '{}/v1/eval'.format(
+                server
+            ),
+            auth = (username, password),
+            data = {
+                'vars': json.dumps({'b': b, 'docs': docs, 'sort': sort, 'limit': limit}),
+                'xquery': f.read()
+            },
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            proxies={
+                'http': 'socks5://{}'.format(proxy_server),
+                'https': 'socks5://{}'.format(proxy_server)
+            }
+        )
+
+    try:
+        multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
+    except requests_toolbelt.multipart.decoder.NonMultipartContentTypeException:
+        print(r.content)
+        sys.exit()
+    try:  
+        return json.loads(multipart_data.parts[0].content.decode('utf-8'))
+    except json.decoder.JSONDecodeError:
+        print(r.content)
+        sys.exit()
+
 def get_collections(server, username, password, proxy_server, collection):
     """Get collections and finding aids from Marklogic.
 
@@ -474,7 +557,47 @@ def get_collections(server, username, password, proxy_server, collection):
     multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
     return json.loads(multipart_data.parts[0].content)
 
-def get_search(server, username, password, proxy_server, q, start, collections, b):
+def get_collection_document_matrix(server, username, password, proxy_server):
+    """Get collections and finding aids from Marklogic.
+
+    Args:
+        server:          The Marklogic server, with port number. 
+        username:        Username for Marklogic.
+        password:        Password for Marklogic.
+        proxy_server:    A proxy server for connecting to Marklogic (You may
+                         find this useful for local development.)
+    """
+    # setup_cache()
+
+    with open(
+        os.path.join(
+            os.path.dirname(__file__),
+            'xquery',
+            'get_collection_document_matrix.xqy'
+        )
+    ) as f:
+        r = requests.post(
+            '{}/v1/eval'.format(
+                server
+            ),
+            auth = (username, password),
+            data = {
+                'vars': json.dumps({}),
+                'xquery': f.read()
+            },
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            proxies={
+                'http': 'socks5://{}'.format(proxy_server),
+                'https': 'socks5://{}'.format(proxy_server)
+            }
+        )
+
+    multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
+    return json.loads(multipart_data.parts[0].content)
+
+def get_search(server, username, password, proxy_server, q, sort, start, collections, b):
     """Get a search result from Marklogic.
     
     Params: 
@@ -484,6 +607,7 @@ def get_search(server, username, password, proxy_server, q, start, collections, 
         proxy_server   A proxy server for connecting to Marklogic (You may find
                        this useful for local development.)
         q              Query to submit to Marklogic.
+        sort           Sort for search results.
         start          An integer, start from this result.
         collections    A list of collections to restrict the search to.
      
@@ -509,7 +633,7 @@ def get_search(server, username, password, proxy_server, q, start, collections, 
             ),
             auth = (username, password),
             data = {
-                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': 50, 'sort': 'title', 'start': start}),
+                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': 25, 'sort': sort, 'start': start}),
                 'xquery': f.read()
             },
             headers = {

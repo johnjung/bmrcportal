@@ -1,84 +1,165 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  {% if search_results['b'] == 'https://bmrc.lib.uchicago.edu/archives/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/archives/'}) }}">&lt;</a> | More Archives</h1>
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/decades/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/decades/'}) }}">&lt;</a> | More Decades</h1>
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/organizations/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/organizations/'}) }}">&lt;</a> | More Organizations</h1>
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/people/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/people/'}) }}">&lt;</a> | More People</h1>
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/places/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/places/'}) }}">&lt;</a> | More Places</h1>
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/topics/' %}
+    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/topics/'}) }}">&lt;</a> | More Topics</h1>
+  {% endif %}
+
   <div id="results_header">
-    <form action="/search/" method="get">
-      <p>
-        <input style="height: 1.5rem; width: 20rem;" id="searchterm" name="q" type="text" value="{{ search_results['q'] }}"/>
-        <input style="height: 1.875rem;" type="submit" value="Search"/>
-      </p>
-      {% for c in search_results['collections-active'] %}
-          <input name="f" type="hidden" value="{{ c[0] }}"/>
-      {% endfor %}
-    </form>
+    {% if search_results['b'] == '' %}
+      <h1>Results 
+         {{ search_results['start'] }} 
+         to 
+         {{ search_results['stop'] }} 
+         of {{ search_results['total'] }}
+      </h1>
+    {% endif %}
 
-    <h1>Results 
-       {{ search_results['start'] }} 
-       to 
-       {{ search_results['stop'] }} 
-       of {{ search_results['total'] }}</h1>
+    <p>
+      Sort results by:
+      {% if (search_results['b'] or search_results['q']) and search_results['sort'] != 'relevance' %}
+        <a href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}">Relevance (high to low) &darr;</a>
+      {% else %}
+        <span>Relevance (high to low) &darr;</span>
+      {% endif %}
 
-    <span class="previous_next">
+      {% if (search_results['b'] or search_results['q']) and search_results['sort'] != 'relevance-dsc' %}
+        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'relevance-dsc'}) }}">Relevance (low to high) &uarr;</a>
+      {% else %}
+        <span>Relevance (low to high) &uarr;</span>
+      {% endif %}
+
+      {% if search_results['sort'] != 'alpha' %}
+        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha'}) }}">A-Z &darr;</a>
+      {% else %}
+        <span>A-Z &darr;</span>
+      {% endif %}
+
+      {% if search_results['sort'] != 'alpha-dsc' %}
+        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha-dsc'}) }}">Z-A &uarr;</a>
+      {% else %}
+        <span>Z-A &uarr;</span>
+      {% endif %}
+
+      {% if search_results['b'] %}
+        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'random'}) }}">Shuffle</a>
+      {% else %}
+        <span>Shuffle</span>
+      {% endif %}
+    </p>
+
+    {% if search_results['b'] == '' %}
+      <span class="previous_next">
         {% if search_results['start'] > 1 %}
-            <a class="previous" href="/search/?q={{ search_results['q'] }}&start={{ search_results['start'] - search_results['size'] }}">Previous</a>
+          <a class="previous" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] - search_results['size']}) }}">Previous</a>
         {% else %}
-            <span class="previous">Previous</span>
+          <span class="previous">Previous</span>
         {% endif %}
-      
+        
         {% if search_results['stop'] < search_results['total'] %}
-            <a class="next" href="/search/?q={{ search_results['q'] }}&start={{ search_results['start'] + search_results['size'] }}">Next</a>
+          <a class="next" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] + search_results['size']}) }}">Next</a>
         {% else %}
-            <span class="next">Next</span>
+          <span class="next">Next</span>
         {% endif %}
-    </span>
+      </span>
+    {% endif %}
   </div>
 
-  <p id="facets">
-  {% if search_results["q"] %}
-    <span>{{ search_results["q"] }} <a href="/search/?{{ remove_q_from_url_params(search_results) }}">&#215;</a></span>
-  {% endif %}
-  {% for c in search_results["collections-active"] %}
-    <span>{{ c[1] }} <a href="/search/?{{ remove_facet_from_url_params(c[0], search_results) }}">&#215;</a></span>
-  {% endfor %}
-  </p>
-
-  {% if search_results['all-institutions'] %}
+  {% if search_results['more-archives'] %}
     <ul>
-      {% for f in search_results['all-institutions'] %}
-        <li><a href="/search/?f={{ quote_plus(f[0]) }}&{{ get_url_params(search_results) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% for f in search_results['more-archives'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['all-topics'] %}
+  {% elif search_results['more-decades'] %}
     <ul>
-      {% for f in search_results['all-topics'] %}
-        <li><a href="/search/?f={{ quote_plus(f[0]) }}&{{ get_url_params(search_results) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% for f in search_results['more-decades'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['all-places'] %}
+  {% elif search_results['more-organizations'] %}
     <ul>
-      {% for f in search_results['all-places'] %}
-        <li><a href="/search/?f={{ quote_plus(f[0]) }}&{{ get_url_params(search_results) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% for f in search_results['more-organizations'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% endfor %}
+    </ul>
+  {% elif search_results['more-people'] %}
+    <ul>
+      {% for f in search_results['more-people'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% endfor %}
+    </ul>
+  {% elif search_results['more-places'] %}
+    <ul>
+      {% for f in search_results['more-places'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+      {% endfor %}
+    </ul>
+  {% elif search_results['more-topics'] %}
+    <ul>
+      {% for f in search_results['more-topics'] %}
+        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
   {% else %}
     {% for r in search_results['results'] %}
-      <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['index']}}. {{ r['title'] }}"</a></h3>
+      <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['index']}}. {{ r['title'] }}</a></h3>
       <p>{{ r['abstract'] }}</p>
       <p class="tags">
-        {% for f in r['collections-institutions'] %} 
+        {% for f in r['collections-archives'] %} 
+          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
+        {% endfor %}
+        {% for f in r['collections-organizations'] %} 
           <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
         {% endfor %}
         {% for f in r['collections-places'] %} 
           <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
         {% endfor %}
         {% for f in r['collections-people'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[3] }})</a></span>
+          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
         {% endfor %}
         {% for f in r['collections-topics'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[4] }})</a></span>
+          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
         {% endfor %}
       </p>
     {% endfor %}
   {% endif %}
+
+  {% if not search_results['b'] %}
+    <span class="previous_next">
+      {% if search_results['start'] > 1 %}
+        <a class="previous" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] - search_results['size']}) }}">Previous</a>
+      {% else %}
+        <span class="previous">Previous</span>
+      {% endif %}
+        
+      {% if search_results['stop'] < search_results['total'] %}
+        <a class="next" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] + search_results['size']}) }}">Next</a>
+      {% else %}
+        <span class="next">Next</span>
+      {% endif %}
+    </span>
+  {% endif %}
+
+  <span 
+    data-collections-active='{{ search_results['collections-active']|tojson|safe }}'
+    data-docs='{{ search_results['docs']|tojson|safe }}'
+    data-q='{{ search_results['q']|safe }}'
+    data-size='{{ search_results['size']|safe }}'
+    data-sort='{{ search_results['sort']|safe }}'
+    data-start='{{ search_results['start']|safe }}'
+    data-total='{{ search_results['total']|safe }}'
+    id="search_results_data"></span>
 
 {% endblock %}

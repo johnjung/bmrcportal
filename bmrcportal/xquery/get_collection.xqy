@@ -112,12 +112,12 @@ declare function get-collection-counts($docs, $collections, $sort, $limit) {
         else if ($sort eq 'relevance')
         then
             for $c in $collections
-            order by map:count($docs-map * map:get($collections-map, $c)) * -1
+            order by map:count($docs-map * map:get($collections-map, $c))
             return $c
         else if ($sort eq 'relevance-dsc')
         then
             for $c in $collections
-            order by map:count($docs-map * map:get($collections-map, $c))
+            order by map:count($docs-map * map:get($collections-map, $c)) * -1
             return $c
         else if ($sort eq 'shuffle')
         then
@@ -198,8 +198,8 @@ return json:object(
                     get-collection-counts(
                         json:array-values($docs),
                         $collections-starts-with,
-                        'relevance-dsc',
-                        5
+                        $sort,
+                        $limit
                     )
                 }
             </json:value>

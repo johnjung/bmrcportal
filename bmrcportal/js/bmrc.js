@@ -7,7 +7,9 @@ for (var i = 0; i < facets.length; i++) {
     xhr.open("POST", "/sidebar/" + facet_type, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
-        docs: docs
+        docs: docs,
+        limit: 5,
+        sort: 'relevance-dsc'
     }));
 
     xhr.onreadystatechange = function () {
@@ -16,14 +18,19 @@ for (var i = 0; i < facets.length; i++) {
         if (this.status == 200) {
             var data = JSON.parse(this.responseText);
 
+            console.log(data);
+
             /* get the facet that triggered this XHR request. */
             var f = data['b'].replace('https://bmrc.lib.uchicago.edu/', '').replace('/', '');
+            console.log(f);
             var this_facet = null;
             for (var j = 0; j < facets.length; j++) {
                 if (facets[j].dataset.facet == f) {
                     this_facet = facets[j];
                 }
             }
+
+            console.log(this_facet);
 
             /* add content to that facet. */
             if (this_facet) {
@@ -45,7 +52,6 @@ for (var i = 0; i < facets.length; i++) {
     
                     this_facet.innerHTML = h;
                 }
-                console.log(data['results']);
             }
         }
     };

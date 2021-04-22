@@ -76,37 +76,37 @@
     {% endif %}
   </div>
 
-  {% if search_results['more-archives'] %}
+  {% if search_results['b'] == 'https://bmrc.lib.uchicago.edu/archives/' %}
     <ul>
       {% for f in search_results['more-archives'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['more-decades'] %}
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/decades/' %}
     <ul>
       {% for f in search_results['more-decades'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['more-organizations'] %}
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/organizations/' %}
     <ul>
       {% for f in search_results['more-organizations'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['more-people'] %}
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/people/' %}
     <ul>
       {% for f in search_results['more-people'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['more-places'] %}
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/places/' %}
     <ul>
       {% for f in search_results['more-places'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
       {% endfor %}
     </ul>
-  {% elif search_results['more-topics'] %}
+  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/topics/' %}
     <ul>
       {% for f in search_results['more-topics'] %}
         <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
@@ -151,15 +151,4 @@
       {% endif %}
     </span>
   {% endif %}
-
-  <span 
-    data-collections-active='{{ search_results['collections-active']|tojson|safe }}'
-    data-docs='{{ search_results['docs']|tojson|safe }}'
-    data-q='{{ search_results['q']|safe }}'
-    data-size='{{ search_results['size']|safe }}'
-    data-sort='{{ search_results['sort']|safe }}'
-    data-start='{{ search_results['start']|safe }}'
-    data-total='{{ search_results['total']|safe }}'
-    id="search_results_data"></span>
-
 {% endblock %}

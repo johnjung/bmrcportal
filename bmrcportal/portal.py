@@ -98,30 +98,68 @@ server_args = (
     os.environ['BMRCPORTAL_PROXY_SERVER']
 )
 
+@app.route('/about/')
+def about():
+    global server_args
+
+    return render_template(
+        'contact.html', 
+        breadcrumbs = [
+            ('/', 'Home'),
+            ('/contact/', 'About')
+        ],
+        search_results = {}
+    )
+
+@app.route('/contact/')
+def contact():
+    global server_args
+
+    return render_template(
+        'contact.html', 
+        breadcrumbs = [
+            ('/', 'Home'),
+            ('/contact/', 'Contact')
+        ],
+        search_results = {}
+    )
+
+@app.route('/help/')
+def help():
+    global server_args
+
+    return render_template(
+        'help.html', 
+        breadcrumbs = [
+            ('/', 'Home'),
+            ('/help/', 'Help')
+        ],
+        search_results = {}
+    )
+
 @app.route('/')
 def homepage():
     global server_args
-
-    collections = request.args.getlist('f')
-    q = request.args.get('q', default='', type=str)
-    start = request.args.get('start', default=1, type=int)
-
-    search_results = get_search(
-        *server_args + (
-            q,
-            'relevance',
-            start,
-            collections,
-            ''
-        )
-    )
 
     return render_template(
         'homepage.html', 
         breadcrumbs = [
             ('/', 'Home')
         ],
-        search_results = search_results
+        search_results = {}
+    )
+
+@app.route('/members/')
+def members():
+    global server_args
+
+    return render_template(
+        'members.html', 
+        breadcrumbs = [
+            ('/', 'Home'),
+            ('/members/', 'Members')
+        ],
+        search_results = {}
     )
 
 @app.route('/search/')
@@ -201,13 +239,15 @@ def view():
 def sidebar(starts_with):
     # how to get docs? did that come in via POST?
     docs = request.json['docs']
+    l = request.json['limit']
+    s = request.json['sort']
 
     collection = get_collection(
         *server_args + (
             docs,
             'https://bmrc.lib.uchicago.edu/{}/'.format(starts_with),
-            'relevance_dsc',
-            3
+            s,
+            l
         )
     )
 

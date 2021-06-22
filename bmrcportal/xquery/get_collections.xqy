@@ -4,6 +4,8 @@ declare namespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
 
 declare variable $browse as xs:string external;
 
+(: Get a complete list of collections. :)
+
 let $collections := json:object()
 let $_ := for $c in cts:collections()
     return 

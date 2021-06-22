@@ -13,6 +13,8 @@ declare namespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
 
 declare default function namespace "https://bmrc.lib.uchicago.edu";
 
+(: Get collections for the sidebar :)
+
 (::::::::::::::::::::
   EXTERNAL VARIABLES
  ::::::::::::::::::::)

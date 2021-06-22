@@ -1,154 +1,68 @@
 {% extends "base.html" %}
 
+{##########}
+{# MACROS #}
+{##########}
+
+{% macro facet(facet_name) %}
+    {% set facet_name_active = "active-" + facet_name|lower %}
+    {% set facet_name_more = "more-" + facet_name|lower %}
+    {% if search_results[facet_name_active] or search_results[facet_name_more] %}
+        <div class="facet">
+            <h3 style="text-transform: uppercase; font-weight: bold;"><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2F{{ facet_name }}%2F">{{ facet_name }}</a></h3>
+            <ul>
+                  {% for f in search_results[facet_name_active] %}
+                      <li>{{ f[1] }} <a href="/search/?{{ remove_from_url_params(search_results, {'f': f[0]}) }}">x</a></li>
+                  {% endfor %}
+                  {% for f in search_results[facet_name_more] %}
+                      <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
+                  {% endfor %}
+            </ul>
+             <p><a href="#">View more {{ facet_name }} &gt;&gt;</a></p>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{###########}
+{# CONTENT #}
+{###########}
+
 {% block content %}
+    <div class="columns" id="serp_content">
+        <div class="column is-one-quarter" id="facets">
+            {{ facet('Topics') }}
+            {{ facet('People') }}
+            {{ facet('Organizations') }}
+            {{ facet('Places') }}
+            {{ facet('Decades') }}
+            {{ facet('Archives') }}
+        </div>
 
-  {% if search_results['b'] == 'https://bmrc.lib.uchicago.edu/archives/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/archives/'}) }}">&lt;</a> | More Archives</h1>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/decades/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/decades/'}) }}">&lt;</a> | More Decades</h1>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/organizations/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/organizations/'}) }}">&lt;</a> | More Organizations</h1>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/people/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/people/'}) }}">&lt;</a> | More People</h1>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/places/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/places/'}) }}">&lt;</a> | More Places</h1>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/topics/' %}
-    <h1><a href="/search/?{{ remove_from_url_params(search_results, {'b': 'https://bmrc.lib.uchicago.edu/topics/'}) }}">&lt;</a> | More Topics</h1>
-  {% endif %}
-
-  <div id="results_header">
-    {% if search_results['b'] == '' %}
-      <h1>Results 
-         {{ search_results['start'] }} 
-         to 
-         {{ search_results['stop'] }} 
-         of {{ search_results['total'] }}
-      </h1>
-    {% endif %}
-
-    <p>
-      Sort results by:
-      {% if (search_results['b'] or search_results['q']) and search_results['sort'] != 'relevance' %}
-        <a href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}">Relevance (high to low) &darr;</a>
-      {% else %}
-        <span>Relevance (high to low) &darr;</span>
-      {% endif %}
-
-      {% if (search_results['b'] or search_results['q']) and search_results['sort'] != 'relevance-dsc' %}
-        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'relevance-dsc'}) }}">Relevance (low to high) &uarr;</a>
-      {% else %}
-        <span>Relevance (low to high) &uarr;</span>
-      {% endif %}
-
-      {% if search_results['sort'] != 'alpha' %}
-        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha'}) }}">A-Z &darr;</a>
-      {% else %}
-        <span>A-Z &darr;</span>
-      {% endif %}
-
-      {% if search_results['sort'] != 'alpha-dsc' %}
-        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha-dsc'}) }}">Z-A &uarr;</a>
-      {% else %}
-        <span>Z-A &uarr;</span>
-      {% endif %}
-
-      {% if search_results['b'] %}
-        <a href="/search/?{{ add_to_url_params(search_results, {'sort': 'random'}) }}">Shuffle</a>
-      {% else %}
-        <span>Shuffle</span>
-      {% endif %}
-    </p>
-
-    {% if search_results['b'] == '' %}
-      <span class="previous_next">
-        {% if search_results['start'] > 1 %}
-          <a class="previous" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] - search_results['size']}) }}">Previous</a>
-        {% else %}
-          <span class="previous">Previous</span>
-        {% endif %}
+        <div id="search_results">
+            <div id="results_header">
+                {% if search_results['b'] == '' %}
+                    <h1>Results 
+                    {{ search_results['start'] }} 
+                    to 
+                    {{ search_results['stop'] }} 
+                    of {{ search_results['total'] }}
+                    for search '{{ search_results['q'] }}'
+                    </h1>
+                {% endif %}
         
-        {% if search_results['stop'] < search_results['total'] %}
-          <a class="next" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] + search_results['size']}) }}">Next</a>
-        {% else %}
-          <span class="next">Next</span>
-        {% endif %}
-      </span>
-    {% endif %}
-  </div>
+                {% include "search-sort.html" %}
 
-  {% if search_results['b'] == 'https://bmrc.lib.uchicago.edu/archives/' %}
-    <ul>
-      {% for f in search_results['more-archives'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/decades/' %}
-    <ul>
-      {% for f in search_results['more-decades'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/organizations/' %}
-    <ul>
-      {% for f in search_results['more-organizations'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/people/' %}
-    <ul>
-      {% for f in search_results['more-people'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/places/' %}
-    <ul>
-      {% for f in search_results['more-places'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% elif search_results['b'] == 'https://bmrc.lib.uchicago.edu/topics/' %}
-    <ul>
-      {% for f in search_results['more-topics'] %}
-        <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    {% for r in search_results['results'] %}
-      <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['index']}}. {{ r['title'] }}</a></h3>
-      <p>{{ r['abstract'] }}</p>
-      <p class="tags">
-        {% for f in r['collections-archives'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
-        {% endfor %}
-        {% for f in r['collections-organizations'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
-        {% endfor %}
-        {% for f in r['collections-places'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
-        {% endfor %}
-        {% for f in r['collections-people'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
-        {% endfor %}
-        {% for f in r['collections-topics'] %} 
-          <span class="tag"><a href="/search/?f={{ quote_plus(f[0]) }}">{{ f[1] }} ({{ f[2] }})</a></span>
-        {% endfor %}
-      </p>
-    {% endfor %}
-  {% endif %}
+                {% include "search-pager.html" %}
 
-  {% if not search_results['b'] %}
-    <span class="previous_next">
-      {% if search_results['start'] > 1 %}
-        <a class="previous" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] - search_results['size']}) }}">Previous</a>
-      {% else %}
-        <span class="previous">Previous</span>
-      {% endif %}
-        
-      {% if search_results['stop'] < search_results['total'] %}
-        <a class="next" href="/search/?{{ add_to_url_params(search_results, {'start': search_results['start'] + search_results['size']}) }}">Next</a>
-      {% else %}
-        <span class="next">Next</span>
-      {% endif %}
-    </span>
-  {% endif %}
+                {% for r in search_results['results'] %}
+                    <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['title'] }}</a></h3>
+                    <p>{{ r['abstract'] }}</p>
+                    <p>Dates: {{ r['date'] }} | Extent: {{ r['extent'] }}<br/>
+                       Archives: {{ r['archive'] }}</p>
+                {% endfor %}
+
+                {% include "search-pager.html" %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

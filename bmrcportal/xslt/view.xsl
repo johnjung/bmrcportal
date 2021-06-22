@@ -131,6 +131,9 @@
 <div id="text"><xsl:apply-templates/></div>
 </xsl:template>
 
+<!-- EADHEADER -->
+<xsl:template match="ead:eadheader"/>
+
 <!-- EADID -->
 <xsl:template match="ead:eadid"/>
 
@@ -267,11 +270,12 @@
 <p class="note"><xsl:apply-templates/></p>
 </xsl:template>
 
-<xsl:template match="ead:unitid[@encodinganalog='035']"/>
+<!-- UNITID -->
+<xsl:template match="ead:unitid"/>
 
 <!-- UNITTITLE -->
 <xsl:template match="ead:unittitle">
-<p class="unittitle"><xsl:apply-templates/></p>
+<h1><xsl:apply-templates/></h1>
 </xsl:template>
 
 <xsl:template match="ead:unittitle[@label='Title'] | ead:unittitle[@label='title'] | ead:unittitle[@label='Collection Title']">

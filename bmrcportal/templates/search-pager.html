@@ -1,0 +1,14 @@
+{% if total_pages > 1 %}
+    <section class="section">
+        <div class="is-pulled-left">
+            <p>
+                {% for i in range(1, total_pages + 1) %}
+                    <a class="button"{% if i == page %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': i}) }}">{{ i }}</a>
+                {% endfor %}
+            </p>
+        </div>
+        <div class="is-pulled-right">
+            <a class="button"{% if i == page %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': page + 1}) }}">Next page</a>
+        </div>
+    </section>
+{% endif %}

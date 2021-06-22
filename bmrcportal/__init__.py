@@ -1,6 +1,9 @@
 import io, json, os, re, requests, requests_cache, requests_toolbelt, sys, urllib
 import lxml.etree as etree
 
+#import config.default
+
+from flask import current_app
 from xml.etree import ElementTree
 from collections import namedtuple
 #ElementTree.register_namespace('ead', 'urn:isbn:1-931666-22-9')
@@ -8,6 +11,9 @@ ElementTree.register_namespace('search', 'http://marklogic.com/appservices/searc
 
 # load global variables to connect to marklogic (e.g. username,
 # password)
+
+# get config.yaml. 
+# get institutions.
 
 def setup_cache():
     return
@@ -52,47 +58,29 @@ def get_transformed_xml(fname):
         ) as fh:
             return ElementTree.parse(fh)
 
-def get_archives_for_xml(dir, uri_format_str):
-    archive_lookup = {
-        'bmrcportal':  'BMRC Portal',
-        'bronzeville': 'Bronzeville Historical',
-        'cbmr':        'CBMR',
-        'chm':         'Chicago History Museum',
-        'columbia':    'Columbia College',
-        'csu':         'Chicago State',
-        'cyc':         'Chicago Youth Ctr',
-        'defender':    'Defender',
-        'depaul':      'DePaul',
-        'du':          'Dominican',
-        'dusable':     'Dusable',
-        'ehc':         'Evanston History Ctr',
-        'eta':         'ETA Creative Arts',
-        'gerhart':     'Gerber Hart',
-        'harsh':       'CPL-Harsh',
-        'hwlc':        'CPL-HWLC',
-        'iit':         'Illinois Tech',
-        'ilhs':        'IL Labor History',
-        'isdsa':       'Intl Society Slave Ancestry',
-        'kart':        'Kartemquin',
-        'lake':        'Lake City Discovery',
-        'lanetech':    'Lane Tech HS',
-        'lbp':         'Little Black Pearl',
-        'loyola':      'Loyola',
-        'malcolmx':    'Malcolm X College',
-        'neiu':        'Northeastern IL',
-        'newberry':    'Newberry',
-        'nu':          'Northwestern',
-        'pshs':        'Pullman Historic Site',
-        'roosevelt':   'Roosevelt',
-        'rush':        'Rush U Med Ctr',
-        'shorefront':  'Shorefront',
-        'spertus':     'Spertus',
-        'sscac':       'South Side Community Arts Ctr',
-        'taylor':      'Taylor',
-        'uic':         'UIC',
-        'uoc':         'UChicago',
-        'werner':      'Werner'
-    }
+def get_archives_for_xml(archive_config, dir, uri_format_str):
+    '''Get a dict of finding aids grouped by archive.
+
+       Params:
+           archive_config  - a list of dicts, data about archives from the
+                             configuration for this app.
+           dir             - a string, the full path to the directory
+                             containing those finding aids. This directory
+                             should contain a sequence of subdirectories, where
+                             each subdirectory is a key in archives_lookup. E.g.,
+                             if /home/user/findingaids is the dir,
+                             /home/user/findingaids/bronzeville should exist inside.
+           uri_format_str  - a string, the format string to generate a unique
+                             identifier for each archive.
+
+        Returns:
+            A dict, where each key is the unique identifier for the archive
+            and the value is a list of EADIDs produced by that institution.
+    '''
+
+    archive_lookup = {}
+    for a in archive_config:
+        archive_lookup[a['finding_aid_dirname']] = a['short_title']
 
     bmrc_uri = uri_format_str.format(
         urllib.parse.quote_plus('BMRC Portal')
@@ -403,7 +391,8 @@ def load_findingaid(server, username, password, proxy_server, fh, uri, collectio
     assert r.status_code in (201, 204)
 
 def get_collection(server, username, password, proxy_server, docs, b, sort, limit):
-    """Get collections and finding aids from Marklogic.
+    """Get collections and finding aids from Marklogic- this is more complicated, 
+       its for the sidebar.
 
     Args:
         server:          The Marklogic server, with port number. 
@@ -597,7 +586,7 @@ def get_collection_document_matrix(server, username, password, proxy_server):
     multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
     return json.loads(multipart_data.parts[0].content)
 
-def get_search(server, username, password, proxy_server, q, sort, start, collections, b):
+def get_search(server, username, password, proxy_server, q, sort, start, page_length, collections, b):
     """Get a search result from Marklogic.
     
     Params: 
@@ -609,6 +598,7 @@ def get_search(server, username, password, proxy_server, q, sort, start, collect
         q              Query to submit to Marklogic.
         sort           Sort for search results.
         start          An integer, start from this result.
+        page_length    An integer, include at most this many results.
         collections    A list of collections to restrict the search to.
      
     Returns:
@@ -633,7 +623,7 @@ def get_search(server, username, password, proxy_server, q, sort, start, collect
             ),
             auth = (username, password),
             data = {
-                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': 25, 'sort': sort, 'start': start}),
+                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': page_length, 'sort': sort, 'start': start}),
                 'xquery': f.read()
             },
             headers = {

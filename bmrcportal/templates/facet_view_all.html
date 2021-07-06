@@ -1,0 +1,17 @@
+{{ title }}
+
+<a href="#" id="facet_overlay_close">X</a>
+
+<p>
+    Sort by:
+    <a class="button facet_overlay_sort" data-sort="relevance" href="#">Relevance</a>
+    <a class="button facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</a>
+    <a class="button facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</a>
+    <a class="button facet_overlay_sort" data-sort="shuffle" href="#">Shuffle &#128256;</a>
+</p>
+
+<ul>
+    {% for c in collection %}
+        <li data-count="{{ c[2] }}" data-title="{{ c[0] }}"><a href="/search/?{{ add_to_url_params(search_results, {'f': c[0]}) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+    {% endfor %}
+</ul>

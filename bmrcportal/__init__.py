@@ -586,20 +586,24 @@ def get_collection_document_matrix(server, username, password, proxy_server):
     multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
     return json.loads(multipart_data.parts[0].content)
 
-def get_search(server, username, password, proxy_server, q, sort, start, page_length, collections, b):
+def get_search(server, username, password, proxy_server, q, sort, start, page_length, sidebar_facet_limit, collections, b):
     """Get a search result from Marklogic.
     
     Params: 
-        server         The Marklogic server, with port number. 
-        username       Username for Marklogic.
-        password       Password for Marklogic.
-        proxy_server   A proxy server for connecting to Marklogic (You may find
-                       this useful for local development.)
-        q              Query to submit to Marklogic.
-        sort           Sort for search results.
-        start          An integer, start from this result.
-        page_length    An integer, include at most this many results.
-        collections    A list of collections to restrict the search to.
+        server                    The Marklogic server, with port number. 
+        username                  Username for Marklogic.
+        password                  Password for Marklogic.
+        proxy_server              A proxy server for connecting to Marklogic
+                                  (You may find this useful for local
+                                  development.)
+        q                         Query to submit to Marklogic.
+        sort                      Sort for search results.
+        start                     An integer, start from this result.
+        page_length               An integer, include at most this many
+                                  results.
+        sidebar_facet_limit       Limit number of links for each sidebar group.
+        collections               A list of collections to restrict the search
+                                  to.
      
     Returns:
         XML as ElementTree.
@@ -623,7 +627,7 @@ def get_search(server, username, password, proxy_server, q, sort, start, page_le
             ),
             auth = (username, password),
             data = {
-                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': page_length, 'sort': sort, 'start': start}),
+                'vars': json.dumps({'b': b, 'collections_active_raw': collections, 'q': q, 'size': page_length, 'sidebar-facet-limit': sidebar_facet_limit, 'sort': sort, 'start': start}),
                 'xquery': f.read()
             },
             headers = {

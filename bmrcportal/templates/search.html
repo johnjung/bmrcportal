@@ -4,23 +4,29 @@
 {# MACROS #}
 {##########}
 
-{% macro facet(facet_name) %}
+{% macro sidebar_facet(facet_name) %}
     {% set facet_name_active = "active-" + facet_name|lower %}
     {% set facet_name_more = "more-" + facet_name|lower %}
     {% if search_results[facet_name_active] or search_results[facet_name_more] %}
-        <div class="facet">
+        <div class="facet" data-facet="{{ facet_name|lower }}">
             <h3 style="text-transform: uppercase; font-weight: bold;"><a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2F{{ facet_name }}%2F">{{ facet_name }}</a></h3>
             <ul>
                   {% for f in search_results[facet_name_active] %}
-                      <li>{{ f[1] }} <a href="/search/?{{ remove_from_url_params(search_results, {'f': f[0]}) }}">x</a></li>
+                      <li>{{ f[1] }} ({{ f[2] }})</li>
                   {% endfor %}
                   {% for f in search_results[facet_name_more] %}
                       <li><a href="/search/?{{ add_to_url_params(search_results, {'f': f[0]}) }}">{{ f[1] }} ({{ f[2] }})</a></li>
                   {% endfor %}
             </ul>
-             <p><a href="#">View more {{ facet_name }} &gt;&gt;</a></p>
         </div>
     {% endif %}
+{% endmacro %}
+
+{% macro active_facets(facet_name) %}
+    {% set facet_name_active = "active-" + facet_name|lower %}
+    {% for f in search_results[facet_name_active] %}
+        <li>{{ f[1] }} ({{ f[2] }})<a href="/search/?{{ remove_from_url_params(search_results, {'f': f[0]}) }}">x</a></li>
+    {% endfor %}
 {% endmacro %}
 
 {###########}
@@ -29,33 +35,42 @@
 
 {% block content %}
     <div class="columns" id="serp_content">
-        <div class="column is-one-quarter" id="facets">
-            {{ facet('Topics') }}
-            {{ facet('People') }}
-            {{ facet('Organizations') }}
-            {{ facet('Places') }}
-            {{ facet('Decades') }}
-            {{ facet('Archives') }}
+        <div class="column is-one-quarter" id="facets" data-sidebar_view_less_facet_count="{{ sidebar_view_less_facet_count }}" data-sidebar_view_more_facet_count="{{ sidebar_view_more_facet_count }}">
+            {{ sidebar_facet('Topics') }}
+            {{ sidebar_facet('People') }}
+            {{ sidebar_facet('Organizations') }}
+            {{ sidebar_facet('Places') }}
+            {{ sidebar_facet('Decades') }}
+            {{ sidebar_facet('Archives') }}
         </div>
 
         <div id="search_results">
             <div id="results_header">
                 {% if search_results['b'] == '' %}
                     <h1>Results 
-                    {{ search_results['start'] }} 
+                    {{ search_results['start'] + 1 }} 
                     to 
-                    {{ search_results['stop'] }} 
+                    {{ search_results['stop'] + 1 }} 
                     of {{ search_results['total'] }}
                     for search '{{ search_results['q'] }}'
                     </h1>
                 {% endif %}
-        
+
+                <ul>
+                    {{ active_facets('Topics') }}
+                    {{ active_facets('People') }}
+                    {{ active_facets('Organizations') }}
+                    {{ active_facets('Places') }}
+                    {{ active_facets('Decades') }}
+                    {{ active_facets('Archives') }}
+                </ul>
+
                 {% include "search-sort.html" %}
 
                 {% include "search-pager.html" %}
 
                 {% for r in search_results['results'] %}
-                    <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['title'] }}</a></h3>
+                    <h3><strong><a href="/view/?id={{ r['uri'] }}">{{ r['title'] }}</a></strong></h3>
                     <p>{{ r['abstract'] }}</p>
                     <p>Dates: {{ r['date'] }} | Extent: {{ r['extent'] }}<br/>
                        Archives: {{ r['archive'] }}</p>

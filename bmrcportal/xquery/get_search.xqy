@@ -32,6 +32,9 @@ declare variable $q as xs:string external;
 (: For paged search results, start a page of search results from this index. :)
 declare variable $start as xs:integer external;
 
+(: Number of links to return for each sidebar facet. :)
+declare variable $sidebar-facet-limit as xs:integer external;
+
 (: For paged search results, number of results for this result page. :)
 declare variable $size as xs:integer external;
 
@@ -80,59 +83,41 @@ declare function archive($doc) {
        Returns
          a string, the document's archive.
 
-    archive_lookup = { 
-        'https://bmrc.lib.uchicago.edu/archives/bmrcportal':  'BMRC Portal',
-        'https://bmrc.lib.uchicago.edu/archives/bronzeville': 'Bronzeville Historical',
-        'https://bmrc.lib.uchicago.edu/archives/cbmr':        'CBMR',
-        'https://bmrc.lib.uchicago.edu/archives/chm':         'Chicago History Museum',
-        'https://bmrc.lib.uchicago.edu/archives/columbia':    'Columbia College',
-        'https://bmrc.lib.uchicago.edu/archives/csu':         'Chicago State',
-        'https://bmrc.lib.uchicago.edu/archives/cyc':         'Chicago Youth Ctr',
-        'https://bmrc.lib.uchicago.edu/archives/defender':    'Defender',
-        'https://bmrc.lib.uchicago.edu/archives/depaul':      'DePaul',
-        'https://bmrc.lib.uchicago.edu/archives/du':          'Dominican',
-        'https://bmrc.lib.uchicago.edu/archives/dusable':     'Dusable',
-        'https://bmrc.lib.uchicago.edu/archives/ehc':         'Evanston History Ctr',
-        'https://bmrc.lib.uchicago.edu/archives/eta':         'ETA Creative Arts',
-        'https://bmrc.lib.uchicago.edu/archives/gerhart':     'Gerber Hart',
-        'https://bmrc.lib.uchicago.edu/archives/harsh':       'CPL-Harsh',
-        'https://bmrc.lib.uchicago.edu/archives/hwlc':        'CPL-HWLC',
-        'https://bmrc.lib.uchicago.edu/archives/iit':         'Illinois Tech',
-        'https://bmrc.lib.uchicago.edu/archives/ilhs':        'IL Labor History',
-        'https://bmrc.lib.uchicago.edu/archives/isdsa':       'Intl Society Slave Ancestry',
-        'https://bmrc.lib.uchicago.edu/archives/kart':        'Kartemquin',
-        'https://bmrc.lib.uchicago.edu/archives/lake':        'Lake City Discovery',
-        'https://bmrc.lib.uchicago.edu/archives/lanetech':    'Lane Tech HS',
-        'https://bmrc.lib.uchicago.edu/archives/lbp':         'Little Black Pearl',
-        'https://bmrc.lib.uchicago.edu/archives/loyola':      'Loyola',
-        'https://bmrc.lib.uchicago.edu/archives/malcolmx':    'Malcolm X College',
-        'https://bmrc.lib.uchicago.edu/archives/neiu':        'Northeastern IL',
-        'https://bmrc.lib.uchicago.edu/archives/newberry':    'Newberry',
-        'https://bmrc.lib.uchicago.edu/archives/nu':          'Northwestern',
-        'https://bmrc.lib.uchicago.edu/archives/pshs':        'Pullman Historic Site',
-        'https://bmrc.lib.uchicago.edu/archives/roosevelt':   'Roosevelt',
-        'https://bmrc.lib.uchicago.edu/archives/rush':        'Rush U Med Ctr',
-        'https://bmrc.lib.uchicago.edu/archives/shorefront':  'Shorefront',
-        'https://bmrc.lib.uchicago.edu/archives/spertus':     'Spertus',
-        'https://bmrc.lib.uchicago.edu/archives/sscac':       'South Side Community Arts Ctr',
-        'https://bmrc.lib.uchicago.edu/archives/taylor':      'Taylor',
-        'https://bmrc.lib.uchicago.edu/archives/uic':         'UIC',
-        'https://bmrc.lib.uchicago.edu/archives/uoc':         'UChicago',
-        'https://bmrc.lib.uchicago.edu/archives/werner':      'Werner'
-    } 
-
     figure out what archive this document is a part of. 
+    assuming this is a map below. 
+
+    for $s in map:keys($starts-with-dict)
+    return
+        if (
+            fn:starts-with(
+                fn:document-uri($doc),
+                $s
+            )
+        )
+        then map:get($starts-with-dict, $s)
+        else ()
+
+    for $n in $starts-with-json/node()
+    return 
+        if (
+            fn:starts-with(
+                fn:document-uri($doc),
+                local-name($n)
+            )
+        )
+        then $n/text()
 
     :)
-    let $archives :=
-        for $c in xdmp:document-get-collections(fn:document-uri($doc))
-        return
-            if (fn:starts-with($c, 'https://bmrc.lib.uchicago.edu/archives/'))
-            then $c
-            else ()
-    return 
-        if ('https://bmrc.lib.uchicago.edu/archives/bronzeville' eq $archives) then 'Bronzeville Historical'
-        else 'archive'
+    for $c in xdmp:document-get-collections(fn:document-uri($doc))
+    return
+        if (
+            fn:starts-with($c, 'https://bmrc.lib.uchicago.edu/archives/')
+            and fn:not(
+                fn:starts-with($c, 'https://bmrc.lib.uchicago.edu/archives/BMRC+Portal')
+            )
+        )
+        then fn:replace($c, 'https://bmrc.lib.uchicago.edu/archives/', '')
+        else ()
 };
 
 declare function collection-counts($collections, $docs, $sort, $limit) {
@@ -192,12 +177,22 @@ declare function collection-counts($collections, $docs, $sort, $limit) {
         if ($sort eq 'alpha')
         then
             for $c in $collections
-            order by $c
+            let $d := fn:replace(
+                $c,
+                '^(The) ',
+                ''
+            )
+            order by $d
             return $c
         else if ($sort eq 'alpha-dsc')
         then
             for $c in $collections
-            order by $c descending
+            let $d := fn:replace(
+                $c,
+                '^(The) ',
+                ''
+            )
+            order by $d descending
             return $c
         else if ($sort eq 'relevance')
         then
@@ -427,7 +422,7 @@ declare function page-results(
         for $r in $results
         order by
             if ($sort eq 'alpha' or $sort eq 'alpha-dsc')
-            then title($r)
+            then sort-title($r)
             else if ($sort eq 'random')
             then xdmp:random()
             else ()
@@ -438,7 +433,7 @@ declare function page-results(
         then fn:reverse($ordered-results)
         else $ordered-results
 
-    return $paged-results[$start to $start + $size - 1]
+    return $paged-results[$start + 1 to $start + $size]
 };
 
 declare function query($raw-query as xs:string, $collections) as cts:query? {
@@ -464,6 +459,48 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
             return cts:collection-query($c)
         )
     )
+};
+
+declare function results-for-collection($results, $collection) {
+    (: Get results for a given collection, from a larger set of results.
+
+       Params
+         $results - search results from cts:search()
+
+       Returns
+         a sequence of unique MarkLogic collection URIs. 
+
+       Notes
+         map:keys() returns a unique sequence faster than fn:distinct-values().
+    :)
+
+    map:keys(
+        map:new(
+            for $r in $results
+            return 
+                if ($collection = xdmp:document-get-collections(fn:document-uri($r)))
+                then map:entry($r, fn:true())
+                else ()
+        )
+    )
+};
+
+declare function sort-title($doc) {
+    (: Get the title for a given document.
+
+       Params
+         $doc - a MarkLogic document object, e.g.
+                fn:doc('BMRC.DEFENDER.INDIVIDUALS.xml')
+
+       Returns
+         a string, the document's title.
+     :)
+
+     fn:replace(
+         title($doc),
+         '^(The) ',
+         ''
+     )
 };
 
 declare function title($doc) {
@@ -530,9 +567,6 @@ let $docs-seq :=
 (: sort for sidebar facets. :)
 let $sidebar-facet-sort := 'relevance-dsc'
 
-(: number of results to return for a sidebar facet. :)
-let $sidebar-facet-limit := 5
-
 (: active collections, broken up by type, so they can be included in the facet sidebar. :)
 let $active-archives :=
     <json:array>
@@ -548,7 +582,7 @@ let $active-archives :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -568,7 +602,7 @@ let $active-decades :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -588,7 +622,7 @@ let $active-organizations :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -608,7 +642,7 @@ let $active-people :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -628,7 +662,7 @@ let $active-places :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -648,7 +682,7 @@ let $active-topics :=
                                 xdmp:url-decode(fn:tokenize($c, "/")[5]) 
                             }
                         </json:value>
-                        <json:value xsi:type="xs:integer">0</json:value>
+                        <json:value xsi:type="xs:integer">{ fn:count(results-for-collection($search-results, $c)) }</json:value>
                     </json:array>
                 else ()
         }
@@ -664,7 +698,7 @@ let $more-archives :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
         
 let $more-decades :=
@@ -676,7 +710,7 @@ let $more-decades :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
 
 let $more-organizations :=
@@ -688,7 +722,7 @@ let $more-organizations :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
 
 let $more-people :=
@@ -700,7 +734,7 @@ let $more-people :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
 
 let $more-places :=
@@ -712,7 +746,7 @@ let $more-places :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
 
 let $more-topics :=
@@ -724,7 +758,7 @@ let $more-topics :=
         $docs-seq,
         $sidebar-facet-sort,
         $sort,
-        $sidebar-facet-limit
+        $sidebar-facet-limit + 1
     )
 
 return json:object(

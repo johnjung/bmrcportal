@@ -1,92 +1,65 @@
-## Loading Finding Aids
+## Getting Started
 
-There is a 
+Create a directory for this project and a Python 3 virtual environment, and
+activate the environment:
 
 ```console
-php -f admin/load_findingaids.php
+mkdir bmrcportal
+cd bmrcportal
+python3 -m venv venv
+source venv/bin/activate
+```
 
+Install git if necessary and clone the repository:
 
-To check for well-formedness errors in a single XML file:
-xmllint --noout <xml-file>
+```console
+brew install git
+git clone https://github.com/johnjung/bmrcportal.git
+```
 
-To validate a single XML file against a schema:
-xmllint --noout --schema <xsd-file> <xml-file>
+Install required Python packages via pip:
 
-To make an EAD finding aid schema-ready, you can convert it using the XSLT
-transform above. Here's a small script to do that in Python:
+```console
+cd bmrcportal
+pip install -r requirements.txt
+```
 
-import io
-import sys
-import lxml.etree as ET
+## Using Flask
 
-ead_filename = 'test.xml'
-xsd_filename = 'dtd2schema.xsl'
+Configuration files are not included in the Git repository. Request one from
+another developer and place it at config/default.py.
 
-transform = ET.XSLT(ET.parse(xsd_filename))
-transformed_ead = transform(ET.parse(ead_filename))
+If you're running the site on a development machine, you'll need to set up a 
+tunnel for SSH connections. Run a command like the one below in a new console
+window:
 
-sys.stdout.write(
-    ET.tostring(
-        transformed_ead,
-        pretty_print=True
-    ).decode('utf-8')
-)
+```console
+ssh -D 9090 -q -C -N <cnetid>@staff.lib.uchicago.edu
+```
 
-Tdhe script above does not include an XML declaration in its output- to get
-n 
-one you can pipe the results through "xmllint --format -".
+To get started, set the FLASK_APP environmental variable and run the flask
+command to see what's available:
 
-To run any of these commands on groups of files, you can loop them through
-find:
+```console
+export FLASK_APP=bmrcportal
+flask
+```
 
-for x in $(find . -name "*.xml")
-do
-    xmllint --noout $x
-done
+Facets on the website are represented by collections in MarkLogic- you can browse
+MarkLogic collections directly with commands like the following:
 
-accessrestrict, address, blockquote, chronlist, head, legalstatus, list, note, p, table 
-199 p
+```console
+flask browse-archives | python -m json.tool | less
+flask browse-decades | python -m json.tool | less
+flask browse-organizations | python -m json.tool | less
+flask browse-people | python -m json.tool | less
+flask browse-places | python -m json.tool | less
+flask browse-topics | python -m json.tool | less
+```
 
+To run a local version of the site for testing, use the following command and
+open a web browser to localhost:5000:
 
-for $x in cts:search(
-  doc(), 
-  cts:and-query(
-    (
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Winfrey%2C+Oprah"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Winfield%2C+Paul"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Windsor%2C+Duke+of%2C+Edward"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Winchell%2C+Walter"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Winbush%2C+LeRoy"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Wimp%2C+Edward"),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Wimbish%2C+C.C."),
-      cts:collection-query("https://bmrc.lib.uchicago.edu/people/Wilson%2C+William+Julius")
-    )
-  )
-)
-return document-uri($x)
-
-*** GETTING A TITLE
-
-declare namespace ead = 'urn:isbn:1-931666-22-9';
-for $x in fn:doc() 
-let $title_elements := ($x//ead:titleproper/text())[1]
-return (fn:document-uri($x), fn:normalize-space(fn:string-join($title_elements, ' ')))
-
-COMPARE THESE SITES
-
-https://explore.chicagocollections.org/
-https://amistad-finding-aids.tulane.edu/
-https://researchworks.oclc.org/archivegrid/
-https://archives.lib.duke.edu/
-http://dla.library.upenn.edu/dla/pacscl/index.html
-https://rmoa.unm.edu/
-https://archives-library.wcsu.edu/cao/
-https://cdlib.org/
-http://catalog.rockhall.com/
-https://www.roosevelt.edu/library
-https://www.riamco.org/
-https://findingaids.library.northwestern.edu/
-http://cbmr-webapps.colum.edu/archon/
-
-BOX LINK:
-https://uchicago.box.com/s/umk5jrzna0orwlfbwaxma49exfxij9tr
+```console
+flask run
+```

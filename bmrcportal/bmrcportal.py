@@ -12,7 +12,12 @@ from . import (clear_cache, delete_findingaid, get_archives_for_xml,
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('bmrcportal.config.default')
 
-#cli.register(app)
+server_args = (
+    app.config['MARKLOGIC_SERVER'],
+    app.config['MARKLOGIC_USERNAME'],
+    app.config['MARKLOGIC_PASSWORD'],
+    app.config['PROXY_SERVER']
+)
 
 # UTILITY FUNCTIONS
 
@@ -58,16 +63,20 @@ def utility_processor():
         """
 
         params = []
-        if search_results['b']:
+        if 'b' in search_results and search_results['b']:
             p = ('b', search_results['b'])
             if not p in params:
                 params.append(p)
-        if search_results['q']:
+        if 'collections-active' in search_results:
+            for c in search_results['collections-active']:
+                params.append(('f', c[0]))
+        if 'q' in search_results and search_results['q']:
             params.append(('q', search_results['q']))
-        for c in search_results['collections-active']:
-            params.append(('f', c[0]))
+        if 'sort' in search_results and search_results['sort']:
+            params.append(('sort', search_results['sort']))
         for k, v in d.items():
             params.append((k, v))
+
         return urllib.parse.urlencode(params)
 
     def remove_from_url_params(search_results, d):
@@ -105,21 +114,7 @@ def utility_processor():
         remove_from_url_params = remove_from_url_params,
     )
     
-# GLOBAL VARIABLES
-
-max_page_links = 11
-max_page_links_before = 5
-max_page_links_after = 5
-page_length = 50
-
-server_args = (
-    os.environ['BMRCPORTAL_MARKLOGIC_SERVER'],
-    os.environ['BMRCPORTAL_MARKLOGIC_USERNAME'],
-    os.environ['BMRCPORTAL_MARKLOGIC_PASSWORD'],
-    os.environ['BMRCPORTAL_PROXY_SERVER']
-)
-
-# CLI
+# CLI INTERFACE
 
 @click.command(name='browse-archives')
 def browse_archives():
@@ -151,7 +146,7 @@ def browse_organizations():
     click.echo(
         json.dumps(
             get_collections(
-                *server_args + ('https://bmrc.lib.uchicago.edu/corpnames/',)
+                *server_args + ('https://bmrc.lib.uchicago.edu/organizations/',)
             )
         )
     )
@@ -201,10 +196,11 @@ def clear_cache_cli():
 app.cli.add_command(clear_cache_cli)
 
 @click.command(name='delete-all-finding-aids')
-# @with_appcontext
 def delete_all_finding_aids():
     '''Delete all finding aids from the BMRC Portal MarkLogic database.'''
-    collections = get_collections(*server_args + ('https://bmrc.lib.uchicago.edu/archives/',))
+    collections = get_collections(
+        *server_args + ('https://bmrc.lib.uchicago.edu/archives/',)
+    )
     for collection, findingaids in collections.items():
         for findingaid in findingaids:
             click.echo('DELETING {}...'.format(findingaid[0]))
@@ -307,32 +303,50 @@ def load_finding_aids(dir):
                 )
 app.cli.add_command(load_finding_aids)
 
+# FUNCTIONS
+
+def get_min_max_page_links(page, total_pages):
+    min_page_link = page - math.floor(app.config['MAX_PAGE_LINKS'] / 2)
+    max_page_link = page + math.floor(app.config['MAX_PAGE_LINKS'] / 2)
+
+    if min_page_link < 1:
+        min_page_link = 1
+        max_page_link = min(
+           min_page_link + (app.config['MAX_PAGE_LINKS'] - 1),
+           total_pages
+        )
+
+    if max_page_link > total_pages:
+        max_page_link = total_pages
+        min_page_link = max(
+            1,
+            max_page_link - (app.config['MAX_PAGE_LINKS'] - 1)
+        )
+
+    return min_page_link, max_page_link
+
 # WEB INTERFACE
 
 @app.route('/about/')
 def about():
-    global server_args
-
     return render_template(
         'about.html', 
-        breadcrumbs = [],
-        search_results = {}
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
+        search_results = {},
+        title = 'About'
     )
 
 @app.route('/browse/')
 def browse():
-    global max_page_links
-    global max_page_links_before
-    global max_page_links_after
-    global page_length
-    global server_args
-
     b = request.args.get('b', default='', type=str)
     page = request.args.get('page', default=1, type=int)
     sort = request.args.get('sort', default='relevance', type=str)
 
-    start = (page - 1) * page_length
-    stop = start + page_length
+    start = (page - 1) * app.config['PAGE_LENGTH']
+    stop = start + app.config['PAGE_LENGTH']
 
     titles = {
         'archives': 'All Archives',
@@ -347,9 +361,7 @@ def browse():
     assert sort in ('alpha', 'alpha-dsc', 'relevance', 'shuffle')
 
     collections = get_collections(
-        *server_args + (
-            'https://bmrc.lib.uchicago.edu/{}/'.format(b),
-        )
+        *server_args + ('https://bmrc.lib.uchicago.edu/{}/'.format(b),)
     )
 
     browse_results = []
@@ -358,18 +370,8 @@ def browse():
         s = '{} ({})'.format(unquote_plus(u), len(collections[k]))
         browse_results.append((u, s, k))
 
-    total_pages = math.ceil(len(browse_results) / page_length)
-
-    min_page_link = page - max_page_links_before
-    max_page_link = page + max_page_links_after
-
-    while min_page_link < 1:
-        min_page_link += 1
-        max_page_link += 1
-
-    while max_page_link > total_pages and min_page_link > 0:
-        min_page_link -= 1
-        max_page_link -= 1
+    total_pages = math.ceil(len(browse_results) / app.config['PAGE_LENGTH'])
+    min_page_link, max_page_link = get_min_max_page_links(page, total_pages)
 
     if sort == 'alpha':
         browse_results.sort(key=lambda i: i[0].lower())
@@ -383,12 +385,16 @@ def browse():
     return render_template(
         'browse.html',
         b = b,
-        breadcrumbs = [],
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
         browse_results = browse_results[start:stop],
         max_page_link = max_page_link,
         min_page_link = min_page_link,
         page = page,
-        page_length = page_length,
+        page_length = app.config['PAGE_LENGTH'],
+        search_results = {},
         sort = sort,
         start = start,
         title = titles[b],
@@ -397,71 +403,169 @@ def browse():
 
 @app.route('/contact/')
 def contact():
-    global server_args
-
     return render_template(
         'contact.html', 
         breadcrumbs = [
-            ('/', 'Home'),
-            ('/contact/', 'Contact')
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
         ],
-        search_results = {}
+        search_results = {},
+        title = 'Contact'
+    )
+
+@app.route('/curated/')
+def curated():
+    curated_topics = app.config['CURATED_TOPICS']
+    curated_topic = random.choice(curated_topics)
+    return render_template(
+        'curated.html', 
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
+        curated_topic = curated_topic,
+        search_results = {},
+        title = curated_topic['title']
+    )
+
+@app.route('/facet_view_all/')
+def facet_view_all():
+    a = request.args.get('a', default='', type=str)
+    collections_active = request.args.getlist('f')
+    q = request.args.get('q', default='', type=str)
+    sort = request.args.get('sort', default='relevance', type=str)
+
+    assert sort in ('relevance', 'title', 'title-dsc', 'shuffle')
+
+    search_results = {}
+
+    if collections_active:
+        search_results['collections-active'] = []
+        for c in collections_active:
+            search_results['collections-active'].append([
+                c,
+                unquote_plus(c.split('/')[4]),
+                0
+            ])
+    if q:
+        search_results['q'] = q
+    if sort:
+        search_results['sort'] = sort
+
+    facet_name = a.replace('https://bmrc.lib.uchicago.edu/', '').split('/')[0]
+    assert facet_name in ('archives', 'decades', 'organizations', 'people', 'places', 'topics')
+
+    title = facet_name.capitalize()
+
+    # collection = get_collections(*server_args + (a,))
+    search_results = get_search(
+        *server_args + 
+        (
+            q,
+            sort,
+            0,
+            1,
+            -1,
+            collections_active,
+            ''
+        )
+    )
+
+    out = []
+    for f in search_results['more-' + facet_name]:
+        out.append(f)
+
+    if sort == 'relevance':
+        out.sort(key=lambda i: i[2], reverse=True)
+    elif sort == 'title':
+        out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower())
+    elif sort == 'title-dsc':
+        out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower(), reverse=True)
+    elif sort == 'shuffle':
+        random.shuffle(out)
+
+    return render_template(
+        'facet_view_all.html',
+        collection = out,
+        search_results = search_results,
+        title = title
     )
 
 @app.route('/help/')
 def help():
-    global server_args
-
     return render_template(
         'help.html', 
         breadcrumbs = [
-            ('/', 'Home'),
-            ('/help/', 'Help')
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
         ],
-        search_results = {}
+        search_results = {},
+        title = 'Help'
     )
 
 @app.route('/')
 def homepage():
-    global server_args
+    member_spotlight_title = ''
+    member_spotlight_html = ''
+    for a in app.config['ARCHIVES']:
+       if a['finding_aid_prefix'] == 'BMRC.CCARO': 
+           member_spotlight_title = a['short_title']
+           member_spotlight_html = a['member_spotlight_html']
+
+    facet = random.choice((
+        'https://bmrc.lib.uchicago.edu/topics/',
+        'https://bmrc.lib.uchicago.edu/people/',
+        'https://bmrc.lib.uchicago.edu/places/',
+        'https://bmrc.lib.uchicago.edu/organizations/',
+        'https://bmrc.lib.uchicago.edu/decades/'
+    ))
+
+    discover_more_facet = facet.replace('https://bmrc.lib.uchicago.edu/', '').replace('/', '')
+
+    collections = get_collections(*server_args + (facet,))
+
+    discover_more_uri = random.choice(list(collections.keys()))
+    discover_more_title = unquote_plus(discover_more_uri).replace('https://bmrc.lib.uchicago.edu/', '').split('/')[1]
 
     return render_template(
         'homepage.html', 
         breadcrumbs = [
-            ('/', 'Home')
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium')
         ],
-        search_results = {}
+        discover_more_title = discover_more_title,
+        discover_more_uri = discover_more_uri,
+        discover_more_facet = discover_more_facet,
+        member_spotlight_title = member_spotlight_title,
+        member_spotlight_html = member_spotlight_html,
+        search_results = {},
+        title = 'Collections Portal'
     )
 
 @app.route('/members/')
 def members():
-    global server_args
-
     return render_template(
         'members.html', 
         breadcrumbs = [
-            ('/', 'Home'),
-            ('/members/', 'Members')
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
         ],
-        search_results = {}
+        search_results = {},
+        title = 'Members'
     )
 
 @app.route('/search/')
 def search():
-    global max_page_links
-    global max_page_links_before
-    global max_page_links_after
-    global page_length
-    global server_args
-
     b = request.args.get('b', default='', type=str)
     collections = request.args.getlist('f')
     page = request.args.get('page', default=1, type=int)
     q = request.args.get('q', default='', type=str)
     sort = request.args.get('sort', default='', type=str)
 
-    start = (page - 1) * page_length
-    stop = start + page_length
+    # with a page length of 3, this is:
+    # (0, 3), (3, 6), (6, 9)...
+
+    start = (page - 1) * app.config['PAGE_LENGTH']
+    stop = start + app.config['PAGE_LENGTH']
 
     if sort == '':
         if q == '':
@@ -470,15 +574,20 @@ def search():
             sort = 'relevance'
 
     search_results = get_search(
-        *server_args + (
+        *server_args + 
+        (
             q,
             sort,
             start,
-            page_length,
+            app.config['PAGE_LENGTH'],
+            app.config['SIDEBAR_VIEW_MORE_FACET_COUNT'],
             collections,
             b
         )
     )
+
+    total_pages = math.ceil(search_results['total'] / app.config['PAGE_LENGTH'])
+    min_page_link, max_page_link = get_min_max_page_links(page, total_pages)
 
     if q:
         title = 'Portal Search - {}'.format(q)
@@ -487,29 +596,30 @@ def search():
 
     return render_template(
         'search.html',
-        breadcrumbs = [],
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
+        max_page_link = max_page_link,
+        min_page_link = min_page_link,
         page = page,
-        page_length = page_length,
+        page_length = app.config['PAGE_LENGTH'],
         search_results = search_results,
+        sidebar_view_less_facet_count = app.config['SIDEBAR_VIEW_LESS_FACET_COUNT'],
+        sidebar_view_more_facet_count = app.config['SIDEBAR_VIEW_MORE_FACET_COUNT'],
         sort = sort,
         start = start,
         title = title,
-        total_pages = 3
+        total_pages = total_pages
     )
 
 @app.route('/view/')
 def view():
-    global server_args
-
     id = request.args.get('id')
 
     findingaid = etree.fromstring(
         ElementTree.tostring(
-            get_findingaid(
-                *server_args + (
-                    id,
-                )
-            ),
+            get_findingaid(*server_args + (id,)),
             encoding='utf8', 
             method='xml'
         )
@@ -529,27 +639,12 @@ def view():
 
     return render_template(
         'view.html',
-        breadcrumbs = [],
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
         findingaid_html = findingaid_html
     )
-
-@app.route('/sidebar/<string:starts_with>', methods = ['POST'])
-def sidebar(starts_with):
-    # how to get docs? did that come in via POST?
-    docs = request.json['docs']
-    l = request.json['limit']
-    s = request.json['sort']
-
-    collection = get_collection(
-        *server_args + (
-            docs,
-            'https://bmrc.lib.uchicago.edu/{}/'.format(starts_with),
-            s,
-            l
-        )
-    )
-
-    return jsonify(collection)
 
 @app.route('/css/<path:path>')
 def css(path):

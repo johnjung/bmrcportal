@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="section">
-        <p>
-            <a href="https://bmrc.lib.uchicago.edu/">Black Metropolis Research Consortium</a> /
-            <a href="/">Collections Portal</a> /
-            <a href="#">Current Page</a>
-        </p>
-    </section>
-
     <div class="columns">
         <div class="column is-one-quarter" style="background-color: #f5f5eb;">
             <h2>Browse</h2>
@@ -98,7 +90,7 @@
             {# RESULTS #}
             <ul>
                 {% for b in browse_results %}
-                    <li><a href="/browse/{{ b[0] }}">{{ b[1] }}</a></li>
+                    <li><a href="/search/?f={{ b[2] | urlencode }}">{{ b[1] }}</a></li>
                 {% endfor %}
             <ul>
         

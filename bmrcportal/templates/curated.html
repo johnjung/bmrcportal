@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>{{ title }}</h1>
+
+    <p><img src="{{ curated_topic['img_src'] }}"/></p>
+
+    <p>{{ curated_topic['introductory_text'] }}</p>
+
+    <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic.</a></p>
+
+{% endblock %}

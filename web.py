@@ -4,10 +4,11 @@ import xml.etree.ElementTree as ElementTree
 from flask import current_app, Flask, jsonify, render_template, request, send_from_directory
 from flask.cli import with_appcontext
 from urllib.parse import unquote_plus
-from . import (clear_cache, delete_findingaid, get_archives_for_xml,
-               get_collection, get_collections, get_collections_for_xml,
-               get_decades_for_xml, get_findingaid, get_search,
-               load_findingaid, setup_cache)
+from bmrcportal import (clear_cache, delete_findingaid,
+                        get_archives_for_xml, get_collection,
+                        get_collections, get_collections_for_xml,
+                        get_decades_for_xml, get_findingaid, get_search,
+                        load_findingaid, setup_cache)
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('bmrcportal.config.default')

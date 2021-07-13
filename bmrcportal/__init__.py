@@ -298,6 +298,14 @@ def get_findingaid(server, username, password, proxy_server, uri):
     """
     setup_cache()
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     r = requests.get(
         '{}/v1/documents?{}'.format(
             server,
@@ -309,10 +317,7 @@ def get_findingaid(server, username, password, proxy_server, uri):
         headers={
             'Content-Type': 'application/xml'
         },
-        proxies={
-            'http': 'socks5://{}'.format(proxy_server),
-            'https': 'socks5://{}'.format(proxy_server)
-        }
+        proxies=proxies
     )
 
     if r.status_code == 404:
@@ -333,6 +338,14 @@ def delete_findingaid(server, username, password, proxy_server, uri):
         uri:           Marklogic URI for this finding aid.
     """
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     r = requests.delete(
         '{}/v1/documents?{}'.format(
             server,
@@ -341,10 +354,7 @@ def delete_findingaid(server, username, password, proxy_server, uri):
             })
         ),
         auth=(username, password),
-        proxies={
-            'http': 'socks5://{}'.format(proxy_server),
-            'https': 'socks5://{}'.format(proxy_server)
-        }
+        proxies=proxies
     )
 
     assert r.status_code == 204
@@ -372,6 +382,14 @@ def load_findingaid(server, username, password, proxy_server, fh, uri, collectio
             ('collection', collection)
         )
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     r = requests.put(
         '{}/v1/documents?{}'.format(
             server,
@@ -382,10 +400,7 @@ def load_findingaid(server, username, password, proxy_server, fh, uri, collectio
         headers={
             'Content-Type': 'application/xml'
         },
-        proxies={
-            'http': 'socks5://{}'.format(proxy_server),
-            'https': 'socks5://{}'.format(proxy_server)
-        }
+        proxies=proxies
     )
 
     assert r.status_code in (201, 204)
@@ -438,6 +453,14 @@ def get_collection(server, username, password, proxy_server, docs, b, sort, limi
     """
     #setup_cache()
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     with open(
         os.path.join(
             os.path.dirname(__file__),
@@ -457,10 +480,7 @@ def get_collection(server, username, password, proxy_server, docs, b, sort, limi
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            proxies={
-                'http': 'socks5://{}'.format(proxy_server),
-                'https': 'socks5://{}'.format(proxy_server)
-            }
+            proxies=proxies
         )
 
     try:
@@ -518,6 +538,14 @@ def get_collections(server, username, password, proxy_server, collection):
     """
     setup_cache()
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     with open(
         os.path.join(
             os.path.dirname(__file__),
@@ -537,10 +565,7 @@ def get_collections(server, username, password, proxy_server, collection):
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            proxies={
-                'http': 'socks5://{}'.format(proxy_server),
-                'https': 'socks5://{}'.format(proxy_server)
-            }
+            proxies=proxies
         )
 
     multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
@@ -557,6 +582,14 @@ def get_collection_document_matrix(server, username, password, proxy_server):
                          find this useful for local development.)
     """
     # setup_cache()
+
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
 
     with open(
         os.path.join(
@@ -577,10 +610,7 @@ def get_collection_document_matrix(server, username, password, proxy_server):
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            proxies={
-                'http': 'socks5://{}'.format(proxy_server),
-                'https': 'socks5://{}'.format(proxy_server)
-            }
+            proxies=proxies
         )
 
     multipart_data = requests_toolbelt.multipart.decoder.MultipartDecoder.from_response(r)
@@ -614,6 +644,14 @@ def get_search(server, username, password, proxy_server, q, sort, start, page_le
 
     # setup_cache()
 
+    if proxy_server:
+        proxies = {
+            'http': 'socks5://{}'.format(proxy_server),
+            'https': 'socks5://{}'.format(proxy_server)
+        }
+    else:
+        proxies = {}
+
     with open(
         os.path.join(
             os.path.dirname(__file__),
@@ -633,10 +671,7 @@ def get_search(server, username, password, proxy_server, q, sort, start, page_le
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            proxies={
-                'http': 'socks5://{}'.format(proxy_server),
-                'https': 'socks5://{}'.format(proxy_server)
-            }
+            proxies=proxies
         )
 
     try:

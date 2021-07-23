@@ -19,16 +19,15 @@
 
         #facet_overlay {
             background-color: white;
-            bottom: 1rem;
             height: calc(100% - 2rem);
-            left: 1rem;
             overflow-y: scroll;
             padding: 1rem;
             position: fixed;
-            right: 1rem;
-            top: 1rem;
             width: calc (100% - 4rem);
             z-index: 50;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         #facet_overlay_bg {
@@ -55,9 +54,11 @@
 
         {# Global stylesheets #}
             <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js"></script>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="/static/css/bulma.min.css">
-            <link rel="stylesheet" type="text/x-scss" href="/static/css/carousel.scss">
-            <link rel="stylesheet" type="text/x-scss" href="/static/css/style.scss">
+            <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+            <link rel="stylesheet" type="text/css" href="/static/css/portal.css">
 
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
@@ -85,7 +86,9 @@
     
                     <div id="navbarExampleTransparentExample" class="navbar-menu">
                         <div class="navbar-start">
-                            <a class="navbar-item" href="https://bmrc.lib.uchicago.edu/collections/"><span class="is-hidden-desktop-only">Search&nbsp;</span>Collections</a>
+                            <a class="navbar-item"
+                            href="https://bmrc.lib.uchicago.edu/collections/"><span
+                            class="is-hidden-desktop-only">Search&nbsp;</span>Collections</a>
                             <div class="navbar-item has-dropdown is-hoverable">
                                 <a class="navbar-link" href="https://bmrc.lib.uchicago.edu/programs/">Programs</a>
                                 <div class="navbar-dropdown is-boxed">
@@ -122,10 +125,8 @@
                         <div class="navbar-end">
                             <div class="navbar-item is-search">
                                 <form action="https://bmrc.lib.uchicago.edu/search" method="get">
-                                    <div class="field has-addons">
                                         <label class="is-sr-only">Site Search</label>
                                         <input class="input control is-small" placeholder="search website" type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-                                    </div>
                                     <button type="submit" value="Search" class="button is-small"><i class="fa fa-search" aria-hidden="true" aria-label="Submit site search"></i></button>
                                 </form>
                             </div>
@@ -135,18 +136,19 @@
             </section>
         {# endcache #}
 
-        <section class="section" style="background-color: #e5e7d2;">
-            <form action="/search/" method="get">
-                <div class="field has-addons">
-                    <label class="is-sr-only">Finding Aid Search</label>
-                    <input class="input control is-medium" placeholder="search collections" type="text" name="q"{% if search_results['q'] %} value="{{ search_results['q'] }}"{% endif %}>
-                    <button type="submit" value="Search" class="button is-medium">Search</button>
-                </div>
-            </form>
-            <p class="has-text-right is-size-7"><a href="/help/">Help</a></p>
-        </section>
-        
         <main id="content" role="main">
+            <section class="section portal-search" style="background-color: #e5e7d2;">
+                <form action="/search/" method="get">
+                    <div class="field has-addons">
+                        <label class="is-sr-only">Finding Aid Search</label>
+                        <input class="input control is-medium" placeholder="search collections" type="text" name="q"{% if search_results['q'] %} value="{{ search_results['q'] }}"{% endif %}>
+                        <button type="submit" value="Search" class="button is-medium">Search</button>
+                    </div>
+                </form>
+                <div class="search-help level-right"><a href="/help/">Research Help</a></div>
+            </section>
+        
+
             <nav class="breadcrumb is-small" aria-label="breadcrumbs">
               <ul>
                 {% for b in breadcrumbs %}
@@ -159,34 +161,34 @@
             {% block content %}{% endblock %}
         </main>
 
-        <footer id="footer" class="footer" role="contentinfo">
-            <section class="section">
-                <div class="is-pulled-left">
-                    <a href="/about/">About the Portal</a> |
-                    <a href="#">Curated Topics</a> | 
-                    <a href="https://bmrc.lib.uchicago.edu/news/newsletter-signup/">Newsletter Signup</a> |
-                    <a href="#">Search Help</a>
-                </div>
-                <div class="is-pulled-right">
-                    <a class="large button is-dark" href="https://bmrc.lib.uchicago.edu/news/support-bmrc/">Support the BMRC</a>
-                </div>
-            </section>
+        <section class="section subfooter level">
+            <div class="level-left">
+                <ul>
+                    <li><a href="/about/">About the Portal</a></li>
+                    <li><a href="#">Curated Topics</a></li>
+                    <li><a href="https://bmrc.lib.uchicago.edu/news/newsletter-signup/">Newsletter Signup</a></li>
+                    <li><a href="/help/">Research Help</a></li>
+                </ul>
+            </div>
+            <div class="level-right">
+                <a class="large button is-dark" href="https://bmrc.lib.uchicago.edu/news/support-bmrc/">Support the BMRC</a>
+            </div>
+        </section>
 
+        <footer id="footer" class="footer" role="contentinfo">
             <div class="container">
-                <div class="content has-text-centered">
-                    <div>
-                        <a href="https://www.facebook.com/1BMRC"><i class="fab fa-facebook-square"></i></a>
-                        <a href="https://twitter.com/ChicagoBMRC"><i class="fab fa-twitter-square"></i></a>
-                        <a href="https://instagram.com/black_metropolis/"><i class="fab fa-instagram"></i></a>
-                    </div>
+                <div class="has-text-centered">
+                    <a href="https://www.facebook.com/1BMRC"><i class="fab fa-facebook-square"></i></a>
+                    <a href="https://twitter.com/ChicagoBMRC"><i class="fab fa-twitter-square"></i></a>
+                    <a href="https://instagram.com/black_metropolis/"><i class="fab fa-instagram"></i></a>
                 </div>
-                <div class="content has-text-centered">
+                <div class="has-text-centered">
                     <div>
-                        <a href="#">Contact</a> | <a href="#">Jobs</a>
+                        <p><a href="https://bmrc.lib.uchicago.edu/contact/">Contact</a> | <a href="https://bmrc.lib.uchicago.edu/resources/jobs/">Jobs</a></p>
                     </div>
                     <div>
-                        Black Metropolis Research Consortium<br/>
-                        1100 E. 57th St., 2nd Floor, Room 203, Chicago, IL 60637
+                        <p>Black Metropolis Research Consortium<br/>
+                        1100 E. 57th St., 2nd Floor, Room 203, Chicago, IL 60637</p>
                     </div>
                 </div>
             </div>
@@ -217,7 +219,7 @@
             var facet_name = facets[i].dataset.facet;
 
             var ul = facets[i].querySelector('ul');
-            var lis = facets[i].querySelectorAll('li');
+            var lis = facets[i].querySelectorAll('li:not([view_link])');
             var lis_length = lis.length;
    
             for (var j = lis.length - 1; j >= 0; j--) {
@@ -230,13 +232,13 @@
             }
 
             if (lis_length > view_less_limit) {
-                facets[i].innerHTML += '<p><a class="view_more_link" href="#">View more ' + facet_name + ' >></a></p>';
-                facets[i].innerHTML += '<p><a class="view_less_link" href="#"><< View less ' + facet_name + '</a></p>';
-                facets[i].querySelector('.view_less_link').parentNode.style.display = 'none';
+                ul.innerHTML += '<li class="view_link"><a class="view_more_link" href="#">View more ' + facet_name + ' >></a></li>';
+                ul.innerHTML += '<li class="view_link"><a class="view_less_link" href="#"><< View less ' + facet_name + '</a></li>';
+                ul.querySelector('.view_less_link').parentNode.style.display = 'none';
             }
             if (lis_length > view_more_limit) {
-                facets[i].innerHTML += '<p><a class="view_all_link" href="#">View all ' + facet_name + ' >></a></p>';
-                facets[i].querySelector('.view_all_link').parentNode.style.display = 'none';
+                ul.innerHTML += '<li class="view_link"><a class="view_all_link" href="#">View all ' + facet_name + ' >></a></li>';
+                ul.querySelector('.view_all_link').parentNode.style.display = 'none';
             }
         }
 
@@ -248,7 +250,7 @@
 
                 var a = this;
 
-                var div = a.parentNode.parentNode;
+                var div = a.parentNode.parentNode.parentNode;
 
                 // get the facet name, e.g. "Organizations", from link text.
                 var facet_name = div.dataset.facet;
@@ -275,7 +277,7 @@
 
                 var a = this;
 
-                var div = a.parentNode.parentNode;
+                var div = a.parentNode.parentNode.parentNode;
 
                 // get the facet name, e.g. "Organizations", from link text.
                 var facet_name = div.dataset.facet;
@@ -317,7 +319,7 @@
                 var a = this;
 
                 // e.g. "people"
-                var facet_name = a.parentNode.parentNode.dataset.facet;
+                var facet_name = a.parentNode.parentNode.parentNode.dataset.facet;
 
                 document.getElementById('facet_overlay_bg').style.display = 'block';
                 var xml_http = new XMLHttpRequest();

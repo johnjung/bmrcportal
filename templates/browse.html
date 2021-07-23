@@ -1,114 +1,121 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="columns">
-        <div class="column is-one-quarter" style="background-color: #f5f5eb;">
+<div class="container section browse-view">
+    <div class="columns is-variable is-8">
+        <div class="column is-narrow browse-sidebar">
             <h2>Browse</h2>
             <ul>
                 {% if b == 'topics' %}
-                    <li>Topics</li>
+                    <li class="active">Topics</li>
                 {% else %}
                     <li><a href="/browse/?b=topics">Topics</a></li>
                 {% endif %}
           
                 {% if b == 'people' %}
-                    <li>People</li>
+                    <li class="active">People</li>
                 {% else %}
                     <li><a href="/browse/?b=people">People</a></li>
                 {% endif %}
           
                 {% if b == 'places' %}
-                    <li>Places</li>
+                    <li class="active">Places</li>
                 {% else %}
                     <li><a href="/browse/?b=places">Places</a></li>
                 {% endif %}
           
                 {% if b == 'corpnames' %}
-                    <li>Organizations</li>
+                    <li class="active">Organizations</li>
                 {% else %}
                     <li><a href="/browse/?b=corpnames">Organizations</a></li>
                 {% endif %}
           
                 {% if b == 'decades' %}
-                    <li>Decades</li>
+                    <li class="active">Decades</li>
                 {% else %}
                     <li><a href="/browse/?b=decades">Decades</a></li>
                 {% endif %}
           
                 {% if b == 'archives' %}
-                    <li>Archives</li>
+                    <li class="active">Archives</li>
                 {% else %}
                     <li><a href="/browse/?b=archives">Archives</a></li>
                 {% endif %}
             </ul>
     
             <h2>Featured Topic</h2>
-            <img src="#"/>
+            <img src="http://placekitten.com/200/300"/>
             <p><a href="#">Black Nurses</a></p>
             <p><a href="#">Explore all curated topics &gt;&gt;</a></p>
         </div>
+
         <div class="column">
             <h1>{{ title }}</h1>
-            <p>Sort by: 
+            <div class="sort-browse level-left">
+                <div class="sort-label">Sort by:</div>
                 {% if sort == 'relevance' %}
-                    <span>Relevance</span>
+                    <button class="button is-link is-light">Relevance</button>
                 {% else %}
-                    <a class="button" href="/browse/?b={{ b }}&sort=relevance">Relevance</a>
+                    <a class="button is-text" href="/browse/?b={{ b }}&sort=relevance">Relevance</a>
                 {% endif %}
           
                 {% if sort == 'alpha' %}
-                    <span>A-Z &darr;</span> 
+                    <button class="button is-link is-light">A-Z &darr;</button> 
                 {% else %}
-                    <a class="button" href="/browse/?b={{ b }}&sort=alpha">A-Z &darr;</a> 
+                    <a class="button is-text" href="/browse/?b={{ b }}&sort=alpha">A-Z &darr;</a> 
                 {% endif %}
           
                 {% if sort == 'alpha-dsc' %}
-                    <span>Z-A &uarr;</span>
+                    <button class="button is-link is-light">Z-A &uarr;</button>
                 {% else %}
-                    <a class="button" href="/browse/?b={{ b }}&sort=alpha-dsc">Z-A &uarr;</a>
+                    <a class="button is-text" href="/browse/?b={{ b }}&sort=alpha-dsc">Z-A &uarr;</a>
                 {% endif %}
           
-                <a class="button" href="/browse/?b={{ b }}&sort=shuffle">Shuffle &#128256;</a>
-            </p>
+                <a class="button is-text" href="/browse/?b={{ b }}&sort=shuffle">Shuffle <span class="material-icons">shuffle</span></a>
+            </div>
+            
         
             {# PAGER #}
             {% if total_pages > 1 %}
-                <section class="section">
-                    <div class="is-pulled-left">
-                        <p>
+                <nav class="pagination" role="navigation" aria-label="pagination">
+                    <a class="pagination-next"{% if page == total_pages %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ page + 1 }}&sort={{ sort }}">Next page</a>
+
+
+                    <ul class="pagination-list">
+                        <li>
                             {% for i in range(min_page_link, max_page_link + 1) %}
                                 <a class="button"{% if i == page %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a>
                             {% endfor %}
-                        </p>
-                    </div>
-                    <div class="is-pulled-right">
-                        <a class="button"{% if page == total_pages %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ page + 1 }}&sort={{ sort }}">Next page</a>
-                    </div>
-                </section>
+                        </li>
+                    </ul>
+                </nav>
             {% endif %}
+
         
             {# RESULTS #}
-            <ul>
+            <ul class="browse-results">
                 {% for b in browse_results %}
                     <li><a href="/search/?f={{ b[2] | urlencode }}">{{ b[1] }}</a></li>
                 {% endfor %}
-            <ul>
+            </ul>
+
         
-            {# PAGER #}
+           {# PAGER #}
             {% if total_pages > 1 %}
-                <section class="section">
-                    <div class="is-pulled-left">
-                        <p>
+                <nav class="pagination" role="navigation" aria-label="pagination">
+                    <a class="pagination-next"{% if page == total_pages %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ page + 1 }}&sort={{ sort }}">Next page</a>
+                    
+                    <ul class="pagination-list">
+                        <li>
                             {% for i in range(min_page_link, max_page_link + 1) %}
                                 <a class="button"{% if i == page %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a>
                             {% endfor %}
-                        </p>
-                    </div>
-                    <div class="is-pulled-right">
-                        <a class="button"{% if page == total_pages %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ page + 1 }}&sort={{ sort }}">Next page</a>
-                    </div>
-                </section>
+                        </li>
+                    </ul>
+                </nav>
             {% endif %}
         </div>
-    </div>
+
+    </div>   <!-- // END columns -->
+</div>  <!-- // END container -->
 {% endblock %}

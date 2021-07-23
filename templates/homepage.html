@@ -1,80 +1,117 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
 
-  <p>Browse by
-      <a href="/browse/?b=topics">Topics</a> |
-      <a href="/browse/?b=people">People</a> |
-      <a href="/browse/?b=places">Places</a> |
-      <a href="/browse/?b=corpnames">Organizations</a> |
-      <a href="/browse/?b=decades">Decades</a> |
-      <a href="/browse/?b=archives">Archives</a>
-  </p>
+    <section class="featured-browse section">
+      <div class="home-header">Browse by</div>
+      <ul>
+          <li><a href="/browse/?b=topics">Topics</a></li>
+          <li><a href="/browse/?b=people">People</a></li>
+          <li><a href="/browse/?b=places">Places</a></li>
+          <li><a href="/browse/?b=corpnames">Organizations</a></li>
+          <li><a href="/browse/?b=decades">Decades</a></li>
+          <li><a href="/browse/?b=archives">Archives</a></li>
+      </ul>
+    </section>
 
-  <div>
-    <h1>THE BMRC COLLECTIONS PORTAL</h1>
-    <p>Your gateway to the Black metropolis in Chicago and beyond, as seen through the unique collections on Black experiences available to you in libraries, museums, archives and other organizations in the Chicago area.</p>
+    <section class="portal-summary section">
+        <h1>THE BMRC COLLECTIONS PORTAL</h1>
+        <p>Your gateway to the Black metropolis in Chicago and beyond, as seen through the unique collections on Black experiences available to you in libraries, museums, archives and other organizations in the Chicago area.</p>
+    </section>
+
+    <section class="featured-news portal-feature section">
+        <div class="container is-fluid">
+            <div class="columns">
+
+                <div class="column has-text-centered is-one-third-tablet is-one-third-desktop">
+                    <a href="#">
+                        <img src="http://placekitten.com/200/300"/>
+                        <div class="header curated"><h2>Black Nurses</h2></div>
+                    </a>
+                    <a href="/curated/">Explore all curated topics &gt;&gt;</a>
+                </div>
+          
+                <div class="column has-text-centered is-one-third-tablet is-one-third-desktop">
+                    <a href="#">
+                        <img src="http://placekitten.com/500/300"/>
+                        <div class="header exhibits"><h2>Activism</h2></div>
+                    </a>
+                    <a href="#">View all exhibits &gt;&gt;</a>
+                </div>
+          
+                <div class="column has-text-centered is-one-third-tablet is-one-third-desktop">
+                    <a href="/search/?f={{ discover_more_uri | urlencode }}"/>
+                        <img src="http://placekitten.com/200/200"/>
+                        <div class="header discover"><h2>{{ discover_more_title }}</h2></div>
+                    </a>
+                    <a href="/browse/?b={{ discover_more_facet }}">Discover more {{ discover_more_facet }} &gt;&gt;</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="featured-modules portal section">
+        <div class="container">
+            <div class="columns is-desktop is-variable is-8">
+
+                <div class="column is-full-tablet is-half-desktop">
+                    <div class="columns">
+                        <div class="column is-narrow">
+                            <img class="is-square" src="http://placekitten.com/150/150"/>
+                        </div>
+                        <div class="column">
+                            <h2>Member Spotlight</h2>
+                            <h3>{{ member_spotlight_title }}</h3>
+                            {{ member_spotlight_html|safe }}
+                            <a href="#">View collections from {{ member_spotlight_title }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-full-tablet is-half-desktop">
+                    <h2>About BMRC</h2>
+                    <p>The Black Metropolis Research Consortium (BMRC) is a Chicago-based membership association of libraries, universities, museums, community/arts organizations and other archival institutions. The BMRC’s mission is to connect all who seek to document, share, understand and preserve Black experiences.</p>
+                    <p><b>It is the vision of the BMRC to be essential to promoting discovery, preservation, and use of Black historical collections.</b> Through consortial programs, the BMRC aids in expanding broad access to its members’ holdings of materials that document African American and African diasporic culture, history, and politics, with a specific focus on materials relating to Chicago.</p>
+                    <a href="https://bmrc.lib.uchicago.edu/about/">Read more about BMRC</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<!--   <section class="featured-news section">
+    <div class="container">
+        <h2>Explore BMRC</h2>
+      <div class="columns is-desktop">
+
+        <div class="column has-text-centered is-half-tablet is-one-quarter-desktop">
+            <a href="#">
+                <img src="http://placekitten.com/250/300"/>
+                Beyond the Consortium
+            </a>
+        </div>
+        <div class="column has-text-centered is-half-tablet is-one-quarter-desktop">
+            <a href="https://bmrc.lib.uchicago.edu/resources/more-materials/">
+                <img src="http://placekitten.com/250/350"/>
+                More Collections Resources
+            </a>
+        </div>
+        <div class="column has-text-centered is-half-tablet is-one-quarter-desktop">
+            <a href="https://bmrc.lib.uchicago.edu/programs/color-curtain-processing-project/">
+                <img src="http://placekitten.com/225/300"/>
+                Backstory: Survey Initiative and Color Curtain Processing Project
+            </a>
+        </div>
+        <div class="column has-text-centered is-half-tablet is-one-quarter-desktop">
+            <a href="https://www.lib.uchicago.edu/collex/exhibits/black-metropolis-research-consortium-fifteen-years-preserving-and-documenting-black-history-and-culture-chicago/summer-short-term-fellowship-program/books-bmrc-fellows/">
+                <img src="http://placekitten.com/250/325"/>
+                Recent work by BMRC Fellows
+            </a>
+        </div>
   </div>
-
-  <div class="columns has-text-centered">
-    <div class="column is-4">
-      <h2>Black Nurses</h2>
-      <p><a href="/curated/"><img src="#"/></a></p>
-      <p><a href="#">Explore all curated topics &gt;&gt;</a></p>
-    </div>
-  
-    <div class="column is-4">
-      <h2>Activism</h2>
-      <img src="#"/>
-      <p><a href="#">View all exhibits &gt;&gt;</a></p>
-    </div>
-  
-    <div class="column is-4">
-      <h2><a href="/search/?f={{ discover_more_uri | urlencode }}">{{ discover_more_title }}</a></h2>
-      <a href="/search/?f={{ discover_more_uri | urlencode }}"/><img src="#"/></a>
-      <p><a href="/browse/?b={{ discover_more_facet }}">Discover more {{ discover_more_facet }} &gt;&gt;</a></p>
-    </div>
-  </div>
-
-    <div class="columns">
-        <div class="column is-one-fifth">
-            <img src="#"/>
-        </div>
-        <div class="column is-two-fifths">
-            <h2>MEMBER SPOTLIGHT</h2>
-            <p>{{ member_spotlight_title }}</p>
-            {{ member_spotlight_html|safe }}
-        </div>
-        <div class="column is-two-fifths">
-            <h2><a href="https://bmrc.lib.uchicago.edu/about/">About BMRC</a></h2>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-    </div>
-
-    <div class="columns has-text-centered">
-        <div class="column">
-            <img src="#"/>
-            <div>
-                <a href="#">Beyond the Consortium</a>
-            </div>
-        </div>
-        <div class="column">
-            <img src="#"/>
-            <div>
-                <a href="https://bmrc.lib.uchicago.edu/resources/more-materials/">More Collections Resources</a>
-            </div>
-        </div>
-        <div class="column">
-            <img src="#"/>
-            <div>
-                <a href="https://bmrc.lib.uchicago.edu/programs/color-curtain-processing-project/">Backstory: Survey Initiative and Color Curtain Processing Project</a>
-            </div>
-        </div>
-        <div class="column">
-            <img src="#"/>
-            <div>
-                <a href="https://www.lib.uchicago.edu/collex/exhibits/black-metropolis-research-consortium-fifteen-years-preserving-and-documenting-black-history-and-culture-chicago/summer-short-term-fellowship-program/books-bmrc-fellows/">Recent work by BMRC Fellows</a>
-            </div>
-        </div>
-  </div>
+</div>
+</section> -->
 {% endblock %}

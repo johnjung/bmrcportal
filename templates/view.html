@@ -1,49 +1,18 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <title>BMRC Portal</title>
-  <link href="/css/bmrc.css" rel="stylesheet" type="text/css"/>
-</head>
-<body>
+{% extends "base.html" %}
 
-  <!--CONTAINER-->
-  <div id="container">
-    <!--HEADER-->
-    <div id="header">
-      <h2><a href="/">BMRC Portal</a></h2>
-      <!--<img id=logo" alt="logo" src="/static/img/BMRC-Logo.png"/>-->
-  
-      <div id="navigation">
-        <ul>
-          <li><a href="/" id="navhome">About the BMRC Portal</a></li>
-          <li><a href="/institutions/" id="navinstitutions">About the Institutions</a></li>
-        </ul>
+{% block content %}
+<div class="container section browse-view">
+    <div class="columns is-variable is-8">
+
+      <div class="column is-narrow browse-sidebar">
+        <p>[Table of contents]</p>
+        <p>[Archive Info box]</p>
       </div>
-    </div>
   
-    <!--CONTENT-->
-    <div id="content">
-      <p id="breadcrumbs">
-        {% for crumb in breadcrumbs %}
-          {% if loop.last %}
-              <span>{{ crumb[1] }}</span>
-          {% else %}
-              <span><a href="{{ crumb[0] }}">{{ crumb[1] }}</a></span> |
-          {% endif %}
-        {% endfor %}
-      </p>
-      {{ findingaid_html|safe }}
-    </div>
+      <div class="column">
+        {{ findingaid_html|safe }}
+      </div>
   
-    <!--FOOTER-->
-    <div id="footer">
-      <p>&#169; 2021. For more information, please contact the Black Metropolis
-  Research Consortium at <a
-  href="mailto:bmrc@uchicago.edu">bmrc@uchicago.edu</a>.  Site co-developed and
-  hosted by <a href="http://www.lib.uchicago.edu/">The University of Chicago
-  Library</a> and the <a href="https://bmrc.lib.uchicago.edu">BMRC.</a> </p>
-    </div>
-  </div>
-</body>
-
-</html>
+    </div>   <!-- // END columns -->
+</div>  <!-- // END container -->
+{% endblock %}

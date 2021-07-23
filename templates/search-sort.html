@@ -1,22 +1,23 @@
-<p>
-    Sort by:
+<div class="sort-browse level-left">
+    <div class="sort-label">Sort by:</div>
+
     {% if (search_results['b'] or search_results['q']) and search_results['sort'] != 'relevance' %}
-        <a class="button" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}">Relevance</a>
+        <a class="button is-link is-light" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}">Relevance</a>
     {% else %}
         <span>Relevance</span>
     {% endif %}
   
     {% if search_results['sort'] != 'alpha' %}
-        <a class="button" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha'}) }}">A-Z &darr;</a>
+        <a class="button is-link is-light" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha'}) }}">A-Z &darr;</a>
     {% else %}
         <span>A-Z &darr;</span>
     {% endif %}
   
     {% if search_results['sort'] != 'alpha-dsc' %}
-        <a class="button" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha-dsc'}) }}">Z-A &uarr;</a>
+        <a class="button is-link is-light" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha-dsc'}) }}">Z-A &uarr;</a>
     {% else %}
         <span>Z-A &uarr;</span>
     {% endif %}
   
-    <a class="button" href="/search/?{{ add_to_url_params(search_results, {'sort': 'random'}) }}">Shuffle &#128256;</a>
-</p>
+    <a class="button is-text" href="/search/?{{ add_to_url_params(search_results, {'sort': 'random'}) }}">Shuffle  <span class="material-icons">shuffle</span></a>
+</div>

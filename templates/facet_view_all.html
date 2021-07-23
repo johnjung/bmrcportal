@@ -1,14 +1,15 @@
-{{ title }}
+<div class="modal-header level">
+    <h2>Viewing all {{ title }}</h2>
+    <a class="level-left" href="#" id="facet_overlay_close">X</a>
+</div>
 
-<a href="#" id="facet_overlay_close">X</a>
-
-<p>
-    Sort by:
-    <a class="button facet_overlay_sort" data-sort="relevance" href="#">Relevance</a>
-    <a class="button facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</a>
-    <a class="button facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</a>
-    <a class="button facet_overlay_sort" data-sort="shuffle" href="#">Shuffle &#128256;</a>
-</p>
+<div class="sort-browse level-left">
+    <div class="sort-label">Sort by:</div>
+    <a class="button  is-text facet_overlay_sort" data-sort="relevance" href="#">Relevance</a>
+    <a class="button  is-text facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</a>
+    <a class="button  is-text facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</a>
+    <a class="button  is-text facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></a>
+</div>
 
 <ul>
     {% for c in collection %}

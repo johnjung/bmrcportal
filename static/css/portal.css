@@ -1,0 +1,288 @@
+
+a {
+    color: #224e64;
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
+}
+
+.material-icons {
+    font-size: 1.2em;
+    margin-left: 0.25em;
+}
+
+nav.breadcrumb ul {
+    padding-bottom:  0;
+}
+
+h1 {
+    text-transform: none;
+}
+
+.button.is-dark {
+    background-color: #6b1722;
+}
+
+.section.subfooter {
+    margin-top: 2rem;
+    margin-bottom: 0;
+    background-color: #e5e7d2;
+}
+
+.subfooter ul {
+    list-style: none;
+    padding-left: 0;
+    padding-bottom: 0;
+}
+
+@media (min-width: 62em) {
+    .subfooter li {
+        display: inline-block;
+    }
+}
+
+@media (min-width: 62em) {
+    .subfooter li+li::before {
+      content: " | ";
+    }
+}
+
+footer.footer {
+    margin-top: 0;
+}
+
+
+/*
+ * Homepage
+ * --------------------------------------------------
+ */
+
+.home-header {
+    color: #fff;
+    font-weight: 600;
+}
+
+@media (min-width: 62em) {
+    .home-header {
+        background-color: #676438;
+        padding: 1em 3em;
+        margin-left: -70px;      
+        display: inline-block;
+    }
+}
+
+.featured-browse {
+    color: #fff;
+    background-color: #676438;
+    padding: 1rem;
+}
+
+.featured-browse a {
+    color: #fff;
+}
+
+@media (min-width: 62em) {
+    .featured-browse a {
+        color: #224e64;
+    }
+}
+
+@media (min-width: 62em) {
+    .featured-browse {
+        color: unset;
+        background-color: unset;
+    }
+}
+
+.featured-browse ul {
+    padding-left: 0;
+    padding-bottom: 0;
+    padding-top: 0.5em;
+}
+
+@media (min-width: 62em) {
+    .featured-browse ul {
+        padding-left: 0.5em;
+        display: inline-block;
+    }
+}
+
+.featured-browse li {
+    display: inline-block;
+}
+
+.featured-browse li+li::before {
+  content: " | ";
+}
+
+.portal-summary h1, .portal-summary p{
+    margin-bottom: 0;
+}
+
+.portal-feature {
+    background-color: #e5e7d2;
+}
+
+.portal-feature .header {
+    width:  100%;
+    margin-top: -10px;
+    padding: 0.55em 0.5em;
+    margin-bottom: 0.35em;
+}
+
+.portal-feature h2 {
+    color: #fff;
+    font-size: 1em;
+    margin-bottom: 0;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.portal-feature .curated {
+    background-color: #676438;
+}
+
+.portal-feature .exhibits {
+    background-color: #7C391B;
+}
+
+.portal-feature .discover {
+    background-color: #663434;
+}
+
+.featured-modules.portal h2 {
+    color: #676438;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.featured-modules.portal h3 {
+    color: #6b1722;
+    font-size: 1.05rem;
+}
+
+.featured-modules img {
+    max-width:  150px;
+}
+
+/*
+ * Search
+ * --------------------------------------------------
+ */
+
+.portal-search {
+    padding: 1em 1em 0;
+}
+
+@media (min-width: 62em) {
+    .portal-search {
+        padding: 2.5em 6em 0.5em;
+    }
+}
+
+.portal-search button {
+    color: #ffffff;
+    background-color: #676438;
+}
+
+.portal-search button:hover {
+    color: #333333;
+    background-color: #a7a35e;
+}
+
+.search-help {
+    font-size: 0.9rem;
+    font-style: italic;
+    padding: 10px;
+}
+
+
+/*
+ * Browse and Search
+ * --------------------------------------------------
+ */
+
+#results_header + .active-facets {
+    margin-top: -15px;
+}
+
+#search_results h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.result-description {
+    margin-bottom: 0.5rem;
+}
+
+.result-metadata span {
+    font-style: italic;
+    font-weight: 600;
+}
+
+.active-facets + .sort-browse {
+    margin-top: 1em;
+}
+
+.sort-label {
+    color: #6b1722;
+    font-weight: 600;
+    padding-right: 1em;
+    display:inline-block;
+}
+
+.pagination-list {
+    padding-left: 0;
+}
+
+.pagination a:hover {
+    background-color:  #e3ecfa;
+    border-color: transparent;
+    color: #2160c4;
+}
+
+.section.browse-view {
+    margin-left: 0;
+}
+
+.browse-sidebar h2 {
+    color: #676438;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.browse-sidebar {
+    background-color: #f5f5eb;
+}
+
+.browse-sidebar ul {
+    list-style: none;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+.sort-browse {
+    padding-bottom: 1em;
+}
+
+.sort-browse .button {
+    margin-left: 0.5em;
+    text-decoration: none;
+}
+
+.sort-browse .button.is-text:hover {
+    background-color:  #e3ecfa;
+    border-color: transparent;
+    color: #2160c4;
+}
+
+ul.browse-results {
+    list-style: none;
+    padding-left: 0;
+}
+
+.browse-results li {
+    margin-bottom: 0.75em;
+}
+

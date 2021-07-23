@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="container section">
     <h1>{{ title }}</h1>
+    <div class="columns is-desktop">
+        <div class="column is-narrow">
+            <img src="{{ curated_topic['img_src'] }}"/>
+        </div>
 
-    <p><img src="{{ curated_topic['img_src'] }}"/></p>
+        <div class="column">
+            <p>{{ curated_topic['introductory_text'] }}</p>
 
-    <p>{{ curated_topic['introductory_text'] }}</p>
-
-    <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic.</a></p>
+            <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

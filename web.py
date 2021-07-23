@@ -630,6 +630,7 @@ def view():
         etree.parse(
             os.path.join(
                 os.path.dirname(__file__),
+                'bmrcportal',
                 'xslt',
                 'view.xsl'
             )
@@ -644,7 +645,8 @@ def view():
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
         ],
-        findingaid_html = findingaid_html
+        findingaid_html = findingaid_html,
+        search_results = []
     )
 
 @app.route('/css/<path:path>')

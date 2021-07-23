@@ -1,14 +1,13 @@
 {% if total_pages > 1 %}
-    <section class="section">
-        <div class="is-pulled-left">
-            <p>
-                {% for i in range(min_page_link, max_page_link + 1) %}
-                    <a class="button"{% if i == page %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': i}) }}">{{ i }}</a>
-                {% endfor %}
-            </p>
-        </div>
-        <div class="is-pulled-right">
-            <a class="button"{% if page == total_pages %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': page + 1}) }}">Next page</a>
-        </div>
-    </section>
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <a class="pagination-next"{% if page == total_pages %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': page + 1}) }}">Next page</a>
+
+    <ul class="pagination-list">
+        <li>
+            {% for i in range(min_page_link, max_page_link + 1) %}
+                <a class="button"{% if i == page %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': i}) }}">{{ i }}</a>
+            {% endfor %}
+        </li>
+    </ul>
+</nav>
 {% endif %}

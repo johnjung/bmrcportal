@@ -216,7 +216,7 @@ def load_finding_aids(dir):
     organizations = get_collections_for_xml(
         dir,
         'https://bmrc.lib.uchicago.edu/organizations/{}',
-        '//ead:corpname',
+        '//ead:corpname[not(ancestor::ead:publisher) and not(ancestor::ead:repository)]',
         {'ead': 'urn:isbn:1-931666-22-9'}
     )
     click.echo('Building decade browse...')
@@ -369,7 +369,8 @@ def browse():
     for k in collections.keys():
         u = k.replace('https://bmrc.lib.uchicago.edu/', '').split('/')[1]
         s = '{} ({})'.format(unquote_plus(u), len(collections[k]))
-        browse_results.append((u, s, k))
+        if not s.startswith('BMRC Portal'):
+            browse_results.append((u, s, k))
 
     total_pages = math.ceil(len(browse_results) / app.config['PAGE_LENGTH'])
     min_page_link, max_page_link = get_min_max_page_links(page, total_pages)

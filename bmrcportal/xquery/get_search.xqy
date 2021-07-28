@@ -116,7 +116,9 @@ declare function archive($doc) {
                 fn:starts-with($c, 'https://bmrc.lib.uchicago.edu/archives/BMRC+Portal')
             )
         )
-        then fn:replace($c, 'https://bmrc.lib.uchicago.edu/archives/', '')
+        then xdmp:url-decode(
+            fn:replace($c, 'https://bmrc.lib.uchicago.edu/archives/', '')
+        )
         else ()
 };
 
@@ -534,7 +536,7 @@ let $search-results :=
     cts:search(
         fn:doc(),
         query(
-            $q,   
+            fn:replace($q, '"', ''),
             $collections-active
         )
     )

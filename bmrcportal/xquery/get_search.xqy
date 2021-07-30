@@ -449,18 +449,29 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
          a cts:and-query() which can be passed to cts:search()
 
        Notes
-         all active facets are ANDed together, to search for results within the
-         intersection of all collections passed to this script.
+         Exact queries are wrapped in double quotes.Otherwise all active facets
+         are ANDed together, to search for results within the intersection of
+         all collections passed to this script.
     :)
 
-    cts:and-query(
-        (
-            for $t in fn:tokenize($raw-query, 's+')[. ne '']
-            return cts:word-query($t),
-            for $c in $collections
-            return cts:collection-query($c)
+    if (fn:starts-with($raw-query, '"') and fn:ends-with($raw-query, '"'))
+    then
+        cts:and-query(
+            (
+                cts:word-query(fn:replace($raw-query, '"', ''), 'exact'),
+                for $c in $collections
+                return cts:collection-query($c)
+            )
         )
-    )
+    else 
+        cts:and-query(
+            (
+                for $t in fn:tokenize($raw-query, '\s+')[. ne '']
+                return cts:word-query($t),
+                for $c in $collections
+                return cts:collection-query($c)
+            )
+        )
 };
 
 declare function results-for-collection($results, $collection) {
@@ -536,7 +547,7 @@ let $search-results :=
     cts:search(
         fn:doc(),
         query(
-            fn:replace($q, '"', ''),
+            $q,
             $collections-active
         )
     )

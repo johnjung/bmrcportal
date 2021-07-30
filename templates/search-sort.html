@@ -8,16 +8,16 @@
     {% endif %}
   
     {% if search_results['sort'] != 'alpha' %}
-        <a class="button is-link is-light" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha'}) }}">A-Z &darr;</a>
+        <a class="button is-link is-light" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}&sort=alpha">A-Z &darr;</a>
     {% else %}
         <span>A-Z &darr;</span>
     {% endif %}
   
     {% if search_results['sort'] != 'alpha-dsc' %}
-        <a class="button is-link is-light" href="/search/?{{ add_to_url_params(search_results, {'sort': 'alpha-dsc'}) }}">Z-A &uarr;</a>
+        <a class="button is-link is-light" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}&sort=alpha-dsc">Z-A &uarr;</a>
     {% else %}
         <span>Z-A &uarr;</span>
     {% endif %}
   
-    <a class="button is-text" href="/search/?{{ add_to_url_params(search_results, {'sort': 'random'}) }}">Shuffle  <span class="material-icons">shuffle</span></a>
+    <a class="button is-link is-light" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}&sort=random">Shuffle  <span class="material-icons">shuffle</span></a>
 </div>

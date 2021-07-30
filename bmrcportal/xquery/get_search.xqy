@@ -455,7 +455,7 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
 
     cts:and-query(
         (
-            for $t in fn:tokenize($raw-query, 's+')[. ne '']
+            for $t in fn:tokenize($raw-query, '\s+')[. ne '']
             return cts:word-query($t),
             for $c in $collections
             return cts:collection-query($c)

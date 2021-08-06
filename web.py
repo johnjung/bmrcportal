@@ -351,8 +351,8 @@ def browse():
 
     titles = {
         'archives': 'All Archives',
-        'corpnames': 'All Organizations',
         'decades': 'All Decades',
+        'organizations': 'All Organizations',
         'people': 'All People',
         'places': 'All Places',
         'topics': 'All Topics'
@@ -437,7 +437,7 @@ def facet_view_all():
     q = request.args.get('q', default='', type=str)
     sort = request.args.get('sort', default='relevance', type=str)
 
-    assert sort in ('relevance', 'title', 'title-dsc', 'shuffle')
+    assert sort in ('alpha', 'alpha-dsc', 'relevance', 'shuffle')
 
     search_results = {}
 
@@ -479,16 +479,19 @@ def facet_view_all():
 
     if sort == 'relevance':
         out.sort(key=lambda i: i[2], reverse=True)
-    elif sort == 'title':
+    elif sort == 'alpha':
         out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower())
-    elif sort == 'title-dsc':
+    elif sort == 'alpha-dsc':
         out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower(), reverse=True)
     elif sort == 'shuffle':
         random.shuffle(out)
 
     return render_template(
         'facet_view_all.html',
+        a = a,
         collection = out,
+        collection_active = collections_active,
+        q = q,
         search_results = search_results,
         title = title
     )

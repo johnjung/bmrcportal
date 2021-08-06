@@ -325,12 +325,40 @@
                 var xml_http = new XMLHttpRequest();
                 xml_http.onreadystatechange = function() {
                     if (xml_http.readyState == 4 && xml_http.status == 200) {
+                        console.log('onreadystatechange');
                         document.getElementById('facet_overlay').innerHTML = xml_http.responseText;
 
                         document.getElementById('facet_overlay_close').onclick = function(e) {
                             e.preventDefault();
                             document.getElementById('facet_overlay_bg').style.display = 'none';
                             document.getElementById('facet_overlay').innerHTML = '';
+                        }
+
+                        // JEJ
+                        var sort_links = document.getElementsByClassName('facet_overlay_sort');
+                        for (var j = 0; j < sort_links.length; j++) {
+                            sort_links[j].onclick = function(e) {
+                                e.preventDefault();
+
+                                var a = this;
+
+                                var facet_uri = 'https://bmrc.lib.uchicago.edu/' + facet_name + '/';
+
+                                var params = window.location.search;
+                                if (params) {
+                                    params += '&'
+                                } else {
+                                    params += '?'
+                                }
+                                params += 'sort=' + encodeURIComponent(a.dataset.sort);
+                                params += '&a=' + encodeURIComponent(facet_uri)
+
+                                var url = '/facet_view_all/' + params;
+                                console.log(url);
+                                overlay_bg.dataset.url = url;
+                                xml_http.open('GET', url);
+                                xml_http.send(null);
+                            }
                         }
                     }
                 }
@@ -342,6 +370,7 @@
                     params = '?a=' + encodeURIComponent(facet_uri)
                 }
                 var url = '/facet_view_all/' + params;
+                console.log(url);
                 overlay_bg.dataset.url = url;
                 xml_http.open('GET', url);
                 xml_http.send(null);

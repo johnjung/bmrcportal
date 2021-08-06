@@ -2,18 +2,38 @@
 
 {% block content %}
 <div class="container section">
-    <h1>{{ title }}</h1>
-    <div class="columns is-desktop">
-        <div class="column is-narrow">
-            <img src="{{ curated_topic['img_src'] }}"/>
+    <div class="columns is-variable is-8">
+        <div class="column is-narrow browse-sidebar">
+            <h2>Browse</h2>
+            <ul>
+                <li><a href="/browse/?b=topics">Topics</a></li>
+                <li><a href="/browse/?b=people">People</a></li>
+                <li><a href="/browse/?b=places">Places</a></li>
+                <li><a href="/browse/?b=organizations">Organizations</a></li>
+                <li><a href="/browse/?b=decades">Decades</a></li>
+                <li><a href="/browse/?b=archives">Archives</a></li>
+            </ul>
+    
+            <h2>Featured Topic</h2>
+            <img src="http://placekitten.com/200/300"/>
+            <p><a href="#">Black Nurses</a></p>
+            <p><a href="#">Explore all curated topics &gt;&gt;</a></p>
         </div>
-
         <div class="column">
-            <p>{{ curated_topic['introductory_text'] }}</p>
-
-            <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
+            <h1>{{ title }}</h1>
+            <div class="columns is-desktop">
+                <div class="column is-narrow">
+                    <img src="{{ curated_topic['img_src'] }}"/>
+                </div>
+        
+                <div class="column">
+                    <p>{{ curated_topic['introductory_text'] }}</p>
+        
+                    <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
+                </div>
+            </div>
         </div>
-    </div>
+    </div> 
 </div>
 
 {% endblock %}

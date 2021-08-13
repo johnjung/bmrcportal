@@ -458,6 +458,15 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
          https://docs.marklogic.com/guide/search-dev/relevance#id_21623
     :)
 
+    if ($raw-query eq "")
+    then
+        cts:and-query(
+            (
+                for $c in $collections
+                return cts:collection-query($c)
+            )
+        )
+    else
     if (fn:starts-with($raw-query, '"') and fn:ends-with($raw-query, '"'))
     then
         cts:and-query(
@@ -468,13 +477,17 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
             )
         )
     else 
-        cts:and-query(
+        cts:or-query(
             (
                 cts:word-query($raw-query, ('distance-weight=4', 'case-insensitive')),
-                for $t in fn:tokenize($raw-query, '\s+')[. ne '']
-                return cts:word-query($t, 'case-insensitive'),
-                for $c in $collections
-                return cts:collection-query($c)
+                cts:and-query(
+                    (
+                        for $t in fn:tokenize($raw-query, '\s+')[. ne '']
+                        return cts:word-query($t, 'case-insensitive'),
+                        for $c in $collections
+                        return cts:collection-query($c)
+                    )
+                )
             )
         )
 };

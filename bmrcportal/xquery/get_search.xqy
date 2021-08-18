@@ -449,13 +449,9 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
          a cts:and-query() which can be passed to cts:search()
 
        Notes
-         Exact queries are wrapped in double quotes.Otherwise all active facets
-         are ANDed together, to search for results within the intersection of
-         all collections passed to this script.
-
-         For notes on building queries where search terms near each
-         other will have a higher ranking, see:
-         https://docs.marklogic.com/guide/search-dev/relevance#id_21623
+	 Exact queries are wrapped in double quotes. Otherwise all active
+	 facets are ANDed together, to search for results within the
+         intersection of all collections passed to this script.
     :)
 
     let $options := (

@@ -458,38 +458,30 @@ declare function query($raw-query as xs:string, $collections) as cts:query? {
          https://docs.marklogic.com/guide/search-dev/relevance#id_21623
     :)
 
-    if ($raw-query eq "")
-    then
-        cts:and-query(
+    let $options := (
+        'case-insensitive',
+        'diacritic-insensitive',
+        'punctuation-insensitive',
+        'whitespace-insensitive'
+    )
+
+    return cts:and-query(
+        (
             (
-                for $c in $collections
-                return cts:collection-query($c)
-            )
-        )
-    else
-    if (fn:starts-with($raw-query, '"') and fn:ends-with($raw-query, '"'))
-    then
-        cts:and-query(
-            (
-                cts:word-query(fn:replace($raw-query, '"', ''), ('distance-weight=64', 'case-insensitive')),
-                for $c in $collections
-                return cts:collection-query($c)
-            )
-        )
-    else 
-        cts:or-query(
-            (
-                cts:word-query($raw-query, ('distance-weight=4', 'case-insensitive')),
-                cts:and-query(
-                    (
+                if ($raw-query eq "")
+                then ()
+                else
+                    if (fn:starts-with($raw-query, '"') and fn:ends-with($raw-query, '"'))
+                    then 
+                        cts:word-query(fn:replace($raw-query, '"', ''), fn:insert-before($options, 0, 'distance-weight=64'))
+                    else
                         for $t in fn:tokenize($raw-query, '\s+')[. ne '']
-                        return cts:word-query($t, 'case-insensitive'),
-                        for $c in $collections
-                        return cts:collection-query($c)
-                    )
-                )
-            )
+                        return cts:word-query($t, $options)
+            ),
+            for $c in $collections
+            return cts:collection-query($c)
         )
+    )
 };
 
 declare function results-for-collection($results, $collection) {

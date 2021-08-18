@@ -71,7 +71,11 @@
                     <a class="button is-text" href="/browse/?b={{ b }}&sort=alpha-dsc">Z-A &uarr;</a>
                 {% endif %}
           
-                <a class="button is-text" href="/browse/?b={{ b }}&sort=shuffle">Shuffle <span class="material-icons">shuffle</span></a>
+                {% if sort == 'shuffle' %}
+                    <button class="button is-link is-light">Shuffle <span class="material-icons">shuffle</span></button>
+                {% else %}
+                    <a class="button is-text" href="/browse/?b={{ b }}&sort=shuffle">Shuffle <span class="material-icons">shuffle</span></a>
+                {% endif %}
             </div>
             
         

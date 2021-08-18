@@ -434,6 +434,7 @@ def curated():
 def facet_view_all():
     a = request.args.get('a', default='', type=str)
     collections_active = request.args.getlist('f')
+    fsort = request.args.get('fsort', default='relevance', type=str)
     q = request.args.get('q', default='', type=str)
     sort = request.args.get('sort', default='relevance', type=str)
 
@@ -449,17 +450,12 @@ def facet_view_all():
                 unquote_plus(c.split('/')[4]),
                 0
             ])
-    if q:
-        search_results['q'] = q
-    if sort:
-        search_results['sort'] = sort
 
     facet_name = a.replace('https://bmrc.lib.uchicago.edu/', '').split('/')[0]
     assert facet_name in ('archives', 'decades', 'organizations', 'people', 'places', 'topics')
 
     title = facet_name.capitalize()
 
-    # collection = get_collections(*server_args + (a,))
     search_results = get_search(
         *server_args + 
         (
@@ -477,13 +473,13 @@ def facet_view_all():
     for f in search_results['more-' + facet_name]:
         out.append(f)
 
-    if sort == 'relevance':
+    if fsort == 'relevance':
         out.sort(key=lambda i: i[2], reverse=True)
-    elif sort == 'alpha':
+    elif fsort == 'alpha':
         out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower())
-    elif sort == 'alpha-dsc':
+    elif fsort == 'alpha-dsc':
         out.sort(key=lambda i: re.sub('^The ', '', i[1]).lower(), reverse=True)
-    elif sort == 'shuffle':
+    elif fsort == 'shuffle':
         random.shuffle(out)
 
     return render_template(
@@ -491,6 +487,7 @@ def facet_view_all():
         a = a,
         collection = out,
         collection_active = collections_active,
+        fsort = fsort,
         q = q,
         search_results = search_results,
         title = title

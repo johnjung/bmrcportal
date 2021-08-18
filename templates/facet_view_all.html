@@ -5,10 +5,29 @@
 
 <div class="sort-browse level-left" data-a={{ a }} data-collections-active={{ collections_active }} data-q={{ q }}>
     <div class="sort-label">Sort by:</div>
-    <a class="button is-text facet_overlay_sort" data-sort="relevance" href="#">Relevance</a>
-    <a class="button is-text facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</a>
-    <a class="button is-text facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</a>
-    <a class="button is-text facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></a>
+    {% if fsort == 'relevance' %}
+        <button class="button is-link is-light facet_overlay_sort" data-sort="relevance" href="#">Relevance</button>
+    {% else %}
+        <a class="button is-text facet_overlay_sort" data-sort="relevance" href="#">Relevance</a>
+    {% endif %}
+
+    {% if fsort == 'alpha' %}
+        <button class="button is-link is-light facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</button>
+    {% else %}
+        <a class="button is-text facet_overlay_sort" data-sort="alpha" href="#">A-Z &darr;</a>
+    {% endif %}
+
+    {% if fsort == 'alpha-dsc' %}
+        <button class="button is-link is-light facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</button>
+    {% else %}
+        <a class="button is-text facet_overlay_sort" data-sort="alpha-dsc" href="#">Z-A &uarr;</a>
+    {% endif %}
+
+    {% if fsort == 'shuffle' %}
+        <button class="button is-link is-light facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></button>
+    {% else %}
+        <a class="button is-text facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></a>
+    {% endif %}
 </div>
 
 <ul>

@@ -92,7 +92,7 @@ the sidebar. Search for "John Cage". The "Jazz" facet should be gone.
 
 ### Searches are Case and Diacritic Insensitive
 Searches for "Chicago State", "chicago state", and "Chicagö State", with or
-without quotes, should all return the same number of results. 
+without quotes, should all return the same number of results.
 
 ### Multi-word Search Results Should Contain The Set Intersection of Individual Word Searches
 Search for "Oneida Woodard" (without quotes.) As of August, 2021, this search
@@ -118,3 +118,10 @@ collection" finding aid near the top of results.
 ### Finding Aid View
 A search for "jazz" should return 115 results, as of August, 2021. Clicking on 
 the first result should display a finding aid. 
+
+### "View All" Facet Overlay 
+Click the "view more" link in one of the sidebar facets, and then click "view
+all". The facet overlay should appear.
+
+### "View All" Facet Overlay Sorting
+

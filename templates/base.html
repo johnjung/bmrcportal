@@ -325,7 +325,6 @@
                 var xml_http = new XMLHttpRequest();
                 xml_http.onreadystatechange = function() {
                     if (xml_http.readyState == 4 && xml_http.status == 200) {
-                        console.log('onreadystatechange');
                         document.getElementById('facet_overlay').innerHTML = xml_http.responseText;
 
                         document.getElementById('facet_overlay_close').onclick = function(e) {
@@ -334,7 +333,6 @@
                             document.getElementById('facet_overlay').innerHTML = '';
                         }
 
-                        // JEJ
                         var sort_links = document.getElementsByClassName('facet_overlay_sort');
                         for (var j = 0; j < sort_links.length; j++) {
                             sort_links[j].onclick = function(e) {
@@ -350,7 +348,7 @@
                                 } else {
                                     params += '?'
                                 }
-                                params += 'sort=' + encodeURIComponent(a.dataset.sort);
+                                params += 'fsort=' + encodeURIComponent(a.dataset.sort);
                                 params += '&a=' + encodeURIComponent(facet_uri)
 
                                 var url = '/facet_view_all/' + params;

@@ -73,6 +73,7 @@
 
 <!-- CONTROLACCESS (subject headings) -->
 <xsl:template match="ead:controlaccess">
+  <h3 id="{generate-id(.)}">Indexed Terms</h3>
   <ul><xsl:apply-templates/></ul>
 </xsl:template>
 

@@ -24,7 +24,7 @@
     {% endif %}
 
     {% if fsort == 'shuffle' %}
-        <button class="button is-link is-light facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></button>
+        <a data-sort="shuffle" href="#" style="text-decoration: none;"><button class="button is-link is-light facet_overlay_sort" data-sort="shuffle">Shuffle <span class="material-icons">shuffle</span></button></a>
     {% else %}
         <a class="button is-text facet_overlay_sort" data-sort="shuffle" href="#">Shuffle <span class="material-icons">shuffle</span></a>
     {% endif %}

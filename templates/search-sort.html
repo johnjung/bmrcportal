@@ -20,7 +20,7 @@
     {% endif %}
 
     {% if search_results['sort'] == 'shuffle' %}
-        <button class="button is-link is-light">Shuffle <span class="material-icons">shuffle</span></button>
+        <a href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}&sort=shuffle" style="text-decoration: none;"><button class="button is-link is-light">Shuffle <span class="material-icons">shuffle</span></button></a>
     {% else %}
         <a class="button is-text" href="/search/?{{ remove_from_url_params(search_results, {'sort': None}) }}&sort=shuffle">Shuffle  <span class="material-icons">shuffle</span></a>
     {% endif %}

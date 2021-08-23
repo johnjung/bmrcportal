@@ -76,8 +76,18 @@
   <ul><xsl:apply-templates/></ul>
 </xsl:template>
 
-<xsl:template match="ead:controlaccess/corpname | ead:controlaccess/famname | controlaccess/geogname | controlaccess/persname | controlaccess/subject">
-	<p class="compact"><xsl:apply-templates/></p>
+<xsl:template match="ead:controlaccess/ead:address | ead:controlaccess/ead:blockquote | ead:controlaccess/ead:chronlist | ead:controlaccess/ead:controlaccess | ead:controlaccess/ead:corpname | ead:controlaccess/ead:famname | ead:controlaccess/ead:function | ead:controlaccess/ead:genreform | ead:controlaccess/ead:geogname | ead:controlaccess/ead:head | ead:controlaccess/ead:list | ead:controlaccess/ead:name | ead:controlaccess/ead:note | ead:controlaccess/ead:occupation | ead:controlaccess/ead:p | ead:controlaccess/ead:persname | ead:controlaccess/ead:subject | ead:controlaccess/ead:table | ead:controlaccess/ead:title">
+	<li>
+        <a>
+            <xsl:attribute name="href">
+                <xsl:value-of select="concat(
+                  '/search/?q=',
+                  . 
+                )"/>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+        </a>
+    </li>
 </xsl:template>
 
 <!-- DAOLOC -->

@@ -17,17 +17,17 @@
                 {% else %}
                     <li><a href="/browse/?b=people">People</a></li>
                 {% endif %}
+
+                {% if b == 'organizations' %}
+                    <li class="active">Organizations</li>
+                {% else %}
+                    <li><a href="/browse/?b=organizations">Organizations</a></li>
+                {% endif %}
           
                 {% if b == 'places' %}
                     <li class="active">Places</li>
                 {% else %}
                     <li><a href="/browse/?b=places">Places</a></li>
-                {% endif %}
-          
-                {% if b == 'organizations' %}
-                    <li class="active">Organizations</li>
-                {% else %}
-                    <li><a href="/browse/?b=organizations">Organizations</a></li>
                 {% endif %}
           
                 {% if b == 'decades' %}

@@ -216,10 +216,6 @@
 <p class="note"><xsl:apply-templates/></p>
 </xsl:template>
 
-<xsl:template match="ead:physdesc/ead:extent">
-<p><strong>Size</strong></p><p><xsl:apply-templates/></p>
-</xsl:template>
-
 <!-- PROFILEDESC -->
 <xsl:template match="ead:profiledesc">
   <p><strong>Profile Description</strong></p><xsl:apply-templates/>

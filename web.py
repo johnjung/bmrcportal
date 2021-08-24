@@ -469,9 +469,13 @@ def facet_view_all():
         )
     )
 
+    # To simplify the template, append a fourth element to each list: True if
+    # the facet is currently active, false if not.
     out = []
+    for f in search_results['active-' + facet_name]:
+        out.append(f + [True])
     for f in search_results['more-' + facet_name]:
-        out.append(f)
+        out.append(f + [False])
 
     if fsort == 'relevance':
         out.sort(key=lambda i: i[2], reverse=True)

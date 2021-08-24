@@ -32,6 +32,10 @@
 
 <ul>
     {% for c in collection %}
-        <li data-count="{{ c[2] }}" data-title="{{ c[0] }}"><a href="/search/?{{ add_to_url_params(search_results, {'f': c[0]}) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+        {% if c[3] %}
+            <li data-count="{{ c[2] }}" data-title="{{ c[0] }}">{{ c[1] }} ({{ c[2] }})</li>
+        {% else %}
+            <li data-count="{{ c[2] }}" data-title="{{ c[0] }}"><a href="/search/?{{ add_to_url_params(search_results, {'f': c[0]}) }}">{{ c[1] }} ({{ c[2] }})</a></li>
+        {% endif %}
     {% endfor %}
 </ul>

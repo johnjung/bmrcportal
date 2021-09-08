@@ -637,6 +637,19 @@ def view():
                 os.path.dirname(__file__),
                 'bmrcportal',
                 'xslt',
+                'regularize.xsl'
+            )
+        )
+    )
+
+    findingaid = transform(findingaid)
+
+    transform = etree.XSLT(
+        etree.parse(
+            os.path.join(
+                os.path.dirname(__file__),
+                'bmrcportal',
+                'xslt',
                 'view.xsl'
             )
         )

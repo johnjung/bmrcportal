@@ -2,7 +2,8 @@
 
 <xsl:stylesheet version="1.0"
  xmlns:ead="urn:isbn:1-931666-22-9"
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  exclude-result-prefixes="ead">
 
 <xsl:output omit-xml-declaration="yes"/>
 
@@ -12,19 +13,29 @@
 <!-- PARAMETER: Q -->
 <xsl:param name="q"/>
 
-<!-- CONTINUE -->
-<xsl:template match="dsc//did">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- CONVERT TO P -->
-<xsl:template match="ead:corpname | ead:geoname | ead:occupation | ead:unitdate">
-<p><xsl:apply-templates/></p>
-</xsl:template>
-
-<!-- * -->
+<!-- NODES AND ATTRIBUTES -->
 <xsl:template match="*">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- ELEMENT NODES -->
+<xsl:template match="ead:archdesc|ead:corpname|ead:ead|ead:language|ead:persname">
   <xsl:apply-templates/>
+</xsl:template>
+
+<!-- TEXT NODES -->
+<xsl:template match="text()">
+  <xsl:value-of select="."/>
+</xsl:template>
+
+<!-- SKIP -->
+<xsl:template match="ead:arc|ead:colspec|ead:eadheader|ead:eadid"/>
+
+<!-- CONVERT TO DIV -->
+<xsl:template match="ead:archref|ead:author|ead:bibref|ead:bibseries|ead:change|ead:container|ead:descrules|ead:div|ead:extent|ead:geogname|ead:langmaterial|ead:langusage|ead:materialspec|ead:note|ead:notestmt|ead:originalsloc|ead:physfacet|ead:physloc|ead:phystech|ead:profiledesc|ead:publisher|ead:repository|ead:sponsor|ead:subarea|ead:subtitle|ead:titlepage|ead:unitdate|ead:did/ead:unittitle">
+  <div>
+    <xsl:apply-templates/>
+  </div>
 </xsl:template>
 
 <!-- @LABEL -->
@@ -33,42 +44,12 @@
   <h3 id="{generate-id(.)}"><xsl:value-of select="."/></h3>
 </xsl:template>
 
-<!-- ABBR -->
-<xsl:template match="ead:abbr">
-  <xsl:apply-templates/>
-</xsl:template>
-
 <!-- ABSTRACT -->
 <xsl:template match="ead:abstract">
-  <xsl:apply-templates select="@label"/>
-  <xsl:if test="not(@label)"> 
-    <h3 id="{generate-id(.)}">Abstract</h3>
-  </xsl:if>
-  <p><xsl:apply-templates/></p>
-</xsl:template>
-
-<!-- ACCESSRESTRICT -->
-<xsl:template match="ead:accessrestrict">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Access Restrictions</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- ACCRUALS -->
-<xsl:template match="ead:accruals">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Accruals</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- ACQINFO -->
-<xsl:template match="ead:acqinfo">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Acquisition Information</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="@*"/>
+  <p>
+    <xsl:apply-templates/>
+  </p>
 </xsl:template>
 
 <!-- ADDRESS -->
@@ -84,123 +65,30 @@
   <xsl:if test="following-sibling::ead:addressline"><br/></xsl:if>
 </xsl:template>
 
-<!-- ALTFORMAVAIL -->
-<xsl:template match="ead:altformavail">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Alternate Format Available</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- APPRAISAL -->
-<xsl:template match="ead:appraisal">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Appraisal</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- ARC -->
-<!-- TODO: revisit -->
-<xsl:template match="ead:arc"/>
-
-<!-- ARCHDESC -->
-<xsl:template match="ead:archdesc">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- ARCHDESCGRP -->
-<xsl:template match="ead:archdescgrp">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- ARCHREF -->
-<xsl:template match="ead:archref">
-  <div>
-    <xsl:apply-templates/>
-  </div>
-</xsl:template>
-
-<!-- ARRANGEMENT -->
-<xsl:template match="ead:arrangement">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Arrangement</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- AUTHOR -->
-<xsl:template match="ead:author">
-  <div><xsl:apply-templates/></div>
-</xsl:template>
-
-<!-- BIBLIOGRAPHY -->
-<xsl:template match="ead:bibliography">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Bibliography</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- BIBREF -->
-<xsl:template match="ead:bibref">
-  <div><xsl:apply-templates/></div>
-</xsl:template>
-
-<!-- BIBSERIES -->
-<xsl:template match="ead:bibseries">
-  <div><xsl:apply-templates/></div>
-</xsl:template>
-
-<!-- BIOGHIST -->
-<xsl:template match="ead:bioghist">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Biographical Note</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
 <!-- BLOCKQUOTE -->
 <xsl:template match="ead:blockquote">
-  <blockquote><xsl:apply-templates/></blockquote>
+  <blockquote>
+    <xsl:apply-templates/>
+  </blockquote>
 </xsl:template>
 
 <!-- C## -->
-<xsl:template match="
-  ead:c[@level] | 
-  ead:c01[@level] | ead:c02[@level] | ead:c03[@level] | ead:c04[@level] |
-  ead:c05[@level] | ead:c06[@level] | ead:c07[@level] | ead:c08[@level] |
-  ead:c09[@level] | ead:c10[@level] | ead:c11[@level] | ead:c12[@level]"> 
-<div class="series"><xsl:apply-templates/></div>
-</xsl:template>
-
-<!-- CHANGE -->
-<xsl:template match="ead:change">
-  <div>
-    <xsl:apply-templates/>
-  </div>
-</xsl:template>
-
-<!-- CHRONITEM -->
-<xsl:template match="ead:chronitem">
-  <div>
+<xsl:template match="ead:c">
+  <div class="c">
     <xsl:apply-templates/>
   </div>
 </xsl:template>
 
 <!-- CHRONLIST -->
 <xsl:template match="ead:chronlist">
-  <div>
+  <dl>
     <xsl:apply-templates/>
-  </div>
+  </dl>
 </xsl:template>
-
-<!-- COLSPEC -->
-<xsl:template match="ead:colspec"/>
 
 <!-- CONTAINER TYPE BOX -->
 <xsl:template match="ead:container[@type='box'] | ead:container[@type='Box']">
-  <div>Box <xsl:apply-templates/></div>
+  <div>Box <xsl:apply-templates select="@*|node()"/></div>
 </xsl:template>
 
 <!-- CONTAINER TYPE FOLDER -->
@@ -208,209 +96,257 @@
   <div>Folder <xsl:apply-templates/></div>
 </xsl:template>
 
-<!-- CONTAINER TYPE OTHERTYPE -->
-<xsl:template match="ead:container[@type='othertype']">
-  <div><xsl:apply-templates/></div>
-</xsl:template>
-
-<!-- CONTROLACCESS -->
-<xsl:template match="ead:controlaccess">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Biographical Note</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- CORPNAME -->
-<xsl:template match="ead:corpname">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- CREATION -->
-<xsl:template match="ead:creation">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- CUSTODHIST -->
-<xsl:template match="ead:custodhist">
-  <xsl:if test="not(ead:head)">
-    <h3 id="{generate-id(.)}">Custodial History</h3>
-  </xsl:if>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DAO -->
-<xsl:template match="ead:dao">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DAODESC -->
-<xsl:template match="ead:daodesc">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DAOGRP -->
-<xsl:template match="ead:daogrp">
-  <xsl:apply-templates/>
-</xsl:template>
-
 <!-- DAOLOC -->
 <xsl:template match="ead:daoloc">
-  <a href="{@href}"><xsl:value-of select="."/></a>
-</xsl:template>
-
-<!-- DATE -->
-<xsl:template match="ead:date">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DESCGRP -->
-<xsl:template match="ead:descgrp">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DESCRULES -->
-<xsl:template match="ead:descrules">
-  <div>
-    <xsl:apply-templates/>
-  </div>
+  <a href="{@href}">
+    <xsl:value-of select="."/>
+  </a>
 </xsl:template>
 
 <!-- DID -->
-<xsl:template match="ead:did">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DIMENSIONS -->
-<xsl:template match="ead:dimensions">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<!-- DIV -->
-<xsl:template match="ead:div">
-  <div>
-    <xsl:apply-templates/>
-  </div>
+<xsl:template match="ead:archdesc/ead:did">
+  <xsl:apply-templates select="ead:head"/>
+  <dl>
+    <xsl:apply-templates select="*[not(self::ead:head)]"/>
+  </dl>
 </xsl:template>
 
 <!-- DSC -->
 <xsl:template match="ead:dsc">
+  <h3 id="{generate-id(.)}">Inventory</h3>
   <xsl:apply-templates/>
 </xsl:template>
 
-<!-- DSCGRP -->
-<xsl:template match="ead:dscgrp">
-  <xsl:apply-templates/>
+<!-- EMPH -->
+<xsl:template match="ead:emph">
+  <em>
+    <xsl:apply-templates/>
+  </em>
 </xsl:template>
 
-<!-- EAD -->
-<xsl:template match="ead:ead">
-  <xsl:apply-templates/>
+<xsl:template match="ead:emph[@render='bold']">
+  <strong>
+    <xsl:apply-templates/>
+  </strong>
 </xsl:template>
 
-<!-- EADGRP -->
-<xsl:template match="ead:eadgrp">
-  <xsl:apply-templates/>
+<!-- ENTRY -->
+<xsl:template match="ead:entry">
+  <td>
+    <xsl:apply-templates/>
+  </td>
 </xsl:template>
 
-<!-- EADHEADER -->
-<xsl:template match="ead:eadheader">
-  <xsl:apply-templates/>
+<!-- EVENT -->
+<xsl:template match="ead:event">
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
-<xsl:template match="ead:eadheader[@audience='internal']"/>
+<!-- EXTPTR -->
+<xsl:template match="ead:extptr[@href]">
+  <a href="{@href}">
+    <xsl:choose>
+      <xsl:when test="@title">
+        <xsl:value-of select="@title"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </a>
+</xsl:template>
 
-<!-- EADID -->
-<xsl:template match="ead:eadid"/>
+<!-- EXTREF -->
+<xsl:template match="ead:extref[@href]">
+  <a href="{@href}">
+    <xsl:apply-templates/>
+  </a>
+</xsl:template>
+
+<!-- EXTREFLOC -->
+<xsl:template match="ead:extrefloc[@href]">
+  <a href="{@href}">
+    <xsl:apply-templates/>
+  </a>
+</xsl:template>
+
+<!-- FUNCTION -->
+<xsl:template match="ead:function">
+  <li>
+    <xsl:apply-templates/>
+  </li>
+</xsl:template>
+
+<!-- GENREFORM -->
+<xsl:template match="ead:genreform">
+  <li>
+    <xsl:apply-templates/>
+  </li>
+</xsl:template>
 
 <!-- GEOGNAME -->
-<xsl:template match="ead:geogname">
-<p><xsl:apply-templates/></p>
+<xsl:template match="ead:imprint/ead:geogname">
+  <div>
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
+<xsl:template match="ead:indexentry/ead:geogname">
+  <dt>
+    <xsl:apply-templates/>
+  </dt>
+</xsl:template>
+<xsl:template match="ead:namegrp/ead:geogname">
+  <li>
+    <xsl:apply-templates/>
+  </li>
+</xsl:template>
+<xsl:template match="ead:p/ead:geogname">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- HEAD -->
 <xsl:template match="ead:head">
-<h3 id="{generate-id(.)}"><xsl:apply-templates/></h3>
+  <h3 id="{generate-id(.)}">
+    <xsl:apply-templates/>
+  </h3>
 </xsl:template>
 
 <!-- HIGHLIGHT -->
 <xsl:template match="ead:highlight">
-<span class="highlight"><xsl:value-of select="."/></span>
+  <span class="highlight">
+    <xsl:apply-templates/>
+  </span>
+</xsl:template>
+
+<!-- IMPRINT -->
+<xsl:template match="ead:imprint">
+  <ul>
+    <xsl:apply-templates/>
+  </ul>
 </xsl:template>
 
 <!-- ITEM -->
-<xsl:template match="ead:item">
-<li><xsl:apply-templates/></li>
+<xsl:template match="ead:change/ead:item">
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
+</xsl:template>
+<xsl:template match="ead:defitem/ead:item">
+  <dt>
+    <xsl:apply-templates/>
+  </dt>
+</xsl:template>
+<xsl:template match="ead:list/ead:item">
+  <li>
+    <xsl:apply-templates/>
+  </li>
+</xsl:template>
+
+<!-- LABEL -->
+<xsl:template match="ead:label">
+  <dt>
+    <xsl:apply-templates/>
+  </dt>
+</xsl:template>
+
+<!-- LANGMATERIAL -->
+<xsl:template match="ead:archdesc/ead:did/ead:langmaterial">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
 <!-- LIST -->
 <xsl:template match="ead:list">
-<ul><xsl:apply-templates/></ul>
+  <ul>
+    <xsl:apply-templates/>
+  </ul>
 </xsl:template>
 
-<xsl:template match="ead:dsc//ead:list">
-<ul class="bullets"><xsl:apply-templates/></ul>
+<!-- NAMEGRP -->
+<xsl:template match="ead:namegrp">
+  <ul>
+    <xsl:apply-templates/>
+  </ul>
 </xsl:template>
 
-<!-- NOTE -->
-<xsl:template match="ead:note">
-<xsl:apply-templates/>
+<!-- OCCUPATION -->
+<xsl:template match="ead:controlaccess/ead:occupation | ead:namegrp/ead:occupation">
+  <div>
+    <xsl:apply-templates/>
+  </div>
 </xsl:template>
-
-<xsl:template match="ead:note[@label='Note']">
-<p><strong>Note</strong></p><xsl:apply-templates/>
-</xsl:template>
-
-<!-- NUM -->
-<xsl:template match="ead:num"/>
 
 <!-- ORIGINATION -->
-<xsl:template match="ead:origination">
-<p class="note"><xsl:apply-templates/></p>
-</xsl:template>
-
-<xsl:template match="ead:origination[@label='Collector']">
-<p><strong>Collector</strong></p><p><xsl:apply-templates/></p>
+<xsl:template match="ead:archdesc/ead:did/ead:origination">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
 <!-- P -->
 <xsl:template match="ead:p">
-<p><xsl:apply-templates/></p>
-</xsl:template>
-
-<xsl:template match="ead:dsc//ead:p">
-<p class="note"><xsl:apply-templates/></p>
+  <p>
+    <xsl:apply-templates/>
+  </p>
 </xsl:template>
 
 <!-- PHYSDESC -->
-<xsl:template match="ead:physdesc[@label='Size'] | ead:physdesc[@label='size'] | ead:physdesc[@label='Alternate Extent Statement']">
-<p><strong>Size</strong></p><xsl:apply-templates/>
-</xsl:template>
-
-<xsl:template match="ead:physdesc">
-<p class="note"><xsl:apply-templates/></p>
-</xsl:template>
-
-<!-- PROFILEDESC -->
-<xsl:template match="ead:profiledesc">
-  <p><strong>Profile Description</strong></p><xsl:apply-templates/>
-</xsl:template>
-
-<!-- PUBLICATIONSTMT -->
-<xsl:template match="ead:publicationstmt">
-<p><strong>Publication Statement</strong></p><xsl:apply-templates/>
-</xsl:template>
-
-<!-- PUBLISHER -->
-<xsl:template match="ead:publisher">
-<xsl:apply-templates/><br/>
+<xsl:template match="ead:archdesc/ead:did/ead:physdesc">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
 <!-- REPOSITORY -->
-<xsl:template match="ead:repository">
-<p><strong>Repository</strong></p><xsl:apply-templates/>
+<xsl:template match="ead:archdesc/ead:did/ead:repository">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
+<!-- REVISIONDESC -->
+<xsl:template match="ead:revisiondesc">
+  <dl>
+    <xsl:apply-templates/>
+  </dl>
+</xsl:template>
+
+<!-- ROW -->
+<xsl:template match="ead:row">
+  <tr>
+    <xsl:apply-templates/>
+  </tr>
+</xsl:template>
+
+<!-- SUBJECT -->
+<xsl:template match="ead:controlacces/ead:subject|ead:entry/ead:subject">
+  <div>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="concat(
+          '/search/?f=',
+          . 
+        )"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </a>
+  </div>
+</xsl:template>
 <xsl:template match="ead:subject">
   <a>
     <xsl:attribute name="href">
@@ -423,64 +359,67 @@
   </a>
 </xsl:template>
 
-<!-- TITLE -->
-<xsl:template match="ead:title">
-  <xsl:apply-templates/>
+<!-- TABLE -->
+<xsl:template match="ead:table">
+  <table>
+    <xsl:apply-templates/>
+  </table>
 </xsl:template>
 
-<!-- TITLEPAGE -->
-<xsl:template match="ead:titlepage">
-<xsl:apply-templates/>
+<!-- TBODY -->
+<xsl:template match="ead:tbody">
+  <tbody>
+    <xsl:apply-templates/>
+  </tbody>
+</xsl:template>
+
+<!-- THEAD -->
+<xsl:template match="ead:thead">
+  <tbody>
+    <xsl:apply-templates/>
+  </tbody>
+</xsl:template>
+
+<!-- TITLE -->
+<xsl:template match="ead:title[@render='italic']">
+  <em>
+    <xsl:apply-templates/>
+  </em>
 </xsl:template>
 
 <!-- TITLEPROPER -->
 <xsl:template match="ead:titleproper">
-<h1><xsl:apply-templates/></h1>
-</xsl:template>
-
-<!-- TITLESTMT -->
-<xsl:template match="ead:titlestmt">
-<xsl:apply-templates/>
+  <h1>
+    <xsl:apply-templates/>
+  </h1>
 </xsl:template>
 
 <!-- UNITDATE -->
-<xsl:template match="ead:unitdate">
-<p><strong>Dates</strong></p><p><xsl:apply-templates/></p>
-</xsl:template>
-
-<xsl:template match="ead:dsc//ead:unitdate">
-<p class="note"><xsl:apply-templates/></p>
+<xsl:template match="ead:archdesc/ead:did/ead:unitdate">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
 </xsl:template>
 
 <!-- UNITID -->
 <xsl:template match="ead:unitid"/>
 
 <!-- UNITTITLE -->
-<xsl:template match="ead:unittitle">
-<h1><xsl:apply-templates/></h1>
+<xsl:template match="ead:archdesc/ead:did/ead:unittitle">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dl>
+    <xsl:apply-templates/>
+  </dl>
 </xsl:template>
 
-<xsl:template match="ead:unittitle[@label='Title'] | ead:unittitle[@label='title'] | ead:unittitle[@label='Collection Title']">
-<p><strong>Title</strong></p><p><xsl:apply-templates/></p>
-</xsl:template>
-
-<xsl:template match="ead:archref/ead:unittitle">
-<p><xsl:apply-templates/></p>
-</xsl:template>
-
-<xsl:template
- match="
-  ead:c[@level and not(@level='file')]/ead:did/ead:unittitle | 
-  ead:c01[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c02[@level and not(@level='file')]/ead:did/unittitle |
-  ead:c03[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c04[@level and not(@level='file')]/ead:did/unittitle |
-  ead:c05[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c06[@level and not(@level='file')]/ead:did/unittitle |
-  ead:c07[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c08[@level and not(@level='file')]/ead:did/unittitle |
-  ead:c09[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c10[@level and not(@level='file')]/ead:did/unittitle |
-  ead:c11[@level and not(@level='file')]/ead:did/ead:unittitle | ead:c12[@level and not(@level='file')]/ead:did/unittitle">
-	<h3 id="{generate-id()}"><xsl:apply-templates/></h3>
-</xsl:template>
-
-<!-- NAVIGATION -->
+<!--**************
+    * NAVIGATION *
+    ************** -->
 
 <xsl:template match="text()" mode="nav"/>
 

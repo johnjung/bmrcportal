@@ -19,7 +19,7 @@
 </xsl:template>
 
 <!-- ELEMENT NODES -->
-<xsl:template match="ead:archdesc|ead:corpname|ead:ead|ead:language|ead:persname">
+<xsl:template match="ead:archdesc|ead:bioghist|ead:corpname|ead:ead|ead:language|ead:occupation|ead:persname|ead:processinfo|ead:relatedmaterial|ead:scopecontent">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -32,7 +32,7 @@
 <xsl:template match="ead:arc|ead:colspec|ead:eadheader|ead:eadid"/>
 
 <!-- CONVERT TO DIV -->
-<xsl:template match="ead:archref|ead:author|ead:bibref|ead:bibseries|ead:change|ead:container|ead:descrules|ead:div|ead:extent|ead:geogname|ead:langmaterial|ead:langusage|ead:materialspec|ead:note|ead:notestmt|ead:originalsloc|ead:physfacet|ead:physloc|ead:phystech|ead:profiledesc|ead:publisher|ead:repository|ead:sponsor|ead:subarea|ead:subtitle|ead:titlepage|ead:unitdate|ead:did/ead:unittitle">
+<xsl:template match="ead:archref|ead:author|ead:bibref|ead:bibseries|ead:change|ead:container|ead:descrules|ead:div|ead:geogname|ead:langmaterial|ead:langusage|ead:materialspec|ead:note|ead:notestmt|ead:originalsloc|ead:physfacet|ead:physloc|ead:phystech|ead:profiledesc|ead:publisher|ead:repository|ead:sponsor|ead:subarea|ead:subtitle|ead:titlepage|ead:unitdate|ead:did/ead:unittitle">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -276,7 +276,7 @@
 </xsl:template>
 
 <!-- OCCUPATION -->
-<xsl:template match="ead:controlaccess/ead:occupation | ead:namegrp/ead:occupation">
+<xsl:template match="ead:namegrp/ead:occupation">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -334,7 +334,7 @@
 </xsl:template>
 
 <!-- SUBJECT -->
-<xsl:template match="ead:controlacces/ead:subject|ead:entry/ead:subject">
+<xsl:template match="ead:entry/ead:subject">
   <div>
     <a>
       <xsl:attribute name="href">

@@ -166,6 +166,9 @@
   </xsl:copy>
 </xsl:template>
 
+<!-- DSC -->
+<xsl:template match="ead:dsc[not(*)]"/>
+
 <!-- FILEPLAN -->
 <xsl:template match="ead:fileplan">
   <xsl:copy>
@@ -194,6 +197,16 @@
   </xsl:copy>
 </xsl:template>
 
+<!-- LANGUAGE -->
+<xsl:template match="ead:language[not(text())]">
+  <xsl:choose>
+    <xsl:when test="@langcode='aar'">Afar</xsl:when>
+    <xsl:when test="@langcode='eng'">English</xsl:when>
+    <xsl:when test="@langcode='fre'">French</xsl:when>
+    <xsl:when test="@langcode='ger'">German</xsl:when>
+    <xsl:otherwise/>
+  </xsl:choose>
+</xsl:template>
 
 <!-- ORIGINATION -->
 <xsl:template match="ead:archdesc/ead:did/ead:origination[not(@label)]">

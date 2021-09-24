@@ -93,6 +93,23 @@
   </xsl:copy>
 </xsl:template>
 
+<xsl:template match="ead:bibliography/ead:bibref">
+  <xsl:if test="not(preceding-sibling::ead:bibref)">
+    <ead:list>
+      <xsl:apply-templates select="." mode="item"/>
+      <xsl:for-each select="following-sibling::ead:bibref">
+        <xsl:apply-templates select="." mode="item"/>
+      </xsl:for-each>
+    </ead:list>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="ead:bibref" mode="item">
+  <ead:item>
+    <xsl:copy-of select="."/>
+  </ead:item>
+</xsl:template>
+
 <!-- BIOGHIST -->
 <xsl:template match="ead:bioghist">
   <xsl:copy>
@@ -275,6 +292,14 @@
 <xsl:template match="ead:archdesc/ead:did/ead:unitdate[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Dates</xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
+<!-- UNITID -->
+<xsl:template match="ead:archdesc/ead:did/ead:unitid[not(@label)]">
+  <xsl:copy>
+    <xsl:attribute name="label">Identifier</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>

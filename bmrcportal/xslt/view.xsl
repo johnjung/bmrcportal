@@ -2,8 +2,9 @@
 
 <xsl:stylesheet version="1.0"
  xmlns:ead="urn:isbn:1-931666-22-9"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="ead">
+ exclude-result-prefixes="ead xlink">
 
 <xsl:output omit-xml-declaration="yes"/>
 
@@ -32,11 +33,14 @@
 <xsl:template match="ead:arc|ead:colspec|ead:eadheader|ead:eadid"/>
 
 <!-- CONVERT TO DIV -->
-<xsl:template match="ead:archref|ead:author|ead:bibref|ead:bibseries|ead:change|ead:container|ead:descrules|ead:div|ead:extent|ead:geogname|ead:langmaterial|ead:langusage|ead:materialspec|ead:note|ead:notestmt|ead:originalsloc|ead:physfacet|ead:physloc|ead:phystech|ead:profiledesc|ead:publisher|ead:repository|ead:sponsor|ead:subarea|ead:subtitle|ead:titlepage|ead:unitdate|ead:did/ead:unittitle">
+<xsl:template match="ead:archref|ead:author|ead:bibseries|ead:change|ead:container|ead:descrules|ead:div|ead:extent|ead:geogname|ead:langmaterial|ead:langusage|ead:materialspec|ead:note|ead:notestmt|ead:originalsloc|ead:physfacet|ead:physloc|ead:phystech|ead:profiledesc|ead:publisher|ead:repository|ead:sponsor|ead:subarea|ead:subtitle|ead:titlepage|ead:unitdate|ead:did/ead:unittitle">
   <div>
     <xsl:apply-templates/>
   </div>
 </xsl:template>
+
+<!-- @AUDIENCE -->
+<xsl:template match="@audience"/>
 
 <!-- @LABEL -->
 <!-- can occur within abstract -->
@@ -159,8 +163,8 @@
 </xsl:template>
 
 <!-- EXTREF -->
-<xsl:template match="ead:extref[@href]">
-  <a href="{@href}">
+<xsl:template match="ead:extref[@xlink:href]">
+  <a href="{@xlink:href}">
     <xsl:apply-templates/>
   </a>
 </xsl:template>
@@ -263,8 +267,9 @@
 
 <!-- LIST -->
 <xsl:template match="ead:list">
+  <xsl:apply-templates select="ead:head"/>
   <ul>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[not(self::ead:head)]"/>
   </ul>
 </xsl:template>
 
@@ -405,7 +410,14 @@
 </xsl:template>
 
 <!-- UNITID -->
-<xsl:template match="ead:unitid"/>
+<xsl:template match="ead:unitid">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dl>
+    <xsl:apply-templates/>
+  </dl>
+</xsl:template>
 
 <!-- UNITTITLE -->
 <xsl:template match="ead:archdesc/ead:did/ead:unittitle">
@@ -421,6 +433,7 @@
     * NAVIGATION *
     ************** -->
 
+<!--
 <xsl:template match="text()" mode="nav"/>
 
 <xsl:template match="*" mode="nav">
@@ -439,7 +452,6 @@
 
 <xsl:template match="ead:descgrp/ead:head" mode="nav"/>
 
-<!-- skip these for finding aids like MTS.abbottsengstacke.xml -->
 <xsl:template match="ead:bibliography | ead:dsc/ead:head | ead:scopecontent/ead:head[position() &gt; 1]" mode="nav"/>
 
 <xsl:template 
@@ -466,6 +478,7 @@
   </xsl:if>
 </li>
 </xsl:template>
+-->
 
 <xsl:template name="searchcount">
 <xsl:value-of select="concat(' (', count(//ead:highlight), ')')"/>

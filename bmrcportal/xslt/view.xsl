@@ -281,7 +281,7 @@
 </xsl:template>
 
 <!-- OCCUPATION -->
-<xsl:template match="ead:controlaccess/ead:occupation | ead:namegrp/ead:occupation">
+<xsl:template match="ead:namegrp/ead:occupation">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -339,7 +339,7 @@
 </xsl:template>
 
 <!-- SUBJECT -->
-<xsl:template match="ead:controlacces/ead:subject|ead:entry/ead:subject">
+<xsl:template match="ead:entry/ead:subject">
   <div>
     <a>
       <xsl:attribute name="href">

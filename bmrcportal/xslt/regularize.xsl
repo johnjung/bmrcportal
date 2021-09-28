@@ -148,7 +148,8 @@
                      ead:controlaccess/ead:name |
                      ead:controlaccess/ead:occupation |
                      ead:controlaccess/ead:persname |
-                     ead:controlaccess/ead:subject">
+                     ead:controlaccess/ead:subject |
+                     ead:controlaccess/ead:title">
   <xsl:if test="not(preceding-sibling::ead:corpname) and
                 not(preceding-sibling::ead:famname) and
                 not(preceding-sibling::ead:function) and
@@ -157,7 +158,8 @@
                 not(preceding-sibling::ead:name) and
                 not(preceding-sibling::ead:occupation) and
                 not(preceding-sibling::ead:persname) and
-                not(preceding-sibling::ead:subject)">
+                not(preceding-sibling::ead:subject) and
+                not(preceding-sibling::ead:title)">
     <ead:list>
       <xsl:apply-templates select="." mode="item"/>
       <xsl:for-each select="following-sibling::ead:corpname | following-sibling::ead:famname | following-sibling::ead:function | following-sibling::ead:genreform | following-sibling::ead:geogname | following-sibling::ead:name | following-sibling::ead:occupation | following-sibling::ead:persname | following-sibling::ead:subject">
@@ -185,6 +187,22 @@
 
 <!-- DSC -->
 <xsl:template match="ead:dsc[not(*)]"/>
+
+<!-- EADHEADER, FRONTMATTER -->
+<xsl:template match="ead:eadheader">
+  <xsl:copy-of select="."/>
+  <xsl:if test="not(//ead:frontmatter)">
+    <ead:frontmatter>
+      <ead:titlepage>
+        <ead:titleproper>
+          <!-- omit <num> elements embedded inside <titleproper> -->
+          <xsl:value-of select="//ead:titleproper[1]/text()"/>
+        </ead:titleproper>
+        <xsl:copy-of select="//ead:author[1]"/>
+      </ead:titlepage>
+    </ead:frontmatter>
+  </xsl:if>
+</xsl:template>
 
 <!-- FILEPLAN -->
 <xsl:template match="ead:fileplan">
@@ -243,6 +261,14 @@
   </xsl:copy>
 </xsl:template>
 
+<!-- PHYSDESC -->
+<xsl:template match="ead:archdesc/ead:did/ead:physdesc[not(@label)]">
+  <xsl:copy>
+    <xsl:attribute name="label">Size</xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
 <!-- PREFERCITE -->
 <xsl:template match="ead:prefercite">
   <xsl:copy>
@@ -271,6 +297,23 @@
     </xsl:if>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
+</xsl:template>
+
+<xsl:template match="ead:relatedmaterial/ead:archref">
+  <xsl:if test="not(preceding-sibling::ead:archref)">
+    <ead:list>
+      <xsl:apply-templates select="." mode="item"/>
+      <xsl:for-each select="following-sibling::ead:archref">
+        <xsl:apply-templates select="." mode="item"/>
+      </xsl:for-each>
+    </ead:list>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="ead:archref" mode="item">
+  <ead:item>
+    <xsl:copy-of select="."/>
+  </ead:item>
 </xsl:template>
 
 <!-- REPOSITORY -->

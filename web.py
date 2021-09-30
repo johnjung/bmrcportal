@@ -619,6 +619,7 @@ def search():
         total_pages = total_pages
     )
 
+# need to display ead:runner
 @app.route('/view/')
 def view():
     id = request.args.get('id')

@@ -148,6 +148,7 @@
                      ead:controlaccess/ead:name |
                      ead:controlaccess/ead:occupation |
                      ead:controlaccess/ead:persname |
+                     ead:controlaccess/ead:subarea |
                      ead:controlaccess/ead:subject |
                      ead:controlaccess/ead:title">
   <xsl:if test="not(preceding-sibling::ead:corpname) and
@@ -158,18 +159,19 @@
                 not(preceding-sibling::ead:name) and
                 not(preceding-sibling::ead:occupation) and
                 not(preceding-sibling::ead:persname) and
+                not(preceding-sibling::ead:subarea) and
                 not(preceding-sibling::ead:subject) and
                 not(preceding-sibling::ead:title)">
     <ead:list>
       <xsl:apply-templates select="." mode="item"/>
-      <xsl:for-each select="following-sibling::ead:corpname | following-sibling::ead:famname | following-sibling::ead:function | following-sibling::ead:genreform | following-sibling::ead:geogname | following-sibling::ead:name | following-sibling::ead:occupation | following-sibling::ead:persname | following-sibling::ead:subject">
+      <xsl:for-each select="following-sibling::ead:corpname | following-sibling::ead:famname | following-sibling::ead:function | following-sibling::ead:genreform | following-sibling::ead:geogname | following-sibling::ead:name | following-sibling::ead:occupation | following-sibling::ead:persname | following-sibling::ead:subarea | following-sibling::ead:subject">
         <xsl:apply-templates select="." mode="item"/>
       </xsl:for-each>
     </ead:list>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="ead:corpname | ead:famname | ead:function | ead:genreform | ead:geogname | ead:name | ead:occupation | ead:persname | ead:subject" mode="item">
+<xsl:template match="ead:corpname | ead:famname | ead:function | ead:genreform | ead:geogname | ead:name | ead:occupation | ead:persname | ead:subarea | ead:subject" mode="item">
   <ead:item>
     <xsl:copy-of select="."/>
   </ead:item>
@@ -243,6 +245,16 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ACCESSRESTRICT -->
+<xsl:template match="ead:odd">
+  <xsl:copy>
+    <xsl:if test="not(ead:head)">
+      <ead:head>Other Descriptive Data</ead:head>
+    </xsl:if>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
 <!-- ORIGINATION -->
 <xsl:template match="ead:archdesc/ead:did/ead:origination[not(@label)]">
   <xsl:copy>
@@ -262,9 +274,45 @@
 </xsl:template>
 
 <!-- PHYSDESC -->
-<xsl:template match="ead:archdesc/ead:did/ead:physdesc[not(@label)]">
+<xsl:template match="ead:physdesc/ead:dimension |
+                     ead:physdesc/ead:extent |
+                     ead:physdesc/ead:genreform |
+                     ead:physdesc/ead:physfacet">
+  <xsl:if test="not(preceding-sibling::ead:dimension) and
+                not(preceding-sibling::ead:extent) and
+                not(preceding-sibling::ead:genreform) and
+                not(preceding-sibling::ead:physfacet)">
+    <ead:list>
+      <xsl:apply-templates select="." mode="item"/>
+      <xsl:for-each select="following-sibling::ead:dimension | following-sibling::ead:extent | following-sibling::ead:genreform | following-sibling::ead:physfacet">
+        <xsl:apply-templates select="." mode="item"/>
+      </xsl:for-each>
+    </ead:list>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="ead:dimension | ead:extent | ead:genreform | ead:physfacet">
+  <ead:item>
+    <xsl:copy-of select="."/>
+  </ead:item>
+</xsl:template>
+
+<!-- PHYSLOC -->
+<xsl:template match="ead:physloc">
   <xsl:copy>
-    <xsl:attribute name="label">Size</xsl:attribute>
+    <xsl:if test="not(@label)"> 
+      <xsl:attribute name="label">Physical Location</xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
+<!-- PHYSTECH -->
+<xsl:template match="ead:phystech">
+  <xsl:copy>
+    <xsl:if test="not(ead:head)">
+      <ead:head>Physical Characteristics and Technical Requirements</ead:head>
+    </xsl:if>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>

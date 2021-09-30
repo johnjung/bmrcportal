@@ -41,7 +41,7 @@
 
 <xsl:template match="ead:abbr[@expan]">
   <abbr title="{@expan}">
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'expan']|node()"/>
   </abbr>
 </xsl:template>
 
@@ -49,7 +49,7 @@
 <xsl:template match="ead:abstract">
   <xsl:apply-templates select="@label"/>
   <p>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </p>
 </xsl:template>
 
@@ -132,6 +132,11 @@
   </div>
 </xsl:template>
 
+<!-- BIBREF -->
+<xsl:template match="ead:bibref">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- BIBSERIES -->
 <xsl:template match="ead:bibseries">
   <xsl:apply-templates select="@*|node()"/>
@@ -149,7 +154,7 @@
   </blockquote>
 </xsl:template>
 
-<!-- C## -->
+<!-- C -->
 <xsl:template match="ead:c">
   <div class="c">
     <xsl:apply-templates select="@*|node()"/>
@@ -158,9 +163,14 @@
 
 <!-- CHANGE -->
 <xsl:template match="ead:change">
-  <dl>
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- CHRONITEM -->
+<xsl:template match="ead:chronitem">
+  <dd>
     <xsl:apply-templates select="@*|node()"/>
-  </dl>
+  </dd>
 </xsl:template>
 
 <!-- CHRONLIST -->
@@ -185,27 +195,55 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
+<xsl:template match="ead:namegrp/ead:corpname">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
+<!-- CREATION -->
+<xsl:template match="ead:creation">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- DAO -->
-<!-- inventory -->
-<xsl:template match="ead:dsc//ead:did/ead:dao">
-  <div>
-    Digital Archival Object: <xsl:apply-templates select="@*|node()"/>
-  </div>
+<xsl:template match="ead:dao">
+  <a href="{@href}">
+    <xsl:apply-templates select="@*[name() != 'href']|node()"/>
+  </a>
+</xsl:template>
+
+<!-- DAODESC -->
+<xsl:template match="ead:daodesc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:daogrp/ead:daodesc">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
 </xsl:template>
 
 <!-- DAOGRP -->
-<!-- inventory -->
-<xsl:template match="ead:dsc//ead:did/ead:daogrp">
-  <div>
-    Digital Archival Object Group: <xsl:apply-templates select="@*|node()"/>
-  </div>
+<xsl:template match="ead:daogrp">
+  <ul>
+    <xsl:apply-templates select="@*|node()"/>
+  </ul>
 </xsl:template>
 
 <!-- DAOLOC -->
 <xsl:template match="ead:daoloc">
   <a href="{@href}">
-    <xsl:value-of select="."/>
+    <xsl:apply-templates select="@*[name() != 'href']|node()"/>
   </a>
+</xsl:template>
+
+<xsl:template match="ead:daogrp/ead:daoloc">
+  <li>
+    <a href="{@href}">
+      <xsl:apply-templates select="@*[name() != 'href']|node()"/>
+    </a>
+  </li>
 </xsl:template>
 
 <!-- DATE -->
@@ -213,7 +251,7 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
-<xsl:template match="ead:change/ead:date">
+<xsl:template match="ead:change/ead:date|ead:chronlist/ead:date">
   <dt>
     <xsl:apply-templates select="@*|node()"/>
   </dt>
@@ -334,23 +372,92 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
+<!-- EADGRP -->
+<xsl:template match="ead:eadgrp">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- EADHEADER -->
 <xsl:template match="ead:eadheader"/>
 
 <!-- EADID -->
 <xsl:template match="ead:eadid"/>
 
+<!-- EDITION -->
+<xsl:template match="ead:edition">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- EDITIONSTMT -->
+<xsl:template match="ead:editionstmt">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- EMPH -->
-<xsl:template match="ead:emph">
+<xsl:template match="ead:emph[@render='bold']">
+  <strong>
+    <xsl:apply-templates select="@*|node()"/>
+  </strong>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='bolddoublequote']">
+  <strong>
+    “<xsl:apply-templates select="@*|node()"/>”
+  </strong>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='bolditalic']">
+  <strong>
+    <em>
+      <xsl:apply-templates select="@*|node()"/>
+    </em>
+  </strong>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='boldsinglequote']">
+  <strong>
+    ‘<xsl:apply-templates select="@*|node()"/>’
+  </strong>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='boldunderline']">
+  <strong>
+    <u>
+      <xsl:apply-templates select="@*|node()"/>
+    </u>
+  </strong>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='doublequote']">
+  “<xsl:apply-templates select="@*|node()"/>”
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='italic']">
   <em>
     <xsl:apply-templates select="@*|node()"/>
   </em>
 </xsl:template>
 
-<xsl:template match="ead:emph[@render='bold']">
-  <strong>
+<xsl:template match="ead:emph[@render='singlequote']">
+  ‘<xsl:apply-templates select="@*|node()"/>’
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='sub']">
+  <sub>
     <xsl:apply-templates select="@*|node()"/>
-  </strong>
+  </sub>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='super']">
+  <sup>
+    <xsl:apply-templates select="@*|node()"/>
+  </sup>
+</xsl:template>
+
+<xsl:template match="ead:emph[@render='underline']">
+  <u>
+    <xsl:apply-templates select="@*|node()"/>
+  </u>
 </xsl:template>
 
 <!-- ENTRY -->
@@ -367,10 +474,25 @@
   </dd>
 </xsl:template>
 
+<!-- EVENTGRP -->
+<xsl:template match="ead:eventgrp">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- EXPAN -->
+<xsl:template match="ead:expan">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:expan[@abbr]">
+  <abbr title="{@expan}">
+    <xsl:apply-templates select="@*[name() != 'abbr']|node()"/>
+  </abbr>
+</xsl:template>
+
 <!-- EXTENT -->
 <xsl:template match="ead:extent">
   <xsl:apply-templates select="@*|node()"/>
-  <xsl:value-of select="concat(' ', @type)"/>
 </xsl:template>
 
 <!-- EXTPTR -->
@@ -387,9 +509,20 @@
   </a>
 </xsl:template>
 
+<!-- EXTPTRLOC -->
+<xsl:template match="ead:extptrloc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:daogrp/ead:extptrloc | ead:linkgrp/ead:extptrloc">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
 <!-- EXTREF -->
-<xsl:template match="ead:extref[@xlink:href]">
-  <a href="{@xlink:href}">
+<xsl:template match="ead:extref[@href]">
+  <a href="{@href}">
     <xsl:apply-templates select="@*|node()"/>
   </a>
 </xsl:template>
@@ -401,8 +534,46 @@
   </a>
 </xsl:template>
 
+<xsl:template match="ead:daogrp/ead:extrefloc[@href] | ead:linkgrp/ead:extrefloc[@href]">
+  <li>
+    <a href="{@href}">
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
+  </li>
+</xsl:template>
+
+<!-- FAMNAME -->
+<xsl:template match="ead:famname">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:famname">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
+<!-- FILEDESC -->
+<xsl:template match="ead:filedesc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- FILEPLAN -->
+<xsl:template match="ead:fileplan">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- FRONTMATTER -->
+<xsl:template match="ead:frontmatter">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- FUNCTION -->
 <xsl:template match="ead:function">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:function">
   <li>
     <xsl:apply-templates select="@*|node()"/>
   </li>
@@ -410,6 +581,10 @@
 
 <!-- GENREFORM -->
 <xsl:template match="ead:genreform">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:genreform">
   <li>
     <xsl:apply-templates select="@*|node()"/>
   </li>
@@ -417,9 +592,7 @@
 
 <!-- GEOGNAME -->
 <xsl:template match="ead:geogname">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <xsl:template match="ead:indexentry/ead:geogname">
@@ -454,9 +627,9 @@
 
 <!-- IMPRINT -->
 <xsl:template match="ead:imprint">
-  <ul>
+  <div>
     <xsl:apply-templates select="@*|node()"/>
-  </ul>
+  </div>
 </xsl:template>
 
 <!-- ITEM -->
@@ -467,15 +640,25 @@
 </xsl:template>
 
 <xsl:template match="ead:defitem/ead:item">
-  <dt>
+  <dd>
     <xsl:apply-templates select="@*|node()"/>
-  </dt>
+  </dd>
 </xsl:template>
 
 <xsl:template match="ead:list/ead:item">
   <li>
     <xsl:apply-templates select="@*|node()"/>
   </li>
+</xsl:template>
+
+<!-- INDEX -->
+<xsl:template match="ead:index">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- INDEXENTRY -->
+<xsl:template match="ead:index">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- LABEL -->
@@ -487,9 +670,7 @@
 
 <!-- LANGMATERIAL -->
 <xsl:template match="ead:langmaterial">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- top of archival description -->
@@ -498,7 +679,7 @@
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -521,12 +702,34 @@
   </div>
 </xsl:template>
 
+<!-- LB -->
+<xsl:template match="ead:lb">
+  <br/>
+</xsl:template>
+
+<!-- LEGALSTATUS -->
+<xsl:template match="ead:legalstatus">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- LINKGRP -->
+<xsl:template match="ead:linkgrp">
+  <ul>
+    <xsl:apply-templates select="@*|node()"/>
+  </ul>
+</xsl:template>
+
 <!-- LIST -->
 <xsl:template match="ead:list">
   <xsl:apply-templates select="ead:head"/>
   <ul>
     <xsl:apply-templates select="@*|*[not(self::ead:head)]|text()"/>
   </ul>
+</xsl:template>
+
+<!-- LISTHEAD -->
+<xsl:template match="ead:listhead">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- MATERIALSPEC -->
@@ -543,6 +746,17 @@
   </div>
 </xsl:template>
 
+<!-- NAME -->
+<xsl:template match="ead:name">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:name">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
 <!-- NAMEGRP -->
 <xsl:template match="ead:namegrp">
   <ul>
@@ -551,10 +765,20 @@
 </xsl:template>
 
 <!-- NOTE -->
+<xsl:template match="ead:note">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <xsl:template match="ead:dsc//ead:did/ead:note">
   <div>
     <xsl:apply-templates select="@*|node()"/>
   </div>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:note">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
 </xsl:template>
 
 <!-- inventory -->
@@ -566,33 +790,47 @@
 
 <!-- NOTESTMT -->
 <xsl:template match="ead:notestmt">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- NUM -->
+<xsl:template match="ead:num">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- OCCUPATION -->
+<xsl:template match="ead:occupation">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <xsl:template match="ead:namegrp/ead:occupation">
-  <div>
+  <li>
     <xsl:apply-templates select="@*|node()"/>
-  </div>
+  </li>
+</xsl:template>
+
+<!-- ODD -->
+<xsl:template match="ead:odd">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- ORIGINALSLOC -->
 <xsl:template match="ead:originalsloc">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- ORIGINATION -->
+<xsl:template match="ead:origination">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- top of archival description -->
 <xsl:template match="ead:archdesc/ead:did/ead:origination">
   <dt>
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -601,6 +839,11 @@
   <div>
     Origination: <xsl:apply-templates select="@*|node()"/>
   </div>
+</xsl:template>
+
+<!-- OTHERFINDINGAID -->
+<xsl:template match="ead:otherfindingaid">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- P -->
@@ -615,14 +858,24 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
+<xsl:template match="ead:namegrp/ead:persname">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
 <!-- PHYSDESC -->
+<xsl:template match="ead:physdesc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- top of archival description -->
 <xsl:template match="ead:archdesc/ead:did/ead:physdesc">
   <dt>
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -642,9 +895,17 @@
 
 <!-- PHYSLOC -->
 <xsl:template match="ead:physloc">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- top of archival description -->
+<xsl:template match="ead:archdesc/ead:did/ead:physloc">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- inventory -->
@@ -656,9 +917,7 @@
 
 <!-- PHYSTECH -->
 <xsl:template match="ead:phystech">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- PREFERCITE -->
@@ -673,9 +932,12 @@
 
 <!-- PROFILEDESC -->
 <xsl:template match="ead:profiledesc">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- PUBLICATIONSTMT -->
+<xsl:template match="ead:publicationstmt">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- PUBLISHER -->
@@ -685,6 +947,33 @@
   </div>
 </xsl:template>
 
+<!-- PTR -->
+<xsl:template match="ead:ptr">
+  <a href="{concat('#', @target)}">
+    <xsl:value-of select="@title"/>
+  </a>
+</xsl:template>
+
+<xsl:template match="ead:ptrgrp/ead:ptr">
+  <li>
+    <a href="{concat('#', @target)}">
+      <xsl:value-of select="@title"/>
+    </a>
+  </li>
+</xsl:template>
+
+<!-- PTRGRP -->
+<xsl:template match="ead:ptrgrp">
+  <ul>
+    <xsl:apply-templates select="@*|node()"/>
+  </ul>
+</xsl:template>
+
+<!-- PTRLOC -->
+<xsl:template match="ead:ptrloc">
+  <div id="{@id}"/>
+</xsl:template>
+
 <!-- RELATEDMATERIAL -->
 <xsl:template match="ead:relatedmaterial">
   <xsl:apply-templates select="@*|node()"/>
@@ -692,9 +981,7 @@
 
 <!-- REPOSITORY -->
 <xsl:template match="ead:repository">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- top of archival description -->
@@ -703,7 +990,7 @@
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -712,6 +999,35 @@
   <div>
     Repository: <xsl:apply-templates select="@*|node()"/>
   </div>
+</xsl:template>
+
+<!-- REF -->
+<xsl:template match="ead:ptrgrp/ead:ref">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
+<!-- REFLOC -->
+<xsl:template match="ead:refloc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:daogrp/ead:refloc | ead:linkgrp/ead:refloc">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
+<!-- RESOURCE -->
+<xsl:template match="ead:resource">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<xsl:template match="ead:daogrp/ead:resource | ead:linkgrp/ead:resource">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
 </xsl:template>
 
 <!-- REVISIONDESC -->
@@ -728,8 +1044,21 @@
   </tr>
 </xsl:template>
 
+<!-- RUNNER -->
+<xsl:template match="ead:runner"/>
+
+<!-- SCOPECONTENT -->
+<xsl:template match="ead:scopecontent">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- SEPARATEDMATERIAL -->
 <xsl:template match="ead:separatedmaterial">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- SERIESSTMT -->
+<xsl:template match="ead:seriesstmt">
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
@@ -742,12 +1071,22 @@
 
 <!-- SUBAREA -->
 <xsl:template match="ead:subarea">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- SUBJECT -->
+<xsl:template match="ead:subject">
+  <a>
+    <xsl:attribute name="href">
+      <xsl:value-of select="concat(
+        '/search/?f=',
+        . 
+      )"/>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
+</xsl:template>
+
 <xsl:template match="ead:entry/ead:subject">
   <div>
     <a>
@@ -761,16 +1100,19 @@
     </a>
   </div>
 </xsl:template>
-<xsl:template match="ead:subject">
-  <a>
-    <xsl:attribute name="href">
-      <xsl:value-of select="concat(
-        '/search/?f=',
-        . 
-      )"/>
-    </xsl:attribute>
-    <xsl:apply-templates select="@*|node()"/>
-  </a>
+
+<xsl:template match="ead:namegrp/ead:subject">
+  <li>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="concat(
+          '/search/?f=',
+          . 
+        )"/>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
+  </li>
 </xsl:template>
 
 <!-- SUBTITLE -->
@@ -794,25 +1136,38 @@
   </tbody>
 </xsl:template>
 
+<!-- TGROUP -->
+<xsl:template match="ead:tgroup">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- THEAD -->
 <xsl:template match="ead:thead">
-  <tbody>
+  <thead>
     <xsl:apply-templates select="@*|node()"/>
-  </tbody>
+  </thead>
 </xsl:template>
 
 <!-- TITLE -->
+<xsl:template match="ead:namegrp/ead:title">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <xsl:template match="ead:title[@render='italic']">
   <em>
     <xsl:apply-templates select="@*|node()"/>
   </em>
 </xsl:template>
 
+<xsl:template match="ead:namegrp/ead:title">
+  <li>
+    <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
 <!-- TITLEPAGE -->
 <xsl:template match="ead:titlepage">
-  <div>
-    <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- TITLEPROPER -->
@@ -820,6 +1175,11 @@
   <h1>
     <xsl:apply-templates select="@*|node()"/>
   </h1>
+</xsl:template>
+
+<!-- TITLESTMT -->
+<xsl:template match="ead:titlestmt">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- UNITDATE -->
@@ -833,7 +1193,7 @@
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -845,13 +1205,17 @@
 </xsl:template>
 
 <!-- UNITID -->
+<xsl:template match="ead:unitid">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- top of archival description -->
 <xsl:template match="ead:archdesc/ead:did/ead:unitid">
   <dt>
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -873,7 +1237,7 @@
     <xsl:value-of select="@label"/>
   </dt>
   <dd>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
   </dd>
 </xsl:template>
 
@@ -887,61 +1251,6 @@
 <!-- USERESTRICT -->
 <xsl:template match="ead:userestrict">
   <xsl:apply-templates select="@*|node()"/>
-</xsl:template>
-
-<!--**************
-    * NAVIGATION *
-    ************** -->
-
-<!--
-<xsl:template match="text()" mode="nav"/>
-
-<xsl:template match="*" mode="nav">
-<xsl:apply-templates mode="nav"/>
-</xsl:template>
-
-<xsl:template match="ead:dsc" mode="nav">
-<xsl:variable name="searchcount"><xsl:if test="count(.//ead:highlight)"><xsl:value-of select="concat(' (', count(.//ead:highlight), ')')"/></xsl:if></xsl:variable>
-<li><a href="#{generate-id(.)}"><xsl:value-of select="concat('INVENTORY', $searchcount)"/></a></li><xsl:apply-templates mode="nav"/>
-</xsl:template>
-
-<xsl:template match="ead:head" mode="nav">
-<xsl:variable name="searchcount"><xsl:if test="count(..//ead:highlight)"><xsl:value-of select="concat(' (', count(..//ead:highlight), ')')"/></xsl:if></xsl:variable>
-<li><a href="#{generate-id(.)}"><xsl:value-of select="concat(., $searchcount)"/></a></li>
-</xsl:template>
-
-<xsl:template match="ead:descgrp/ead:head" mode="nav"/>
-
-<xsl:template match="ead:bibliography | ead:dsc/ead:head | ead:scopecontent/ead:head[position() &gt; 1]" mode="nav"/>
-
-<xsl:template 
- match="
-  ead:c[not(@level = 'file') and ead:did/ead:unittitle//text()] | 
-  ead:c01[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c02[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-  ead:c03[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c04[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-  ead:c05[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c06[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-  ead:c07[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c08[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-  ead:c09[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c10[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-  ead:c11[not(@level = 'file') and ead:did/ead:unittitle//text()] | ead:c12[not(@level = 'file') and ead:did/ead:unittitle//text()]" mode="nav"> 
-<xsl:variable name="searchcount"><xsl:if test="count(.//ead:highlight)"><xsl:value-of select="concat(' (', count(.//ead:highlight), ')')"/></xsl:if></xsl:variable>
-<li><a href="#{generate-id(ead:did/ead:unittitle)}"><xsl:value-of select="concat(ead:did/ead:unittitle, $searchcount)"/></a>
-  <xsl:if 
-    test="
-    descendant::ead:c[not(@level = 'file') and ead:did/ead:unittitle//text()] | 
-    descendant::ead:c01[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c02[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-    descendant::ead:c03[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c04[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-    descendant::ead:c05[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c06[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-    descendant::ead:c07[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c08[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-    descendant::ead:c09[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c10[not(@level = 'file') and ead:did/ead:unittitle//text()] |
-    descendant::ead:c11[not(@level = 'file') and ead:did/ead:unittitle//text()] | descendant::ead:c12[not(@level = 'file') and ead:did/ead:unittitle//text()]"> 
-  <ul><xsl:apply-templates mode="nav"/></ul>
-  </xsl:if>
-</li>
-</xsl:template>
--->
-
-<xsl:template name="searchcount">
-  <xsl:value-of select="concat(' (', count(//ead:highlight), ')')"/>
 </xsl:template>
 
 </xsl:stylesheet>

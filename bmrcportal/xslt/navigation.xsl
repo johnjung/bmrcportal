@@ -20,9 +20,9 @@
     <a href="{concat('#', @id)}">
       <xsl:value-of select="."/>
     </a>
-    <xsl:if test="following-sibling::h3">
+    <xsl:if test="following::h3[preceding::h2[1] = current()]">
       <ul>
-        <xsl:apply-templates select="following-sibling::h3[preceding-sibling::h2[1] = current()]"/>
+        <xsl:apply-templates select="following::h3[preceding::h2[1] = current()]"/>
       </ul>
     </xsl:if>
   </li>
@@ -33,9 +33,9 @@
     <a href="{concat('#', @id)}">
       <xsl:value-of select="."/>
     </a>
-    <xsl:if test="following-sibling::h4">
+    <xsl:if test="following::h4[preceding::h3[1] = current()]">
       <ul>
-        <xsl:apply-templates select="following-sibling::h4[preceding-sibling::h3[1] = current()]"/>
+        <xsl:apply-templates select="following::h4[preceding::h3[1] = current()]"/>
       </ul>
     </xsl:if>
   </li>
@@ -46,9 +46,9 @@
     <a href="{concat('#', @id)}">
       <xsl:value-of select="."/>
     </a>
-    <xsl:if test="following-sibling::h5">
+    <xsl:if test="following::h5[preceding::h4[1] = current()]">
       <ul>
-        <xsl:apply-templates select="following-sibling::h5[preceding-sibling::h4[1] = current()]"/>
+        <xsl:apply-templates select="following::h5[preceding::h4[1] = current()]"/>
       </ul>
     </xsl:if>
   </li>
@@ -59,9 +59,9 @@
     <a href="{concat('#', @id)}">
       <xsl:value-of select="."/>
     </a>
-    <xsl:if test="following-sibling::h6">
+    <xsl:if test="following::h6[preceding::h5[1] = current()]">
       <ul>
-        <xsl:apply-templates select="following-sibling::h6[preceding-sibling::h5[1] = current()]"/>
+        <xsl:apply-templates select="following::h6[preceding::h5[1] = current()]"/>
       </ul>
     </xsl:if>
   </li>

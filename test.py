@@ -598,6 +598,17 @@ class TestBMRCPortalNavigation(unittest.TestCase):
             '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li></ul></div>'
         )
 
+        # h2, h2, h3
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h2 id="t2">2</h2><h3 id="t3">3</h3></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></div>'
+        )
+
+
         # h2, h3, h3
         self.assertEqual(
             etree.tostring(

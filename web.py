@@ -652,6 +652,11 @@ def view():
         )
     )
 
+    try:
+        title = ''.join(findingaid.xpath('//h1')[0].itertext())
+    except IndexError:
+        title = ''
+
     navigation = tn(findingaid)
 
     return render_template(
@@ -662,7 +667,8 @@ def view():
         ],
         findingaid_html = findingaid,
         navigation_html = navigation,
-        search_results = []
+        search_results = [],
+        title = title
     )
 
 @app.route('/css/<path:path>')

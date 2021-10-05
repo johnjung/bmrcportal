@@ -28,7 +28,7 @@
 </xsl:template>
 
 <!-- @LABEL -->
-<xsl:template match="@label">
+<xsl:template match="@label[not(ancestor::ead:dsc)]">
   <h3 id="{generate-id(.)}"><xsl:value-of select="."/></h3>
 </xsl:template>
 
@@ -55,9 +55,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:abstract">
-  <div>
-    Abstract: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Abstract</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- ACCESSRESTRICT -->
@@ -156,7 +157,18 @@
 
 <!-- C -->
 <xsl:template match="ead:c">
-  <div class="c">
+  <xsl:variable name="c_count" select="count(ancestor-or-self::ead:c)"/>
+  <xsl:variable name="c_class">
+    <xsl:choose>
+      <xsl:when test="$c_count &lt; 10">
+        <xsl:value-of select="concat('c0', $c_count)"/>
+      </xsl:when> 
+      <xsl:otherwise>
+        <xsl:value-of select="concat('c', $c_count)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <div class="{concat('c ', $c_class)}">
     <xsl:apply-templates select="@*|node()"/>
   </div>
 </xsl:template>
@@ -183,10 +195,24 @@
 <!-- COLSPEC -->
 <xsl:template match="ead:colspec"/>
 
-<!-- CONTAINER-->
+<!-- CONTAINER
+
+     The vast majority of <container> elements use one of the following forms:
+     <container type="Folder">3</container>
+     <container type="othertype">drawer 4</container>
+
+     Because of this, append the @type to the text output for all containers,
+     except when a container has been specifically marked as "othertype". 
+-->
 <xsl:template match="ead:container">
   <div>
     <xsl:value-of select="concat(@type, ' ')"/> <xsl:apply-templates select="@*|node()"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="ead:container[@type='othertype']">
+  <div>
+    <xsl:apply-templates select="@*|node()"/>
   </div>
 </xsl:template>
 
@@ -350,7 +376,9 @@
   <div class="{concat('did did_', string($column_count))}">
     <xsl:apply-templates select="ead:unitid|ead:container"/>
     <div>
-      <xsl:apply-templates select="@*|*[not(self::ead:unitid) and not(self::ead:container)]|text()"/>
+      <dl>
+        <xsl:apply-templates select="@*|*[not(self::ead:unitid) and not(self::ead:container)]|text()"/>
+      </dl>
     </div>
   </div>
 </xsl:template>
@@ -613,9 +641,47 @@
 
 <!-- HEAD -->
 <xsl:template match="ead:head">
-  <h3 id="{generate-id(.)}">
+  <xsl:variable name="count">
+    <xsl:value-of select="
+      count(
+        ancestor::ead:accessrestrict |
+        ancestor::ead:accruals |
+        ancestor::ead:acqinfo |
+        ancestor::ead:altformavail |
+        ancestor::ead:appraisal |
+        ancestor::ead:arrangement |
+        ancestor::ead:bibliography |
+        ancestor::ead:bioghist |
+        ancestor::ead:controlaccess |
+        ancestor::ead:custodhist |
+        ancestor::ead:descgrp |
+        ancestor::ead:did |
+        ancestor::ead:dsc |
+        ancestor::ead:fileplan |
+        ancestor::ead:index |
+        ancestor::ead:note |
+        ancestor::ead:odd |
+        ancestor::ead:originalsloc |
+        ancestor::ead:otherfindaid |
+        ancestor::ead:phystech |
+        ancestor::ead:prefercite |
+        ancestor::ead:processinfo |
+        ancestor::ead:relatedmaterial |
+        ancestor::ead:scopecontent |
+        ancestor::ead:separatedmaterial |
+        ancestor::ead:userestrict
+      )"/>
+    </xsl:variable>
+  <xsl:if test="$count &gt; 5">
+     <xsl:message terminate="yes">ERROR: Elements are too deeply nested under archdesc.</xsl:message>
+  </xsl:if>
+  
+  <xsl:element name="{concat('h', 1 + $count)}">
+    <xsl:attribute name="id">
+      <xsl:value-of select="generate-id(.)"/>
+    </xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
-  </h3>
+  </xsl:element>
 </xsl:template>
 
 <!-- HIGHLIGHT -->
@@ -685,9 +751,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:langmaterial">
-  <div>
-    Language: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Language</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- LANGUAGE -->
@@ -741,9 +808,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:materialspec">
-  <div>
-    Material Specific Details: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Material Specific Details</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- NAME -->
@@ -783,9 +851,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:note">
-  <div>
-    Note: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Note</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- NOTESTMT -->
@@ -836,9 +905,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:origination">
-  <div>
-    Origination: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Origination</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- OTHERFINDINGAID -->
@@ -869,7 +939,9 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
-<!-- top of archival description -->
+<!-- top of archival description. note that in this part of the document, this
+     element usually, but not always, contains an extent, although the label
+     attribute is always on the physdesc. -->
 <xsl:template match="ead:archdesc/ead:did/ead:physdesc">
   <dt>
     <xsl:value-of select="@label"/>
@@ -881,9 +953,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:physdesc">
-  <div>
-    Physical Description: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Physical Description</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- PHYSFACET -->
@@ -910,9 +983,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:physloc">
-  <div>
-    Physical Location: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Physical Location</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- PHYSTECH -->
@@ -996,9 +1070,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:repository">
-  <div>
-    Repository: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Repository</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- REF -->
@@ -1167,7 +1242,7 @@
 
 <!-- TITLEPAGE -->
 <xsl:template match="ead:titlepage">
-  <xsl:apply-templates select="@*|node()"/>
+  <xsl:apply-templates select="ead:titleproper"/>
 </xsl:template>
 
 <!-- TITLEPROPER -->
@@ -1199,9 +1274,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:unitdate">
-  <div>
-    Date: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Date</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- UNITID -->
@@ -1243,9 +1319,10 @@
 
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:unittitle">
-  <div>
-    Date: <xsl:apply-templates select="@*|node()"/>
-  </div>
+  <dt>Title</dt>
+  <dd>
+    <xsl:apply-templates select="@*|node()"/>
+  </dd>
 </xsl:template>
 
 <!-- USERESTRICT -->

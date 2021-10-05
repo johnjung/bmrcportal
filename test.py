@@ -263,7 +263,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:c>1</ead:c></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><div class="c">1</div></div>'
+            '<div><div class="c c01">1</div></div>'
         )
 
         self.assertEqual(
@@ -516,8 +516,8 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                   'processinfo', 'profiledesc', 'publicationstmt', 'refloc',
                   'relatedmaterial', 'repository', 'scopecontent',
                   'separatedmaterial', 'seriesstmt', 'subarea', 'tgroup',
-                  'title', 'titlepage', 'titlestmt', 'unitdate', 'unitid',
-                  'unittitle', 'userestrict'):
+                  'title', 'titlestmt', 'unitdate', 'unitid', 'unittitle',
+                  'userestrict'):
             self.assertEqual(
                 etree.tostring(
                     self.transform(
@@ -539,6 +539,125 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                 ).decode('utf-8'),
                 '<div/>'
             )
+
+class TestBMRCPortalNavigation(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super(TestBMRCPortalNavigation, self).__init__(*args, **kwargs)
+
+        self.transform3 = etree.XSLT(
+            etree.parse(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    'bmrcportal',
+                    'xslt',
+                    'navigation.xsl'
+                )
+            )
+        )
+
+    def test_navigation_root(self):
+        # root only
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html/>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul/></div>'
+        )
+
+    def test_navigation_single_level(self):
+        # one <h2>
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li></ul></div>'
+        )
+
+        # two <h2>s
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h2 id="t2">2</h2></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a></li></ul></div>'
+        )
+
+    def test_navigation_two_levels(self):
+        # h2, h3
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li></ul></div>'
+        )
+
+        # h2, h3, h3
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h3 id="t3">3</h3></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li><li><a href="#t3">3</a></li></ul></li></ul></div>'
+        )
+
+        # h2, h3, h2
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h2 id="t3">3</h2></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a></li></ul></div>'
+        )
+
+        # h2, h3, h2, h3
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h2 id="t3">3</h2><h3 id="t4">4</h3></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a><ul><li><a href="#t4">4</a></li></ul></li></ul></div>'
+        )
+
+    def test_navigation_three_levels(self):
+        # h2, h3, h4
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li></ul></div>'
+        )
+
+        # h2, h3, h4, h2
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4><h2 id="t4">4</h2></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li><li><a href="#t4">4</a></li></ul></div>'
+        )
+
+        # h2, h3, h4, h4, h2
+        self.assertEqual(
+            etree.tostring(
+                self.transform3(
+                    etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4><h4 id="t4">4</h4><h2 id="t5">5</h2></html>''')
+                )
+            ).decode('utf-8'),
+            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li><li><a href="#t4">4</a></li></ul></li></ul></li><li><a href="#t5">5</a></li></ul></div>'
+        )
 
 
 if __name__ == '__main__':

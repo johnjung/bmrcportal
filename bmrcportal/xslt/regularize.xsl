@@ -121,10 +121,9 @@
 </xsl:template>
 
 <!-- C## -->
-<xsl:template match="
-  ead:c01[@level] | ead:c02[@level] | ead:c03[@level] | ead:c04[@level] |
-  ead:c05[@level] | ead:c06[@level] | ead:c07[@level] | ead:c08[@level] |
-  ead:c09[@level] | ead:c10[@level] | ead:c11[@level] | ead:c12[@level]"> 
+<xsl:template match="ead:c01 | ead:c02 | ead:c03 | ead:c04 | ead:c05 | 
+                     ead:c06 | ead:c07 | ead:c08 | ead:c09 | ead:c10 | 
+                     ead:c11 | ead:c12"> 
   <ead:c>
     <xsl:apply-templates select="@*|node()"/>
   </ead:c>
@@ -188,6 +187,15 @@
 </xsl:template>
 
 <!-- DSC -->
+<xsl:template match="ead:dsc">
+  <xsl:copy>
+    <xsl:if test="not(ead:head)">
+      <ead:head>Inventory</ead:head>
+    </xsl:if>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
 <xsl:template match="ead:dsc[not(*)]"/>
 
 <!-- EADHEADER, FRONTMATTER -->
@@ -245,7 +253,7 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- ACCESSRESTRICT -->
+<!-- ODD -->
 <xsl:template match="ead:odd">
   <xsl:copy>
     <xsl:if test="not(ead:head)">
@@ -274,27 +282,11 @@
 </xsl:template>
 
 <!-- PHYSDESC -->
-<xsl:template match="ead:physdesc/ead:dimension |
-                     ead:physdesc/ead:extent |
-                     ead:physdesc/ead:genreform |
-                     ead:physdesc/ead:physfacet">
-  <xsl:if test="not(preceding-sibling::ead:dimension) and
-                not(preceding-sibling::ead:extent) and
-                not(preceding-sibling::ead:genreform) and
-                not(preceding-sibling::ead:physfacet)">
-    <ead:list>
-      <xsl:apply-templates select="." mode="item"/>
-      <xsl:for-each select="following-sibling::ead:dimension | following-sibling::ead:extent | following-sibling::ead:genreform | following-sibling::ead:physfacet">
-        <xsl:apply-templates select="." mode="item"/>
-      </xsl:for-each>
-    </ead:list>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template match="ead:dimension | ead:extent | ead:genreform | ead:physfacet">
-  <ead:item>
-    <xsl:copy-of select="."/>
-  </ead:item>
+<xsl:template match="ead:physdesc[not(@label)]">
+  <xsl:copy>
+    <xsl:attribute name="label">Size</xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
 </xsl:template>
 
 <!-- PHYSLOC -->
@@ -424,6 +416,10 @@
     </xsl:if>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
+</xsl:template>
+
+<xsl:template match="ead:archdesc/ead:did//ead:userestrict | ead:dsc//ead:userestrict">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 </xsl:stylesheet>

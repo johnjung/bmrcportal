@@ -624,39 +624,35 @@ def search():
 def view():
     id = request.args.get('id')
 
-    findingaid = etree.fromstring(
-        ElementTree.tostring(
-            get_findingaid(*server_args + (id,)),
-            encoding='utf8', 
-            method='xml'
+    def t(filename):
+        return etree.XSLT(
+            etree.parse(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    'bmrcportal',
+                    'xslt',
+                    filename
+                )
+            )
         )
-    )
 
-    transform = etree.XSLT(
-        etree.parse(
-            os.path.join(
-                os.path.dirname(__file__),
-                'bmrcportal',
-                'xslt',
-                'regularize.xsl'
+    tn = t('navigation.xsl')
+    tr = t('regularize.xsl')
+    tv = t('view.xsl')
+
+    findingaid = tv(
+        tr(
+            etree.fromstring(
+                ElementTree.tostring(
+                    get_findingaid(*server_args + (id,)),
+                    encoding='utf8', 
+                    method='xml'
+                )
             )
         )
     )
 
-    findingaid = transform(findingaid)
-
-    transform = etree.XSLT(
-        etree.parse(
-            os.path.join(
-                os.path.dirname(__file__),
-                'bmrcportal',
-                'xslt',
-                'view.xsl'
-            )
-        )
-    )
-
-    findingaid_html = transform(findingaid)
+    navigation = tn(findingaid)
 
     return render_template(
         'view.html',
@@ -664,7 +660,8 @@ def view():
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
         ],
-        findingaid_html = findingaid_html,
+        findingaid_html = findingaid,
+        navigation_html = navigation,
         search_results = []
     )
 

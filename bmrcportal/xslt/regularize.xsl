@@ -14,81 +14,65 @@
 </xsl:template>
 
 <!-- ABSTRACT -->
-<xsl:template match="ead:abstract">
+<xsl:template match="ead:abstract[not(@label)]">
   <xsl:copy>
-    <xsl:if test="not(@label)"> 
-      <xsl:attribute name="label">Abstract</xsl:attribute>
-    </xsl:if>
+    <xsl:attribute name="label">Abstract</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ACCESSRESTRICT -->
-<xsl:template match="ead:accessrestrict">
+<xsl:template match="ead:accessrestrict[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Access Restrictions</ead:head>
-    </xsl:if>
+    <ead:head>Access Restrictions</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ACCRUALS -->
-<xsl:template match="ead:accruals">
+<xsl:template match="ead:accruals[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Accruals</ead:head>
-    </xsl:if>
+    <ead:head>Accruals</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ACQINFO -->
-<xsl:template match="ead:acqinfo">
+<xsl:template match="ead:acqinfo[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Acquisition Information</ead:head>
-    </xsl:if>
+    <ead:head>Acquisition Information</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ALTFORMAVAIL -->
-<xsl:template match="ead:altformavail">
+<xsl:template match="ead:altformavail[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Alternate Format Available</ead:head>
-    </xsl:if>
+    <ead:head>Alternate Format Available</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- APPRAISAL -->
-<xsl:template match="ead:appraisal">
+<xsl:template match="ead:appraisal[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Appraisal</ead:head>
-    </xsl:if>
+    <ead:head>Appraisal</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ARRANGEMENT -->
-<xsl:template match="ead:arrangement">
+<xsl:template match="ead:arrangement[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Arrangement</ead:head>
-    </xsl:if>
+    <ead:head>Arrangement</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- BIBLIOGRAPHY -->
-<xsl:template match="ead:bibliography">
+<xsl:template match="ead:bibliography[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Bibliography</ead:head>
-    </xsl:if>
+    <ead:head>Bibliography</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -111,11 +95,9 @@
 </xsl:template>
 
 <!-- BIOGHIST -->
-<xsl:template match="ead:bioghist">
+<xsl:template match="ead:bioghist[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Biographical Note</ead:head>
-    </xsl:if>
+    <ead:head>Biographical Note</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -153,11 +135,9 @@
 </xsl:template>
 
 <!-- CONTROLACCESS -->
-<xsl:template match="ead:controlaccess">
+<xsl:template match="ead:controlaccess[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Controlled Access Headings</ead:head>
-    </xsl:if>
+    <ead:head>Controlled Access Headings</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -200,11 +180,9 @@
 </xsl:template>
 
 <!-- CUSTODHIST -->
-<xsl:template match="ead:custodhist">
+<xsl:template match="ead:custodhist[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Custodial History</ead:head>
-    </xsl:if>
+    <ead:head>Custodial History</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -233,11 +211,9 @@
 </xsl:template>
 
 <!-- DSC -->
-<xsl:template match="ead:dsc">
+<xsl:template match="ead:dsc[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Inventory</ead:head>
-    </xsl:if>
+    <ead:head>Inventory</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -261,21 +237,17 @@
 </xsl:template>
 
 <!-- FILEPLAN -->
-<xsl:template match="ead:fileplan">
+<xsl:template match="ead:fileplan[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>File List</ead:head>
-    </xsl:if>
+    <ead:head>File List</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- INDEX -->
-<xsl:template match="ead:index">
+<xsl:template match="ead:index[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Index</ead:head>
-    </xsl:if>
+    <ead:head>Index</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -300,11 +272,9 @@
 </xsl:template>
 
 <!-- ODD -->
-<xsl:template match="ead:odd">
+<xsl:template match="ead:odd[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Other Descriptive Data</ead:head>
-    </xsl:if>
+    <ead:head>Other Descriptive Data</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -318,11 +288,9 @@
 </xsl:template>
 
 <!-- OTHERFINDINGAID -->
-<xsl:template match="ead:otherfindingaid">
+<xsl:template match="ead:otherfindingaid[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Other Finding Aid</ead:head>
-    </xsl:if>
+    <ead:head>Other Finding Aid</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -336,51 +304,41 @@
 </xsl:template>
 
 <!-- PHYSLOC -->
-<xsl:template match="ead:physloc">
+<xsl:template match="ead:physloc[not(@label)]">
   <xsl:copy>
-    <xsl:if test="not(@label)"> 
-      <xsl:attribute name="label">Physical Location</xsl:attribute>
-    </xsl:if>
+    <xsl:attribute name="label">Physical Location</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- PHYSTECH -->
-<xsl:template match="ead:phystech">
+<xsl:template match="ead:phystech[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Physical Characteristics and Technical Requirements</ead:head>
-    </xsl:if>
+    <ead:head>Physical Characteristics and Technical Requirements</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- PREFERCITE -->
-<xsl:template match="ead:prefercite">
+<xsl:template match="ead:prefercite[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Preferred Citation</ead:head>
-    </xsl:if>
+    <ead:head>Preferred Citation</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- PROCESSINFO -->
-<xsl:template match="ead:processinfo">
+<xsl:template match="ead:processinfo[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Processing Information</ead:head>
-    </xsl:if>
+    <ead:head>Processing Information</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- RELATED MATERIAL -->
-<xsl:template match="ead:relatedmaterial">
+<xsl:template match="ead:relatedmaterial[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Related Material</ead:head>
-    </xsl:if>
+    <ead:head>Related Material</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -411,21 +369,17 @@
 </xsl:template>
 
 <!-- SCOPECONTENT -->
-<xsl:template match="ead:scopecontent">
+<xsl:template match="ead:scopecontent[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Scope and Content</ead:head>
-    </xsl:if>
+    <ead:head>Scope and Content</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- SEPARATEDMATERIAL -->
-<xsl:template match="ead:separatedmaterial">
+<xsl:template match="ead:separatedmaterial[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Separated Material</ead:head>
-    </xsl:if>
+    <ead:head>Separated Material</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
@@ -455,11 +409,9 @@
 </xsl:template>
 
 <!-- USERESTRICT -->
-<xsl:template match="ead:userestrict">
+<xsl:template match="ead:userestrict[not(ead:head)]">
   <xsl:copy>
-    <xsl:if test="not(ead:head)">
-      <ead:head>Conditions Governing Use</ead:head>
-    </xsl:if>
+    <ead:head>Conditions Governing Use</ead:head>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>

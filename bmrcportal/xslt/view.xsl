@@ -210,7 +210,7 @@
   </div>
 </xsl:template>
 
-<xsl:template match="ead:container[@type='othertype']">
+<xsl:template match="ead:container[@type='Othertype']">
   <div>
     <xsl:apply-templates select="@*|node()"/>
   </div>

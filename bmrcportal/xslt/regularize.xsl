@@ -129,6 +129,29 @@
   </ead:c>
 </xsl:template>
 
+<!-- CONTAINER -->
+<xsl:template match="ead:container[@type]">
+  <xsl:copy>
+    <xsl:attribute name="type">
+      <xsl:value-of select="
+          concat(
+            substring(
+                translate(
+                    @type,
+                    'abcdefghijklmnopqrstuvwxyz',
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                ),  
+                1,  
+                1   
+            ),
+            substring(@type, 2)
+          )
+      "/>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*[name()!='type']|node()"/>
+  </xsl:copy>
+</xsl:template>
+
 <!-- CONTROLACCESS -->
 <xsl:template match="ead:controlaccess">
   <xsl:copy>
@@ -183,6 +206,29 @@
       <ead:head>Custodial History</ead:head>
     </xsl:if>
     <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
+<!-- DID/* -->
+<xsl:template match="ead:archdesc/ead:did/*[@label]">
+  <xsl:copy>
+    <xsl:attribute name="label">
+      <xsl:value-of select="
+        concat(
+          substring(
+              translate(
+                  @label,
+                  'abcdefghijklmnopqrstuvwxyz',
+                  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+              ),  
+              1,  
+              1   
+          ),
+          substring(@label, 2)
+        )
+    "/>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*[name()!='label']|node()"/>
   </xsl:copy>
 </xsl:template>
 

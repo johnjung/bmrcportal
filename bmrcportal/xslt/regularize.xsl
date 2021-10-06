@@ -24,56 +24,63 @@
 <!-- ACCESSRESTRICT -->
 <xsl:template match="ead:accessrestrict[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Access Restrictions</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ACCRUALS -->
 <xsl:template match="ead:accruals[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Accruals</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ACQINFO -->
 <xsl:template match="ead:acqinfo[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Acquisition Information</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ALTFORMAVAIL -->
 <xsl:template match="ead:altformavail[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Alternate Format Available</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- APPRAISAL -->
 <xsl:template match="ead:appraisal[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Appraisal</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- ARRANGEMENT -->
 <xsl:template match="ead:arrangement[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Arrangement</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- BIBLIOGRAPHY -->
 <xsl:template match="ead:bibliography[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Bibliography</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -97,8 +104,9 @@
 <!-- BIOGHIST -->
 <xsl:template match="ead:bioghist[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Biographical Note</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -137,8 +145,9 @@
 <!-- CONTROLACCESS -->
 <xsl:template match="ead:controlaccess[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Controlled Access Headings</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -182,8 +191,9 @@
 <!-- CUSTODHIST -->
 <xsl:template match="ead:custodhist[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Custodial History</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -213,8 +223,9 @@
 <!-- DSC -->
 <xsl:template match="ead:dsc[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Inventory</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -239,16 +250,18 @@
 <!-- FILEPLAN -->
 <xsl:template match="ead:fileplan[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>File List</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- INDEX -->
 <xsl:template match="ead:index[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Index</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -274,8 +287,9 @@
 <!-- ODD -->
 <xsl:template match="ead:odd[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Other Descriptive Data</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -290,8 +304,9 @@
 <!-- OTHERFINDINGAID -->
 <xsl:template match="ead:otherfindingaid[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Other Finding Aid</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -314,32 +329,36 @@
 <!-- PHYSTECH -->
 <xsl:template match="ead:phystech[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Physical Characteristics and Technical Requirements</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- PREFERCITE -->
 <xsl:template match="ead:prefercite[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Preferred Citation</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- PROCESSINFO -->
 <xsl:template match="ead:processinfo[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Processing Information</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- RELATED MATERIAL -->
 <xsl:template match="ead:relatedmaterial[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Related Material</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -363,24 +382,27 @@
 <!-- REPOSITORY -->
 <xsl:template match="ead:archdesc/ead:did/ead:repository[not(@label)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <xsl:attribute name="label">Repository</xsl:attribute>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- SCOPECONTENT -->
 <xsl:template match="ead:scopecontent[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Scope and Content</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <!-- SEPARATEDMATERIAL -->
 <xsl:template match="ead:separatedmaterial[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Separated Material</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
@@ -411,13 +433,16 @@
 <!-- USERESTRICT -->
 <xsl:template match="ead:userestrict[not(ead:head)]">
   <xsl:copy>
+    <xsl:apply-templates select="@*"/>
     <ead:head>Conditions Governing Use</ead:head>
-    <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
 
 <xsl:template match="ead:archdesc/ead:did//ead:userestrict | ead:dsc//ead:userestrict">
-  <xsl:apply-templates select="@*|node()"/>
+  <xsl:copy>
+    <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
 </xsl:template>
 
 </xsl:stylesheet>

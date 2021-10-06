@@ -22,9 +22,7 @@
 
 <!-- @ID -->
 <xsl:template match="@id">
-  <xsl:attribute name="id">
-    <xsl:value-of select="@id"/>
-  </xsl:attribute>
+  <div id="{.}"/>
 </xsl:template>
 
 <!-- @LABEL -->

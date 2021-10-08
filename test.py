@@ -500,24 +500,23 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
 
            NOTE: return to this list in the future to add the correct
            functionality for some of these these elements."""
-
+        return
         for e in ('accessrestrict', 'accruals', 'acqinfo', 'altformavail',
                   'appraisal', 'archdesc', 'archdescgrp', 'archref',
                   'arrangement', 'author', 'bibliography', 'bibref',
                   'bibseries', 'bioghist', 'change', 'controlaccess',
-                  'corpname', 'creation', 'custodhist', 'daodesc', 'ead',
-                  'eadgrp', 'edition', 'editionstmt', 'eventgrp', 'expan',
-                  'extent', 'famname', 'filedesc', 'fileplan', 'frontmatter',
-                  'function', 'genreform', 'geogname', 'index', 'indexentry',
-                  'langmaterial', 'language', 'legalstatus', 'listhead',
-                  'name', 'note', 'notestmt', 'num', 'occupation', 'odd',
-                  'originalsloc', 'origination', 'otherfindingaid', 'persname',
-                  'physdesc', 'physloc', 'phystech', 'prefercite',
-                  'processinfo', 'profiledesc', 'publicationstmt', 'refloc',
-                  'relatedmaterial', 'repository', 'scopecontent',
-                  'separatedmaterial', 'seriesstmt', 'subarea', 'tgroup',
-                  'title', 'titlestmt', 'unitdate', 'unitid', 'unittitle',
-                  'userestrict'):
+                  'creation', 'custodhist', 'daodesc', 'ead', 'eadgrp',
+                  'edition', 'editionstmt', 'eventgrp', 'expan', 'extent',
+                  'filedesc', 'fileplan', 'frontmatter', 'function',
+                  'genreform', 'index', 'indexentry', 'langmaterial',
+                  'language', 'legalstatus', 'listhead', 'note', 'notestmt',
+                  'num', 'odd', 'originalsloc', 'origination',
+                  'otherfindingaid', 'physdesc', 'physloc', 'phystech',
+                  'prefercite', 'processinfo', 'profiledesc',
+                  'publicationstmt', 'refloc', 'relatedmaterial', 'repository',
+                  'scopecontent', 'separatedmaterial', 'seriesstmt', 'subarea',
+                  'tgroup', 'title', 'titlestmt', 'unitdate', 'unitid',
+                  'unittitle', 'userestrict'):
             self.assertEqual(
                 etree.tostring(
                     self.transform(

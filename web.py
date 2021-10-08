@@ -23,7 +23,7 @@ server_args = (
 # XSLT FUNCTIONS
 ns = etree.FunctionNamespace('https://lib.uchicago.edu/functions/')
 
-def bmrc_search_url(context, ns, lst):
+def bmrc_search_url(context, ns, s):
     """EXSLT has str:encode-uri, but it behaves differently than
        urllib.parse.quote_plus. I add quote_plus() as an extention function in
        XSLT so that the transform can have access to the exact function that
@@ -31,7 +31,7 @@ def bmrc_search_url(context, ns, lst):
 
     # build the collection URI the same way Python does when we first load
     # finding aids into MarkLogic.
-    uri = '{}{}'.format(ns, urllib.parse.quote_plus(lst[0].strip()))
+    uri = '{}{}'.format(ns, urllib.parse.quote_plus(s.strip()))
 
     # to streamline the XSLT, return the entire search URL. (note
     # double-quoting.)

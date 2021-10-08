@@ -6,7 +6,7 @@
  xmlns:ucf="https://lib.uchicago.edu/functions/"
  xmlns:xlink="http://www.w3.org/1999/xlink"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
- exclude-result-prefixes="ead xlink">
+ exclude-result-prefixes="ead str ucf xlink">
 
 <xsl:output omit-xml-declaration="yes"/>
 
@@ -221,9 +221,35 @@
   <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
+<xsl:template match="ead:corpname[not(ancestor::ead:publisher) and not(ancestor::ead:repository)]">
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/organizations/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
+</xsl:template>
+
 <xsl:template match="ead:namegrp/ead:corpname">
   <li>
     <xsl:apply-templates select="@*|node()"/>
+  </li>
+</xsl:template>
+
+<xsl:template match="ead:namegrp/ead:corpname[not(ancestor::ead:publisher) and not(ancestor::ead:repository)]">
+  <li>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/organizations/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
 </xsl:template>
 
@@ -572,12 +598,28 @@
 
 <!-- FAMNAME -->
 <xsl:template match="ead:famname">
-  <xsl:apply-templates select="@*|node()"/>
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:famname">
   <li>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
 </xsl:template>
 
@@ -620,23 +662,43 @@
 
 <!-- GEOGNAME -->
 <xsl:template match="ead:geogname">
-  <xsl:apply-templates select="@*|node()"/>
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/places/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="ead:indexentry/ead:geogname">
   <dt>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/places/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </dt>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:geogname">
   <li>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/places/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
-</xsl:template>
-
-<xsl:template match="ead:p/ead:geogname">
-  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- HEAD -->
@@ -816,12 +878,28 @@
 
 <!-- NAME -->
 <xsl:template match="ead:name">
-  <xsl:apply-templates select="@*|node()"/>
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:name">
   <li>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
 </xsl:template>
 
@@ -869,12 +947,28 @@
 
 <!-- OCCUPATION -->
 <xsl:template match="ead:occupation">
-  <xsl:apply-templates select="@*|node()"/>
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/topics/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:occupation">
   <li>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/topics/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
 </xsl:template>
 
@@ -925,12 +1019,28 @@
 
 <!-- PERSNAME -->
 <xsl:template match="ead:persname">
-  <xsl:apply-templates select="@*|node()"/>
+  <a>
+    <xsl:attribute name="href">
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
+    </xsl:attribute>
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:persname">
   <li>
-    <xsl:apply-templates select="@*|node()"/>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/people/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="@*|node()"/>
+    </a>
   </li>
 </xsl:template>
 
@@ -1153,10 +1263,10 @@
 <xsl:template match="ead:subject">
   <a>
     <xsl:attribute name="href">
-      <xsl:value-of select="ucf:bmrc_search_url(
-        'https://bmrc.lib.uchicago.edu/topics/',
-        text()
-      )"/>
+      <xsl:call-template name="build_search_link">
+        <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/topics/'"/>
+        <xsl:with-param name="s" select="string(.)"/>
+      </xsl:call-template>
     </xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </a>
@@ -1166,10 +1276,10 @@
   <div>
     <a>
       <xsl:attribute name="href">
-        <xsl:value-of select="ucf:bmrc_search_url(
-          'https://bmrc.lib.uchicago.edu/topics/',
-          text()
-        )"/>
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/topics/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
       </xsl:attribute>
       <xsl:apply-templates select="@*|node()"/>
     </a>
@@ -1180,10 +1290,10 @@
   <li>
     <a>
       <xsl:attribute name="href">
-        <xsl:value-of select="ucf:bmrc_search_url(
-          'https://bmrc.lib.uchicago.edu/topics/',
-          text()
-        )"/>
+        <xsl:call-template name="build_search_link">
+          <xsl:with-param name="ns" select="'https://bmrc.lib.uchicago.edu/topics/'"/>
+          <xsl:with-param name="s" select="string(.)"/>
+        </xsl:call-template>
       </xsl:attribute>
       <xsl:apply-templates select="@*|node()"/>
     </a>
@@ -1328,6 +1438,16 @@
 <!-- USERESTRICT -->
 <xsl:template match="ead:userestrict">
   <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
+<!-- BUILD SEARCH LINKS -->
+<xsl:template name="build_search_link">
+  <xsl:param name="ns"/>
+  <xsl:param name="s"/>
+  <xsl:value-of select="ucf:bmrc_search_url(
+    $ns,
+    $s
+  )"/>
 </xsl:template>
 
 </xsl:stylesheet>

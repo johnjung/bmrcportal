@@ -1446,7 +1446,7 @@
   <xsl:param name="s"/>
   <xsl:value-of select="ucf:bmrc_search_url(
     $ns,
-    $s
+    normalize-space($s)
   )"/>
 </xsl:template>
 

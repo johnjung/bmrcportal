@@ -2,6 +2,8 @@
 
 <xsl:stylesheet version="1.0"
  xmlns:ead="urn:isbn:1-931666-22-9"
+ xmlns:str="http://exslt.org/strings"
+ xmlns:ucf="https://lib.uchicago.edu/functions/"
  xmlns:xlink="http://www.w3.org/1999/xlink"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  exclude-result-prefixes="ead xlink">
@@ -1151,9 +1153,9 @@
 <xsl:template match="ead:subject">
   <a>
     <xsl:attribute name="href">
-      <xsl:value-of select="concat(
-        '/search/?f=',
-        . 
+      <xsl:value-of select="ucf:bmrc_search_url(
+        'https://bmrc.lib.uchicago.edu/topics/',
+        text()
       )"/>
     </xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -1164,9 +1166,9 @@
   <div>
     <a>
       <xsl:attribute name="href">
-        <xsl:value-of select="concat(
-          '/search/?f=',
-          . 
+        <xsl:value-of select="ucf:bmrc_search_url(
+          'https://bmrc.lib.uchicago.edu/topics/',
+          text()
         )"/>
       </xsl:attribute>
       <xsl:apply-templates select="@*|node()"/>
@@ -1178,9 +1180,9 @@
   <li>
     <a>
       <xsl:attribute name="href">
-        <xsl:value-of select="concat(
-          '/search/?f=',
-          . 
+        <xsl:value-of select="ucf:bmrc_search_url(
+          'https://bmrc.lib.uchicago.edu/topics/',
+          text()
         )"/>
       </xsl:attribute>
       <xsl:apply-templates select="@*|node()"/>

@@ -20,11 +20,33 @@ server_args = (
     app.config['PROXY_SERVER']
 )
 
+# XSLT FUNCTIONS
+ns = etree.FunctionNamespace('https://lib.uchicago.edu/functions/')
+
+def bmrc_search_url(context, ns, lst):
+    """EXSLT has str:encode-uri, but it behaves differently than
+       urllib.parse.quote_plus. I add quote_plus() as an extention function in
+       XSLT so that the transform can have access to the exact function that
+       produces collection URIs when they're first added to MarkLogic."""
+
+    # build the collection URI the same way Python does when we first load
+    # finding aids into MarkLogic.
+    uri = '{}{}'.format(ns, urllib.parse.quote_plus(lst[0].strip()))
+
+    # to streamline the XSLT, return the entire search URL. (note
+    # double-quoting.)
+    return '/search/?f={}'.format(
+        urllib.parse.quote_plus(uri)
+    )
+    
+ns['bmrc_search_url'] = bmrc_search_url
+
 # UTILITY FUNCTIONS
 
 @app.context_processor
 def utility_processor():
     def quote_plus(s):
+        """Make quote_plus available in templates."""
         return urllib.parse.quote_plus(s)
 
     def get_active_facet(search_results, starts_with):
@@ -237,7 +259,6 @@ def load_finding_aids(dir):
         ' | '.join((
             '//ead:famname',
             '//ead:name',
-            '//ead:namegrp',
             '//ead:persname'
         )),
         {'ead': 'urn:isbn:1-931666-22-9'}

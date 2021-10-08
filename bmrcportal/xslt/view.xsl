@@ -61,6 +61,11 @@
   </dd>
 </xsl:template>
 
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:abstract">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- ACCESSRESTRICT -->
 <xsl:template match="ead:accessrestrict">
   <xsl:apply-templates select="@*|node()"/>
@@ -406,6 +411,13 @@
         <xsl:apply-templates select="@*|*[not(self::ead:unitid) and not(self::ead:container)]|text()"/>
       </dl>
     </div>
+  </div>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]">
+  <div class="did">
+    <xsl:apply-templates select="@*|node()"/>
   </div>
 </xsl:template>
 
@@ -819,6 +831,11 @@
   </dd>
 </xsl:template>
 
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:langmaterial">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- LANGUAGE -->
 <xsl:template match="ead:language">
   <xsl:apply-templates select="@*|node()"/>
@@ -874,6 +891,11 @@
   <dd>
     <xsl:apply-templates select="@*|node()"/>
   </dd>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:materialspec">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- NAME -->
@@ -933,6 +955,11 @@
   <dd>
     <xsl:apply-templates select="@*|node()"/>
   </dd>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:note">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- NOTESTMT -->
@@ -1005,6 +1032,11 @@
   </dd>
 </xsl:template>
 
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:origination">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- OTHERFINDINGAID -->
 <xsl:template match="ead:otherfindingaid">
   <xsl:apply-templates select="@*|node()"/>
@@ -1069,6 +1101,11 @@
   </dd>
 </xsl:template>
 
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:physdesc">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- PHYSFACET -->
 <xsl:template match="ead:physfacet">
   <div>
@@ -1097,6 +1134,11 @@
   <dd>
     <xsl:apply-templates select="@*|node()"/>
   </dd>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:physloc">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- PHYSTECH -->
@@ -1184,6 +1226,11 @@
   <dd>
     <xsl:apply-templates select="@*|node()"/>
   </dd>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:repository">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- REF -->
@@ -1390,6 +1437,11 @@
   </dd>
 </xsl:template>
 
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:unitdate">
+  <xsl:apply-templates select="@*|node()"/>
+</xsl:template>
+
 <!-- UNITID -->
 <xsl:template match="ead:unitid">
   <xsl:apply-templates select="@*|node()"/>
@@ -1410,6 +1462,11 @@
   <div>
     <xsl:apply-templates select="@*|node()"/>
   </div>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:unitid">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- UNITTITLE -->
@@ -1433,6 +1490,11 @@
   <dd>
     <xsl:apply-templates select="@*|node()"/>
   </dd>
+</xsl:template>
+
+<!-- inventory without container -->
+<xsl:template match="ead:dsc//ead:did[not(ead:container)]/ead:unittitle">
+  <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 <!-- USERESTRICT -->

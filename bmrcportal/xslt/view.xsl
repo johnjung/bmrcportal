@@ -593,6 +593,12 @@
   </a>
 </xsl:template>
 
+<xsl:template match="ead:extref[@xlink:href]">
+  <a href="{@xlink:href}">
+    <xsl:apply-templates select="@*|node()"/>
+  </a>
+</xsl:template>
+
 <!-- EXTREFLOC -->
 <xsl:template match="ead:extrefloc[@href]">
   <a href="{@href}">

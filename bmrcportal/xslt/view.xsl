@@ -53,6 +53,16 @@
   </p>
 </xsl:template>
 
+<!-- top of archival description -->
+<xsl:template match="ead:archdesc/ead:did/ead:abstract">
+  <dt>
+    <xsl:value-of select="@label"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
+  </dd>
+</xsl:template>
+
 <!-- inventory -->
 <xsl:template match="ead:dsc//ead:did/ead:abstract">
   <dt>Abstract</dt>

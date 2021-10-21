@@ -275,7 +275,8 @@
 </xsl:template>
 
 <!-- LANGMATERIAL -->
-<xsl:template match="ead:archdesc/ead:did/ead:langmaterial[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:langmaterial[not(@label)] |
+                     ead:dsc//ead:langmaterial[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Language</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -303,7 +304,8 @@
 </xsl:template>
 
 <!-- ORIGINATION -->
-<xsl:template match="ead:archdesc/ead:did/ead:origination[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:origination[not(@label)] |
+                     ead:dsc//ead:origination[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Creator</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -389,7 +391,8 @@
 </xsl:template>
 
 <!-- REPOSITORY -->
-<xsl:template match="ead:archdesc/ead:did/ead:repository[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:repository[not(@label)] |
+                     ead:dsc//ead:repository[not(@label)]">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
     <xsl:attribute name="label">Repository</xsl:attribute>
@@ -416,7 +419,8 @@
 </xsl:template>
 
 <!-- UNITDATE -->
-<xsl:template match="ead:archdesc/ead:did/ead:unitdate[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:unitdate[not(@label)] |
+                     ead:dsc//ead:unitdate[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Dates</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -424,7 +428,8 @@
 </xsl:template>
 
 <!-- UNITID -->
-<xsl:template match="ead:archdesc/ead:did/ead:unitid[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:unitid[not(@label)] |
+                     ead:dsc//ead:unitid[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Identifier</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -432,7 +437,8 @@
 </xsl:template>
 
 <!-- UNITTITLE -->
-<xsl:template match="ead:archdesc/ead:did/ead:unittitle[not(@label)]">
+<xsl:template match="ead:archdesc/ead:did/ead:unittitle[not(@label)] |
+                     ead:dsc//ead:unittitle[not(@label)]">
   <xsl:copy>
     <xsl:attribute name="label">Title</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
@@ -448,7 +454,7 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="ead:archdesc/ead:did//ead:userestrict | ead:dsc//ead:userestrict">
+<xsl:template match="ead:archdesc/ead:did//ead:userestrict">
   <xsl:copy>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>

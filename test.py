@@ -215,7 +215,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:abbr expan="Expanded">ex</ead:abbr></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><abbr title="Expanded">ex</abbr></div>'
+            '<div class="ead_div"><abbr class="ead_abbr" title="Expanded">ex</abbr></div>'
         )
 
         self.assertEqual(
@@ -224,7 +224,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:abbr audience="internal" expan="Expanded">ex</ead:abbr></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_abstract(self):
@@ -238,11 +238,11 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                 '', 
                 etree.tostring(
                     self.transform(
-                        etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:abstract label="Abstract">Abstract text, <ead:emph render="bold">bold text</ead:emph>.</ead:abstract></ead:div>''')
+                        etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:abstract label="Abstract">Abstract text.</ead:abstract></ead:div>''')
                     )
                 ).decode('utf-8')
             ),
-            '<div><h3>Abstract</h3><p>Abstract text, <strong>bold text</strong>.</p></div>'
+            '<div class="ead_div"><h3 class="ead_abstract">Abstract</h3><p class="ead_abstract">Abstract text.</p></div>'
         )
 
         self.assertEqual(
@@ -251,7 +251,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:abstract audience="internal" label="Abstract">Abstract text, <ead:emph>bold text</ead:emph>.</ead:abstract></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_c(self):
@@ -263,7 +263,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:c>1</ead:c></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><div class="c c01">1</div></div>'
+            '<div class="ead_div"><div class="ead_c ead_c01">1</div></div>'
         )
 
         self.assertEqual(
@@ -272,7 +272,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:c audience="internal">1</ead:c></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_container(self):
@@ -284,7 +284,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:container type="Folder">1</ead:container></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><div>Folder 1</div></div>'
+            '<div class="ead_div"><div class="ead_container">Folder 1</div></div>'
         )
 
         self.assertEqual(
@@ -293,7 +293,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:container audience="internal" type="Folder">1</ead:container></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_dao(self):
@@ -305,7 +305,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:dao href="1">2</ead:dao></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><a href="1">2</a></div>'
+            '<div class="ead_div"><a class="ead_dao" href="1">2</a></div>'
         )
 
         self.assertEqual(
@@ -314,7 +314,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:dao audience="internal" href="1">2</ead:dao></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_emph(self):
@@ -326,7 +326,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:emph render="italic">2</ead:emph></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><em>2</em></div>'
+            '<div class="ead_div"><em class="ead_emph ead_emph_italic">2</em></div>'
         )
 
     def test_extptr(self):
@@ -338,7 +338,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:extptr href="1" title="2"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><a href="1">2</a></div>'
+            '<div class="ead_div"><a class="ead_extptr" href="1">2</a></div>'
         )
 
         self.assertEqual(
@@ -347,7 +347,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:extptr audience="internal" href="1" title="2"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_extref(self):
@@ -359,7 +359,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:extref href="1">2</ead:extref></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><a href="1">2</a></div>'
+            '<div class="ead_div"><a class="ead_extref" href="1">2</a></div>'
         )
 
         self.assertEqual(
@@ -368,7 +368,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:extref audience="internal" href="1">2</ead:extref></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_item(self):
@@ -381,7 +381,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:defitem><ead:label>1</ead:label><ead:item>2</ead:item></ead:defitem></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><dl><dt>1</dt><dd>2</dd></dl></div>'
+            '<div class="ead_div"><dl class="ead_defitem"><dt class="ead_label">1</dt><dd class="ead_item">2</dd></dl></div>'
         )
 
         self.assertEqual(
@@ -390,7 +390,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:list><ead:item>1</ead:item><ead:item>2</ead:item></ead:list></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><ul><li>1</li><li>2</li></ul></div>'
+            '<div class="ead_div"><ul class="ead_list"><li class="ead_item">1</li><li class="ead_item">2</li></ul></div>'
         )
 
         self.assertEqual(
@@ -399,7 +399,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:list><ead:item audience="internal">1</ead:item><ead:item>2</ead:item></ead:list></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><ul><li>2</li></ul></div>'
+            '<div class="ead_div"><ul class="ead_list"><li class="ead_item">2</li></ul></div>'
         )
 
         self.assertEqual(
@@ -408,7 +408,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:defitem><ead:label audience="internal">1</ead:label><ead:item>2</ead:item></ead:defitem></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><dl><dd>2</dd></dl></div>'
+            '<div class="ead_div"><dl class="ead_defitem"><dd class="ead_item">2</dd></dl></div>'
         )
 
     def test_lb(self):
@@ -420,7 +420,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:lb/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><br/></div>'
+            '<div class="ead_div"><br class="ead_lb"/></div>'
         )
 
     def test_ptr(self):
@@ -432,7 +432,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:ptr target="1" title="2"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><a href="#1">2</a></div>'
+            '<div class="ead_div"><span class="ead_ptr"><a class="ead_ptr" href="#1">2</a></span></div>'
         )
 
         self.assertEqual(
@@ -441,7 +441,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:ptr audience="internal" target="1" title="2"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_ptrloc(self):
@@ -453,7 +453,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:ptrloc id="1"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div><div id="1"/></div>'
+            '<div class="ead_div"><div class="ead_ptrloc" id="1"/></div>'
         )
 
         self.assertEqual(
@@ -462,13 +462,13 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:ptrloc audience="internal" id="1"/></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div/>'
+            '<div class="ead_div"/>'
         )
 
     def test_convert_to_html_element(self):
         """EAD elements that convert neatly to an HTML element."""
 
-        for e, h in (('address', 'address'), ('blockquote', 'blockquote'),
+        for e, h in (('address', 'address'), ('blockquote', 'div'),
                      ('chronlist', 'dl'), ('daogrp', 'ul'), ('entry', 'td'),
                      ('imprint', 'div'), ('linkgrp', 'ul'), 
                      ('materialspec', 'div'), ('namegrp', 'ul'), ('p', 'p'),
@@ -482,7 +482,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                         etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:{0}>1</ead:{0}></ead:div>'''.format(e))
                     )
                 ).decode('utf-8'),
-                '<div><{0}>1</{0}></div>'.format(h)
+                '<div class="ead_div"><{0} class="ead_{1}">1</{0}></div>'.format(h, e)
             )
     
             self.assertEqual(
@@ -491,7 +491,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                         etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:{0} audience="internal">1</ead:{0}></ead:div>'''.format(e))
                     )
                 ).decode('utf-8'),
-                '<div/>'
+                '<div class="ead_div"/>'
             )
 
     def test_continue(self):
@@ -536,7 +536,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                         etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:{0}><ead:div>1</ead:div></ead:{0}></ead:div>'''.format(e))
                     )
                 ).decode('utf-8'),
-                '<div/>'
+                '<div class="ead_div"/>'
             )
 
 class TestBMRCPortalNavigation(unittest.TestCase):

@@ -32,7 +32,7 @@
 
 <!-- @ID -->
 <xsl:template match="@id">
-  <div id="{.}"/>
+  <xsl:copy/>
 </xsl:template>
 
 <!-- @LABEL -->
@@ -65,10 +65,11 @@
 <xsl:template match="ead:archdesc/ead:did/ead:abstract |
                      ead:dsc//ead:did/ead:abstract" priority="1.1">
   <dt class="ead_abstract">
+    <xsl:apply-templates select="@*[name() != 'label']"/>
     <xsl:value-of select="@label"/>
   </dt>
   <dd class="ead_abstract">
-    <xsl:apply-templates select="@*[name() != 'label']|node()"/>
+    <xsl:apply-templates select="node()"/>
   </dd>
 </xsl:template>
 
@@ -244,7 +245,7 @@
 <!-- don't output anything extra for this element, since nothing is allowed
      between a <dl> and <dt>, <dd> pairs. -->
 <xsl:template match="ead:change">
-  <xsl:apply-templates select="@*|node()"/>
+  <xsl:apply-templates select="node()"/>
 </xsl:template>
 
 <!-- CHRONITEM -->
@@ -276,7 +277,8 @@
 -->
 <xsl:template match="ead:container">
   <div class="ead_container">
-    <xsl:value-of select="concat(@type, ' ')"/> <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*"/>
+    <xsl:value-of select="concat(@type, ' ')"/> <xsl:apply-templates select="node()"/>
   </div>
 </xsl:template>
 
@@ -565,7 +567,8 @@
 
 <xsl:template match="ead:emph[@render = 'bolddoublequote']" priority="1.1">
   <strong class="ead_emph ead_emph_bolddoublequote">
-    “<xsl:apply-templates select="@*|node()"/>”
+    <xsl:apply-templates select="@*"/>
+    “<xsl:apply-templates select="node()"/>”
   </strong>
 </xsl:template>
 
@@ -579,7 +582,8 @@
 
 <xsl:template match="ead:emph[@render = 'boldsinglequote']" priority="1.1">
   <strong class="ead_emph ead_emph_boldsinglequote">
-    ‘<xsl:apply-templates select="@*|node()"/>’
+    <xsl:apply-templates select="@*"/>
+    ‘<xsl:apply-templates select="node()"/>’
   </strong>
 </xsl:template>
 
@@ -593,7 +597,8 @@
 
 <xsl:template match="ead:emph[@render = 'doublequote']" priority="1.1">
   <span class="ead_emph ead_emph_doublequote">
-    “<xsl:apply-templates select="@*|node()"/>”
+    <xsl:apply-templates select="@*"/>
+    “<xsl:apply-templates select="node()"/>”
   </span>
 </xsl:template>
 
@@ -605,7 +610,8 @@
 
 <xsl:template match="ead:emph[@render = 'singlequote']" priority="1.1">
   <span class="ead_emph ead_emph_singlequote">
-    ‘<xsl:apply-templates select="@*|node()"/>’
+    <xsl:apply-templates select="@*"/>
+    ‘<xsl:apply-templates select="node()"/>’
   </span>
 </xsl:template>
 
@@ -751,8 +757,18 @@
 </xsl:template>
 
 <!-- FUNCTION -->
+<!-- usually outputs an inline element, unless parent is controlaccess, etc. -->
 <xsl:template match="ead:function">
-  <xsl:apply-templates select="@*|node()"/>
+  <span class="ead_function"> 
+    <xsl:apply-templates select="@*|node()"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="*[   self::ead:controlaccess
+                       or self::ead:indexentry   ]/ead:function" priority="1.1">
+  <div class="ead_function"> 
+    <xsl:apply-templates select="@*|node()"/>
+  </div>
 </xsl:template>
 
 <xsl:template match="ead:namegrp/ead:function" priority="1.1">
@@ -1280,6 +1296,7 @@
 
 <xsl:template name="ptr">
   <a class="ead_ptr" href="{concat('#', @target)}">
+    <xsl:apply-templates select="@*"/>
     <xsl:value-of select="@title"/>
   </a>
 </xsl:template>

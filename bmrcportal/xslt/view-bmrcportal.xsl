@@ -22,7 +22,8 @@
 -->
 <xsl:template match="ead:container" priority="2.0">
   <div class="ead_container">
-    <xsl:value-of select="concat(@type, ' ')"/> <xsl:apply-templates select="@*|node()"/>
+    <xsl:apply-templates select="@*"/>
+    <xsl:value-of select="concat(@type, ' ')"/> <xsl:apply-templates select="node()"/>
   </div>
 </xsl:template>
 

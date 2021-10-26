@@ -146,7 +146,7 @@
 <xsl:template match="ead:controlaccess[not(ead:head)]">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
-    <ead:head>Controlled Access Headings</ead:head>
+    <ead:head>Indexed Terms</ead:head>
     <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
@@ -457,6 +457,25 @@
 <xsl:template match="ead:archdesc/ead:did//ead:userestrict">
   <xsl:copy>
     <xsl:apply-templates select="@*|node()"/>
+  </xsl:copy>
+</xsl:template>
+
+<!-- ****************************** -->
+<!-- * PROJECT-SPECIFIC OVERRIDES * -->
+<!-- ****************************** -->
+
+<!-- CONTROLACCESS
+     For the portal, <controlaccess> elements should always be given the
+     heading "Indexed Terms", even if a different heading was used in the
+     finding aid itself. This is because other headings, (e.g. "Control
+     Access") are jargon-y and off-putting to users. As per LLM, 
+     10/26/2021. -->
+
+<xsl:template match="ead:controlaccess" priority="2.0">
+  <xsl:copy>
+    <xsl:apply-templates select="@*"/>
+    <ead:head>Indexed Terms</ead:head>
+    <xsl:apply-templates select="*[not(self::ead:head)]|text()"/>
   </xsl:copy>
 </xsl:template>
 

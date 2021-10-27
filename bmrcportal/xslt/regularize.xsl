@@ -421,8 +421,18 @@
 <!-- UNITDATE -->
 <xsl:template match="ead:archdesc/ead:did/ead:unitdate[not(@label)] |
                      ead:dsc//ead:unitdate[not(@label)]">
+  <xsl:variable name="label">
+    <xsl:choose>
+      <xsl:when test="@type='bulk'">
+        <xsl:value-of select="'Predominant Dates'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'Dates'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:copy>
-    <xsl:attribute name="label">Dates</xsl:attribute>
+    <xsl:attribute name="label"><xsl:value-of select="$label"/></xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>

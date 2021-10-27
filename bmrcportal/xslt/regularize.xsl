@@ -25,7 +25,7 @@
 <xsl:template match="ead:accessrestrict[not(ead:head)]">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
-    <ead:head>Access Restrictions</ead:head>
+    <ead:head>Conditions for Access</ead:head>
     <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
@@ -105,7 +105,7 @@
 <xsl:template match="ead:bioghist[not(ead:head)]">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
-    <ead:head>Biographical Note</ead:head>
+    <ead:head>Biography or History</ead:head>
     <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
@@ -260,7 +260,7 @@
 <xsl:template match="ead:fileplan[not(ead:head)]">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
-    <ead:head>File List</ead:head>
+    <ead:head>Filing System</ead:head>
     <xsl:apply-templates select="node()"/>
   </xsl:copy>
 </xsl:template>
@@ -332,7 +332,7 @@
 <!-- PHYSLOC -->
 <xsl:template match="ead:physloc[not(@label)]">
   <xsl:copy>
-    <xsl:attribute name="label">Physical Location</xsl:attribute>
+    <xsl:attribute name="label">Storage Location</xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>

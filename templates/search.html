@@ -81,7 +81,8 @@
                 <h3><a href="/view/?id={{ r['uri'] }}">{{ r['title'] }}</a></h3>
                 <p class="result-description">{{ r['abstract'] }}</p>
                 <p class="result-metadata"><span>Dates:</span> {{ r['date'] }} &nbsp; | &nbsp; <span>Extent:</span> {{ r['extent'] }}<br/>
-                   <span>Archives:</span> <a href="#">{{ r['archive'] }}</a></p>
+                   {% set a = 'https://bmrc.lib.uchicago.edu/archives/' + quote_plus(r['archive']) %}
+                   <span>Archives:</span> <a href="/search/?f={{ a|urlencode }}">{{ r['archive'] }}</a></p>
             {% endfor %}
 
             {% include "search-pager.html" %}

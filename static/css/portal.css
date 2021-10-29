@@ -7,6 +7,10 @@ a:hover, a:focus {
     text-decoration: underline;
 }
 
+body {
+    display: relative;
+}
+
 .material-icons {
     font-size: 1.2em;
     margin-left: 0.25em;
@@ -242,6 +246,10 @@ footer.footer {
     color: #2160c4;
 }
 
+.view_more {
+    display: none;
+}
+
 .section.browse-view {
     margin-left: 0;
 }
@@ -284,5 +292,62 @@ ul.browse-results {
 
 .browse-results li {
     margin-bottom: 0.75em;
+}
+
+#facet_overlay {
+    background-color: white;
+    height: calc(100% - 2rem);
+    overflow-y: scroll;
+    padding: 1rem;
+    position: fixed;
+    width: calc (100% - 4rem);
+    z-index: 50;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#facet_overlay_bg {
+    background-color: rgba(.5, .5, .5, .5);
+    bottom: 0;
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 60;
+}
+
+/*
+ * Finding Aid Viewer
+ * --------------------------------------------------
+ */
+
+dd {
+    padding-left: 1em;
+}
+.ead_dsc .ead_did {
+    border-bottom: 1px solid #ccc;
+    display: grid;
+}
+.ead_dsc .ead_did_1 {
+    grid-template-columns: auto;
+}
+.ead_dsc .ead_did_2 {
+    grid-template-columns: 6em auto;
+}
+.ead_dsc .ead_did_3 {
+    grid-template-columns: 6em 6em auto;
+}
+.ead_dsc .ead_did_4 {
+    grid-template-columns: 6em 6em 6em auto;
+}
+.ead_dsc .ead_did_5 {
+    grid-template-columns: 6em 6em 6em 6em auto;
+}
+.ead_dsc .ead_did_6 {
+    grid-template-columns: 6em 6em 6em 6em 6em auto;
 }
 

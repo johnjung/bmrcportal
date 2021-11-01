@@ -1,10 +1,17 @@
-
+/* See https://github.com/johnjung/bmrcportal/issues/21.
+   TODO: evaluate link styling on bmrc.lib and the portal
+   when we combine the two sites. */
 a {
-    color: #224e64;
+    color: #2A5DB0;
+    outline: 0;
+    text-decoration: underline;
 }
 
 a:hover, a:focus {
+    color: #487286;
+    outline-offset: 1px;
     text-decoration: underline;
+    text-decoration-style: dotted;
 }
 
 body {

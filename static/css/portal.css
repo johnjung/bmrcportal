@@ -253,6 +253,12 @@ footer.footer {
     color: #2160c4;
 }
 
+/* See: https://github.com/johnjung/bmrcportal/issues/20
+        https://github.com/johnjung/bmrcportal/issues/58 */
+.active {
+    font-style: italic;
+}
+
 .view_more {
     display: none;
 }

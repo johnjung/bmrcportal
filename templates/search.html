@@ -9,7 +9,7 @@
     {% set facet_name_more = "more-" + facet_name|lower %}
     {% if search_results[facet_name_active] or search_results[facet_name_more] %}
         <div class="facet" data-facet="{{ facet_name|lower }}">
-            <h2><!-- <a href="/search/?b=https%3A%2F%2Fbmrc.lib.uchicago.edu%2F{{ facet_name }}%2F"> -->{{ facet_name }}<!-- </a> --></h2>
+            <h2>{{ facet_name }}</h2>
             <ul>
                   {% for f in search_results[facet_name_active] %}
                       <li class="active">{{ f[1] }} ({{ f[2] }})</li>

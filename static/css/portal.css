@@ -263,13 +263,17 @@ footer.footer {
     display: none;
 }
 
+.view_link {
+    font-style: italic;
+}
+
 .section.browse-view {
     margin-left: 0;
 }
 
 .browse-sidebar h2 {
     color: #676438;
-    font-size: 1em;
+    font-size: 1.05rem;
     font-weight: 600;
 }
 

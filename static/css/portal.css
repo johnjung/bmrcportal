@@ -361,6 +361,10 @@ dd {
     margin: 0;
     padding: 0;
 }
+/* hide descriptive summary address */
+.ead_archdesc > dl > dd.ead_repository > .ead_address {
+    display: none;
+}
 
 .ead_dsc .ead_did {
     border-bottom: 1px solid #ccc;

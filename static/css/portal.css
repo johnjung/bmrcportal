@@ -311,30 +311,24 @@ ul.browse-results {
     margin-bottom: 0.75em;
 }
 
-#facet_overlay {
-    background-color: white;
-    height: calc(100% - 2rem);
-    overflow-y: scroll;
-    padding: 1rem;
-    position: fixed;
-    width: calc (100% - 4rem);
-    z-index: 50;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#facet_overlay_bg {
-    background-color: rgba(.5, .5, .5, .5);
-    bottom: 0;
-    display: none;
+.loader-wrapper {
+    align-items: center;
+    display: flex;
     height: 100%;
+    justify-content: center;
     left: 0;
-    position: fixed;
-    right: 0;
+    position: absolute;
     top: 0;
     width: 100%;
-    z-index: 60;
+}
+
+/*
+    height: calc(100vh - 40px);
+*/
+.modal-content {
+    background-color: white;
+    border-radius: .33rem;
+    padding: 1rem;
 }
 
 /*
@@ -361,6 +355,7 @@ dd {
     margin: 0;
     padding: 0;
 }
+
 /* hide descriptive summary address */
 .ead_archdesc > dl > dd.ead_repository > .ead_address {
     display: none;

@@ -99,16 +99,7 @@ for (var i = 0; i < view_more_links.length; i++) {
  * MODAL OVERLAY FOR FACETS *
  ****************************/
 
-var body = document.querySelector('body');
-var overlay_bg = document.createElement('div');
-overlay_bg.id = 'facet_overlay_bg';
-body.appendChild(overlay_bg);
-
-var overlay = document.createElement('div');
-overlay.id = 'facet_overlay';
-overlay_bg.appendChild(overlay);
- 
-var overlay_display = false; 
+var overlay = document.querySelector('.modal-content');
 
 var view_all_links = document.getElementsByClassName('view_all_link');
 for (var i = 0; i < view_all_links.length; i++) {
@@ -120,22 +111,21 @@ for (var i = 0; i < view_all_links.length; i++) {
         // e.g. "people"
         var facet_name = a.parentNode.parentNode.parentNode.dataset.facet;
 
-        document.getElementById('facet_overlay_bg').style.display = 'block';
+        document.querySelector('.modal').classList.add('is-active');
+
+        document.querySelector('.modal-content').innerHTML = '<div class="loader-wrapper"><div class="loader is-large is-loading"></div></div>';
+
         var xml_http = new XMLHttpRequest();
         xml_http.onreadystatechange = function() {
             if (xml_http.readyState == 4 && xml_http.status == 200) {
-                document.getElementById('facet_overlay').innerHTML = xml_http.responseText;
-
-                document.getElementById('facet_overlay_close').onclick = function(e) {
-                    e.preventDefault();
-                    document.getElementById('facet_overlay_bg').style.display = 'none';
-                    document.getElementById('facet_overlay').innerHTML = '';
-                }
+                overlay.innerHTML = xml_http.responseText;
 
                 var sort_links = document.getElementsByClassName('facet_overlay_sort');
                 for (var j = 0; j < sort_links.length; j++) {
                     sort_links[j].onclick = function(e) {
                         e.preventDefault();
+
+                        document.querySelector('.modal-content').innerHTML = '<div class="loader-wrapper"><div class="loader is-loading"></div></div>';
 
                         var a = this;
 
@@ -152,7 +142,7 @@ for (var i = 0; i < view_all_links.length; i++) {
 
                         var url = '/facet_view_all/' + params;
                         console.log(url);
-                        overlay_bg.dataset.url = url;
+                        overlay.dataset.url = url;
                         xml_http.open('GET', url);
                         xml_http.send(null);
                     }
@@ -168,20 +158,17 @@ for (var i = 0; i < view_all_links.length; i++) {
         }
         var url = '/facet_view_all/' + params;
         console.log(url);
-        overlay_bg.dataset.url = url;
+        overlay.dataset.url = url;
         xml_http.open('GET', url);
         xml_http.send(null);
     }
 }
 
 // need the x to close out the overlay.
-
-var sorts = document.getElementsByClassName('facet_overlay_sort');
-for (var i = 0; i < sorts.length; i++) {
-    sorts[i].onclick = function(e) {
-        e.preventDefault();
-
-        // get the sort url from the overlay_bg.
-        // request the data from 
-    }
+close_modal = function(e) {
+    e.preventDefault();
+    document.querySelector('.modal').classList.remove('is-active');
 }
+
+document.querySelector('.modal-background').onclick = close_modal;
+document.querySelector('.modal-close').onclick = close_modal;

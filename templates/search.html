@@ -71,6 +71,16 @@
                 {{ active_facets('Places') }}
                 {{ active_facets('Decades') }}
                 {{ active_facets('Archives') }}
+                {% if search_results['active-topics']|length +
+                      search_results['active-people']|length +
+                      search_results['active-organizations']|length +
+                      search_results['active-places']|length +
+                      search_results['active-decades']|length +
+                      search_results['active-archives']|length > 0 %}
+                    <span class="tag is-white">
+                        <a href="/search/?{{ clear_facets_from_url_params(search_results) }}">clear facets</a>
+                    </span>
+                {% endif %}
             </div>
 
             {% include "search-sort.html" %}

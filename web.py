@@ -49,30 +49,6 @@ def utility_processor():
         """Make quote_plus available in templates."""
         return urllib.parse.quote_plus(s)
 
-    def get_active_facet(search_results, starts_with):
-        counts = []
-        for c in search_results['collections-active']:
-            if c[0].startswith(starts_with):
-                counts.append(c)
-        return counts
-
-    def get_url_params(search_results):
-        """
-        Get the current URL params from the search result object.
-
-        Args:
-           search_results: object returned from MarkLogic.
-
-        Returns:
-           a URL query string.
-        """
-        params = []
-        if search_results['q']:
-            params.append(('q', search_results['q']))
-        for c in search_results['collections-active']:
-            params.append(('f', c[0]))
-        return urllib.parse.urlencode(params)
-
     def add_to_url_params(search_results, d):
         """
         Add a parameter to the current url params.
@@ -100,6 +76,46 @@ def utility_processor():
         for k, v in d.items():
             params.append((k, v))
 
+        return urllib.parse.urlencode(params)
+
+    def clear_facets_from_url_params(search_results):
+        """
+        Clear all facets from current URL params.
+
+        Args:
+           search_results: object returned from MarkLogic.
+
+        Returns:
+            a URL query string.
+        """
+        params = []
+        for p in ('q', 'sort'):
+            if p in search_results and search_results[p]:
+                params.append((p, search_results[p]))
+        return urllib.parse.urlencode(params)
+
+    def get_active_facet(search_results, starts_with):
+        counts = []
+        for c in search_results['collections-active']:
+            if c[0].startswith(starts_with):
+                counts.append(c)
+        return counts
+
+    def get_url_params(search_results):
+        """
+        Get the current URL params from the search result object.
+
+        Args:
+           search_results: object returned from MarkLogic.
+
+        Returns:
+           a URL query string.
+        """
+        params = []
+        if search_results['q']:
+            params.append(('q', search_results['q']))
+        for c in search_results['collections-active']:
+            params.append(('f', c[0]))
         return urllib.parse.urlencode(params)
 
     def remove_from_url_params(search_results, d):
@@ -131,10 +147,11 @@ def utility_processor():
 
     return dict(
         add_to_url_params = add_to_url_params,
+        clear_facets_from_url_params = clear_facets_from_url_params,
         get_active_facet = get_active_facet,
         get_url_params = get_url_params,
         quote_plus = quote_plus,
-        remove_from_url_params = remove_from_url_params,
+        remove_from_url_params = remove_from_url_params
     )
     
 # CLI INTERFACE

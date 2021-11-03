@@ -311,6 +311,12 @@ ul.browse-results {
     margin-bottom: 0.75em;
 }
 
+/* while loading, place the modal at the top of the window. */
+.modal {
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
 .loader-wrapper {
     align-items: center;
     display: flex;
@@ -322,13 +328,28 @@ ul.browse-results {
     width: 100%;
 }
 
-/*
-    height: calc(100vh - 40px);
-*/
+/* remove "height: calc(100vh - 40px);" so that the modal is short while
+   loading, to make the spinner more noticeable. */
 .modal-content {
     background-color: white;
-    border-radius: .33rem;
     padding: 1rem;
+}
+
+.modal-content ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+/* selected facet values in the popup are italic. avaliable facet values are
+   normal. */
+.modal-content li {
+    font-style: italic;
+}
+
+.modal-content li a {
+    font-style: normal;
 }
 
 /*

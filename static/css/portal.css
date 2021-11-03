@@ -1,6 +1,12 @@
 /* See https://github.com/johnjung/bmrcportal/issues/21.
    TODO: evaluate link styling on bmrc.lib and the portal
    when we combine the two sites. */
+
+/* keep anchor links visible with fixed top nav. */
+[id] {
+    scroll-margin-top: 3.75rem;
+}
+
 a {
     color: #2A5DB0;
     outline: 0;

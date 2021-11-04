@@ -65,11 +65,11 @@ def get_archives_for_xml(archive_config, dir, uri_format_str):
            archive_config  - a list of dicts, data about archives from the
                              configuration for this app.
            dir             - a string, the full path to the directory
-                             containing those finding aids. This directory
-                             should contain a sequence of subdirectories, where
-                             each subdirectory is a key in archives_lookup. E.g.,
-                             if /home/user/findingaids is the dir,
-                             /home/user/findingaids/bronzeville should exist inside.
+                             containing those finding aids. This directory may 
+                             contain subdirectories (e.g. for storing each
+                             archive's finding aids together) however, this 
+                             function will use the finding aid prefix to
+                             determine which archive produced the finding aid.
            uri_format_str  - a string, the format string to generate a unique
                              identifier for each archive.
 
@@ -80,7 +80,7 @@ def get_archives_for_xml(archive_config, dir, uri_format_str):
 
     archive_lookup = {}
     for a in archive_config:
-        archive_lookup[a['finding_aid_dirname']] = a['short_title']
+        archive_lookup[a['finding_aid_prefix']] = a['short_title']
 
     bmrc_uri = uri_format_str.format(
         urllib.parse.quote_plus('BMRC Portal')
@@ -89,28 +89,31 @@ def get_archives_for_xml(archive_config, dir, uri_format_str):
         bmrc_uri: []
     }
 
-    for d in os.listdir(dir): 
-        assert d in archive_lookup.keys()
+    for root, subdirs, filenames in os.walk(dir):
+        for filename in filenames:
+            if filename.startswith('BMRC') and filename.endswith('.xml'):
+                eadid = filename
 
-        for eadid in os.listdir(os.path.join(dir, d)):
-            try:
-                xml = get_transformed_xml(
-                    os.path.join(dir, d, eadid)
+                try:
+                    xml = get_transformed_xml(
+                        os.path.join(root, eadid)
+                    )
+                except ValueError:
+                    continue
+    
+                # Confirm that the document passed to this function is namespaced
+                # EAD 2002.
+                assert xml.tag == '{urn:isbn:1-931666-22-9}ead'
+
+                prefix = '.'.join(eadid.split('.')[:2])
+    
+                uri = uri_format_str.format(
+                    urllib.parse.quote_plus(archive_lookup[prefix])
                 )
-            except ValueError:
-                continue
-
-            # Confirm that the document passed to this function is namespaced
-            # EAD 2002.
-            assert xml.tag == '{urn:isbn:1-931666-22-9}ead'
-
-            uri = uri_format_str.format(
-                urllib.parse.quote_plus(archive_lookup[d])
-            )
-            if not uri in archives:
-                archives[uri] = []
-            archives[uri].append(eadid)
-            archives[bmrc_uri].append(eadid)
+                if not uri in archives:
+                    archives[uri] = []
+                archives[uri].append(eadid)
+                archives[bmrc_uri].append(eadid)
 
     return archives
 

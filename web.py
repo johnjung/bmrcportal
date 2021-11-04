@@ -302,6 +302,7 @@ def load_finding_aids(dir):
     transform_xsd = etree.XSLT(
         etree.parse(
             os.path.join(
+                'bmrcportal',
                 'xslt',
                 'dtd2schema.xsl'
             )

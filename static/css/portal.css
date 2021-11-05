@@ -404,6 +404,10 @@ ul.browse-results {
 .archivebox_findingaidviewer {
     margin-bottom: 1rem;
 }
+.archivebox_findingaidviewer_image img {
+    height: auto;
+    width: 6rem;
+}
 
 dl {
     line-height: 1.75rem;

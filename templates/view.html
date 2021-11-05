@@ -4,14 +4,14 @@
 <div class="container section browse-view">
     <div class="columns is-variable is-8">
 
-      <div class="column is-narrow browse-sidebar">
+      <div class="column is-one-quarter browse-sidebar">
         <div>
           <h2>Contents</h2>
           {{ navigation_html|safe }}
           <div class="archivebox_findingaidviewer">
             <h2>Collection Access</h2>
             {% if archivebox_logo %}
-              <div>
+              <div class="archivebox_findingaidviewer_image">
                 <img src="/static{{ archivebox_logo }}"/>
               </div>
             {% endif %}

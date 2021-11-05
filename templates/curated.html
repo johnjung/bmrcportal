@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container section">
+<div class="container section browse-view">
     <div class="columns is-variable is-8">
-        <div class="column is-narrow browse-sidebar">
+        <div class="column is-one-quarter browse-sidebar">
             <h2>Browse</h2>
             <ul>
                 <li><a href="/browse/?b=topics">Topics</a></li>
@@ -22,7 +22,7 @@
         <div class="column">
             <h1>{{ title }}</h1>
             <div class="columns is-desktop">
-                <div class="column is-narrow">
+                <div class="column is-one-quarter">
                     <img src="{{ curated_topic['img_src'] }}"/>
                 </div>
         

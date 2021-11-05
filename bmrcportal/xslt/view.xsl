@@ -38,7 +38,15 @@
 
 <!-- @LABEL -->
 <xsl:template match="@label[not(ancestor::ead:dsc)]">
-  <h3 class="{concat('ead_', local-name(..))}" id="{generate-id(.)}"><xsl:value-of select="."/></h3>
+  <h3>
+    <xsl:attribute name="class">
+      <xsl:value-of select="concat('ead_', local-name(..))"/>
+    </xsl:attribute>
+    <xsl:attribute name="id">
+      <xsl:call-template name="generate_readable_id"/>
+    </xsl:attribute>
+    <xsl:value-of select="."/>
+  </h3>
 </xsl:template>
 
 <!-- ABBR -->
@@ -861,7 +869,7 @@
   <xsl:element name="{concat('h', 1 + $count)}">
     <xsl:attribute name="class">ead_head</xsl:attribute>
     <xsl:attribute name="id">
-      <xsl:value-of select="generate-id(.)"/>
+      <xsl:call-template name="generate_readable_id"/>
     </xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:element>
@@ -1870,6 +1878,37 @@
     $ns,
     normalize-space($s)
   )"/>
+</xsl:template>
+
+<!-- GENERATE READABLE IDS -->
+<xsl:template name="generate_readable_id">
+  <!-- this template can be called from either an @label attribute, or a <head>
+       element. In either case, we want to use the parent element to name the
+       anchor. Either the direct parent of the attribute, or the parent of the
+       <head>. -->
+  <xsl:variable name="name">
+    <xsl:value-of select="local-name(..)"/>
+  </xsl:variable>
+
+  <!-- same for counting preceding elements. If the current context is an element 
+       (a <head>) count backwards from the parent, but also count backwards from 
+       the parent if the current context is an @label attribute. -->
+  <xsl:variable name="count">
+    <xsl:value-of select="count(../preceding::*[local-name() = $name])"/>
+  </xsl:variable>
+
+  <!-- produce IDs like "scopecontent", "scopecontent-2", etc. -->
+  <xsl:variable name="id">
+    <xsl:choose>
+      <xsl:when test="$count &gt; 0">
+        <xsl:value-of select="concat($name, '-', $count + 1)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$name"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="$id"/>
 </xsl:template>
 
 </xsl:stylesheet>

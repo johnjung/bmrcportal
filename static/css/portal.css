@@ -315,14 +315,19 @@ footer.footer {
     margin-left: 0;
 }
 
+.browse-sidebar {
+    background-color: #f5f5eb;
+    hyphens: auto;
+}
+.browse-sidebar a {
+    hyphens: none;
+    overflow-wrap: anywhere;
+}
+
 .browse-sidebar h2 {
     color: #676438;
     font-size: 1.05rem;
     font-weight: 600;
-}
-
-.browse-sidebar {
-    background-color: #f5f5eb;
 }
 
 .browse-sidebar ul {

@@ -563,9 +563,9 @@
 
 <!-- EMPH -->
 <xsl:template match="ead:emph">
-  <strong class="ead_emph">
+  <em class="ead_emph">
     <xsl:apply-templates select="@*|node()"/>
-  </strong>
+  </em>
 </xsl:template>
 
 <xsl:template match="ead:emph[@render = 'bold']" priority="1.1">

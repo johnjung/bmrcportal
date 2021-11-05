@@ -476,8 +476,8 @@
                                             )"/>
   <div class="{concat('ead_did ead_did_', string($column_count))}">
     <xsl:apply-templates select="ead:unitid|ead:container"/>
-    <div>
-      <dl>
+    <div class="ead_did">
+      <dl class="ead_did">
         <xsl:apply-templates select="@*|*[not(self::ead:unitid) and not(self::ead:container)]|text()"/>
       </dl>
     </div>

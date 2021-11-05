@@ -441,8 +441,15 @@ dd {
     display: none;
 }
 
-.ead_dsc .ead_did {
+.ead_dsc .ead_c {
     border-bottom: 1px solid #ccc;
+}
+.ead_dsc .ead_did_1,
+.ead_dsc .ead_did_2,
+.ead_dsc .ead_did_3,
+.ead_dsc .ead_did_4,
+.ead_dsc .ead_did_5,
+.ead_dsc .ead_did_6 {
     display: grid;
 }
 .ead_dsc .ead_did_1 {
@@ -464,3 +471,17 @@ dd {
     grid-template-columns: 6em 6em 6em 6em 6em auto;
 }
 
+/* .visually-hidden */
+.ead_dsc dl.ead_did dt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+.ead_dsc dl.ead_did dd {
+    padding-left: 0;
+}
+.ead_dsc dl.ead_did dd p {
+    margin-bottom: 0;
+}

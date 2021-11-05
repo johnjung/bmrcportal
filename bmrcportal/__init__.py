@@ -80,7 +80,7 @@ def get_archives_for_xml(archive_config, dir, uri_format_str):
 
     archive_lookup = {}
     for a in archive_config:
-        archive_lookup[a['finding_aid_prefix']] = a['short_title']
+        archive_lookup[a['finding_aid_prefix']] = a['name']
 
     bmrc_uri = uri_format_str.format(
         urllib.parse.quote_plus('BMRC Portal')

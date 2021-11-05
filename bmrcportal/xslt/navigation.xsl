@@ -7,12 +7,9 @@
 <xsl:output omit-xml-declaration="yes"/>
 
 <xsl:template match="/">
-  <div>
-    <h2>Contents</h2>
-    <ul>
-      <xsl:apply-templates select="//h2"/>
-    </ul>
-  </div>
+  <ul>
+    <xsl:apply-templates select="//h2"/>
+  </ul>
 </xsl:template>
 
 <xsl:template match="h2">

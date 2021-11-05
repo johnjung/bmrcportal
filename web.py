@@ -554,7 +554,7 @@ def homepage():
     member_spotlight_html = ''
     for a in app.config['ARCHIVES']:
        if a['finding_aid_prefix'] == 'BMRC.CCARO': 
-           member_spotlight_title = a['short_title']
+           member_spotlight_title = a['name']
            member_spotlight_html = a['member_spotlight_html']
 
     facet = random.choice((
@@ -639,8 +639,30 @@ def search():
     else:
         title = 'Portal Search'
 
+    # if this search includes an archive facet, get the logo, short title and
+    # html for archive contact info.
+    archivebox_address = archivebox_link = archivebox_logo = name = ''
+    c = [c for c in collections if c.startswith('https://bmrc.lib.uchicago.edu/archives/')]
+    try:
+        s = urllib.parse.unquote_plus(
+            c[0].replace(
+                'https://bmrc.lib.uchicago.edu/archives/', 
+                ''
+            )
+        )
+        a = [a for a in app.config['ARCHIVES'] if a['name'] == s]
+        archivebox_address = a[0]['archivebox_address']
+        archivebox_link = a[0]['archivebox_link']
+        archivebox_logo = a[0]['archivebox_logo']
+        name = a[0]['name']
+    except IndexError:
+        pass
+
     return render_template(
         'search.html',
+        archivebox_address = archivebox_address,
+        archivebox_link = archivebox_link,
+        archivebox_logo = archivebox_logo,
         breadcrumbs = [
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
@@ -652,6 +674,7 @@ def search():
         search_results = search_results,
         sidebar_view_less_facet_count = app.config['SIDEBAR_VIEW_LESS_FACET_COUNT'],
         sidebar_view_more_facet_count = app.config['SIDEBAR_VIEW_MORE_FACET_COUNT'],
+        name = name,
         sort = sort,
         start = start,
         title = title,
@@ -696,10 +719,24 @@ def view():
     except IndexError:
         title = ''
 
+    prefix = '.'.join(id.split('.')[:2])
+    archivebox_address = archivebox_link = archivebox_logo = name = ''
+    a = [a for a in app.config['ARCHIVES'] if a['finding_aid_prefix'] == prefix]
+    try:
+        archivebox_address = a[0]['archivebox_address']
+        archivebox_link = a[0]['archivebox_link']
+        archivebox_logo = a[0]['archivebox_logo']
+        name = a[0]['name']
+    except IndexError:
+        pass
+    
     navigation = tn(findingaid)
 
     return render_template(
         'view.html',
+        archivebox_address = archivebox_address,
+        archivebox_link = archivebox_link,
+        archivebox_logo = archivebox_logo,
         breadcrumbs = [
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
@@ -707,12 +744,17 @@ def view():
         findingaid_html = findingaid,
         navigation_html = navigation,
         search_results = [],
+        name = name,
         title = title
     )
 
 @app.route('/css/<path:path>')
 def css(path):
     return send_from_directory('css', path)
+
+@app.route('/img/<path:path>')
+def img(path):
+    return send_from_directory('img', path)
 
 @app.route('/js/<path:path>')
 def js(path):

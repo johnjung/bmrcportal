@@ -220,8 +220,46 @@ footer.footer {
  * --------------------------------------------------
  */
 
+.archivebox_serp {
+    background-color: #676438;
+    color: white;
+    display: flex;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+}
+.archivebox_serp a:link,
+.archivebox_serp a:visited,
+.archivebox_serp a:hover,
+.archivebox_serp a:focus,
+.archivebox_serp a:active {
+    color: inherit;
+}
+.archivebox_serp strong {
+    color: inherit;
+}
+.archivebox_serp_image {
+    width: 6rem;
+}
+.archivebox_serp_image img {
+    height: auto;
+    width: 100%;
+}
+.archivebox_serp_text {
+    padding-left: 1rem;
+}
+.archivebox_address {
+    margin-bottom: .5rem;
+}
+
+
 #results_header + .active-facets {
     margin-top: -15px;
+}
+
+@media (min-width: 62em) {
+    #search_results {
+        padding-top: 0;
+    }
 }
 
 #search_results h3 {
@@ -363,12 +401,19 @@ ul.browse-results {
  * --------------------------------------------------
  */
 
+.archivebox_findingaidviewer {
+    margin-bottom: 1rem;
+}
+
+dl {
+    line-height: 1.75rem;
+}
 dd {
     padding-left: 1em;
 }
 
 /* descriptive summary */
-.ead_archdesc > dl {
+.ead_archdesc > dl.ead_did {
     margin-bottom: 1.5rem;
 }
 .ead_archdesc > dl.ead_did dt {

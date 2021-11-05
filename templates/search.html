@@ -49,6 +49,32 @@
     
         <div class="column" id="search_results">
             <div id="results_header">
+                {% if name %}
+                    <div class="archivebox_serp">
+                        <div class="archivebox_serp_image">
+                            {% if archivebox_logo %}
+                                <img src="/static{{ archivebox_logo }}"/>
+                            {% endif %}
+                        </div>
+                        <div class="archivebox_serp_text">
+                            <div class="archivebox_name">
+                                <strong>
+                                    {{ name }}
+                                </strong>
+                            </div>
+                            {% if archivebox_address %}
+                                <div class="archivebox_address">
+                                    {{ archivebox_address|safe }}
+                                </div>
+                            {% endif %}
+                            {% if archivebox_link %}
+                                <div class="archivebox_link">
+                                    {{ archivebox_link|safe }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
                 {% if search_results['b'] == '' %}
                     <h1>Results 
                     {{ search_results['start'] + 1 }} 

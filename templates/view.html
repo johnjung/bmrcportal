@@ -5,7 +5,33 @@
     <div class="columns is-variable is-8">
 
       <div class="column is-narrow browse-sidebar">
-        {{ navigation_html|safe }}
+        <div>
+          <h2>Contents</h2>
+          {{ navigation_html|safe }}
+          <div class="archivebox_findingaidviewer">
+            <h2>Collection Access</h2>
+            {% if archivebox_logo %}
+              <div>
+                <img src="/static{{ archivebox_logo }}"/>
+              </div>
+            {% endif %}
+            <div class="archivebox_name">
+              <strong>
+              {{ archive_name }}
+              </strong>
+            </div>
+            {% if archivebox_address %}
+              <div class="archivebox_address">
+                {{ archivebox_address|safe }}
+              </div>
+            {% endif %}
+            {% if archivebox_link %}
+              <div class="archivebox_link">
+                {{ archivebox_link|safe }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
       </div>
   
       <div class="column">

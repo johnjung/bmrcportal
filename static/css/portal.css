@@ -427,6 +427,7 @@ dd {
 }
 .ead_archdesc > dl.ead_did dt {
     float: left;
+    font-style:italic;
 }
 .ead_archdesc > dl.ead_did dt::after {
     content: ':\00a0'; 

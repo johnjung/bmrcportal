@@ -22,6 +22,7 @@ a:hover, a:focus {
 
 body {
     display: relative;
+    line-height: 1.75rem;
 }
 
 .material-icons {
@@ -414,9 +415,6 @@ ul.browse-results {
     width: 6rem;
 }
 
-dl {
-    line-height: 1.75rem;
-}
 dd {
     padding-left: 1em;
 }
@@ -442,7 +440,10 @@ dd {
     display: none;
 }
 
-.ead_dsc .ead_c {
+.ead_dsc .ead_c:not(:last-child),
+.ead_dsc .ead_did:not(:last-child),
+.ead_dsc .ead_arrangement:not(:last-child),
+.ead_dsc .ead_scopecontent:not(:last-child) {
     border-bottom: 1px solid #ccc;
 }
 .ead_dsc .ead_did_1,
@@ -472,6 +473,19 @@ dd {
     grid-template-columns: 6em 6em 6em 6em 6em auto;
 }
 
+.ead_dsc .ead_head {
+    font-style: italic;
+}
+.ead_dsc > .ead_head {
+    font-style: normal;
+}
+
+.ead_dsc .ead_c_superseries > .ead_did > .ead_unittitle,
+.ead_dsc .ead_c_series > .ead_did > .ead_unittitle,
+.ead_dsc .ead_c_subseries > .ead_did > .ead_unittitle {
+    font-weight: bold;
+}
+
 /* .visually-hidden */
 .ead_dsc dl.ead_did dt {
     position: absolute;
@@ -483,6 +497,6 @@ dd {
 .ead_dsc dl.ead_did dd {
     padding-left: 0;
 }
-.ead_dsc dl.ead_did dd p {
+.ead_dsc p {
     margin-bottom: 0;
 }

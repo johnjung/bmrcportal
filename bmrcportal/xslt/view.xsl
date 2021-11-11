@@ -245,7 +245,17 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <div class="{concat('ead_c ', $c_class)}">
+  <xsl:variable name="c_level">
+    <xsl:choose>
+      <xsl:when test="@level">
+        <xsl:value-of select="concat('ead_c_', @level)"/>
+      </xsl:when> 
+      <xsl:otherwise>
+        <xsl:value-of select="''"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <div class="{concat('ead_c ', $c_class, ' ', $c_level)}">
     <xsl:apply-templates select="@*|node()"/>
   </div>
 </xsl:template>
@@ -873,6 +883,12 @@
     </xsl:attribute>
     <xsl:apply-templates select="@*|node()"/>
   </xsl:element>
+</xsl:template>
+
+<xsl:template match="ead:head[ancestor::ead:dsc and not(parent::ead:dsc)]">
+  <div class="ead_head">
+    <xsl:apply-templates select="@*|node()"/>
+  </div>
 </xsl:template>
 
 <!-- HIGHLIGHT -->

@@ -402,6 +402,19 @@ ul.browse-results {
     font-style: normal;
 }
 
+
+/*
+ * Curated Topics
+ * --------------------------------------------------
+ */
+
+.topic_image p {
+    font-size: .8rem;
+    font-style: italic;
+    line-height: 1.4rem;
+}
+
+
 /*
  * Finding Aid Viewer
  * --------------------------------------------------

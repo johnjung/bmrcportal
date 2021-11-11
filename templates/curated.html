@@ -15,25 +15,22 @@
             </ul>
     
             <h2>Featured Topic</h2>
-            <img class="is-hidden-mobile" src="http://placekitten.com/200/300"/>
-            <p><a href="/curated/">Black Nurses</a></p>
+            <img class="is-hidden-mobile" src="/static/img/curated_topics/black_studies.jpg"/>
+            <p><a href="/curated/">Black Studies</a></p>
             <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
         </div>
         <div class="column">
             <h1>{{ title }}</h1>
-            <div class="columns is-desktop">
-                <div class="column is-one-quarter">
-                    <img src="{{ curated_topic['img_src'] }}"/>
-                </div>
-        
-                <div class="column">
-                    <p>{{ curated_topic['introductory_text'] }}</p>
-        
-                    <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
-                    <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
-                    <p>The BMRC Curated Topics list was created to serve as a subject expert lorum ipsum.</p>
-                </div>
+            <div class="topic_image">
+                <img src="/static{{ curated_topic['img_src'] }}"/>
+                <p>{{ curated_topic['img_caption'] }}</p>
             </div>
+        
+            <p>{{ curated_topic['introductory_text'] }}</p>
+        
+            <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
+            <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
+            <p>The BMRC Curated Topics list was created to serve as a subject expert lorum ipsum.</p>
         </div>
     </div> 
 </div>

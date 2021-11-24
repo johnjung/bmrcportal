@@ -1,7 +1,7 @@
 import click, io, jinja2, json, math, os, random, urllib, urllib.parse, re, sys
 import lxml.etree as etree
 import xml.etree.ElementTree as ElementTree
-from flask import current_app, Flask, jsonify, render_template, request, send_from_directory
+from flask import current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
 from flask.cli import with_appcontext
 from urllib.parse import unquote_plus
 from bmrcportal import (clear_cache, delete_findingaid,
@@ -630,6 +630,16 @@ def search():
             b
         )
     )
+
+    # redirect to the view if there is a single result.
+    # if search_results['total'] == 1:
+    #     return redirect(
+    #         '/view/?{}'.format(
+    #             urllib.parse.urlencode({
+    #                 'id': search_results['results'][0]['uri']
+    #             })
+    #         )
+    #     )
 
     total_pages = math.ceil(search_results['total'] / app.config['PAGE_LENGTH'])
     min_page_link, max_page_link = get_min_max_page_links(page, total_pages)

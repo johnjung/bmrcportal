@@ -361,12 +361,6 @@ ul.browse-results {
     margin-bottom: 0.75em;
 }
 
-/* while loading, place the modal at the top of the window. */
-.modal {
-    justify-content: flex-start;
-    padding-top: 20px;
-}
-
 .loader-wrapper {
     align-items: center;
     display: flex;

@@ -10,8 +10,12 @@ function toggleBurger() {
  *************************************/
 
 // get the view less and view more limits from data attributes.
-var view_less_limit = parseInt(document.getElementById('facets').dataset.sidebar_view_less_facet_count);
-var view_more_limit = parseInt(document.getElementById('facets').dataset.sidebar_view_more_facet_count);
+var view_less_limit = 0;
+var view_more_limit = 0;
+if (document.getElementById('facets')) {
+    view_less_limit = parseInt(document.getElementById('facets').dataset.sidebar_view_less_facet_count);
+    view_more_limit = parseInt(document.getElementById('facets').dataset.sidebar_view_more_facet_count);
+}
 
 var facets = document.getElementsByClassName('facet');
 for (var i = 0; i < facets.length; i++) {

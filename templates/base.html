@@ -41,7 +41,7 @@
             <section class="section pb-0">
                 <nav class="navbar is-fixed-top" role="navigation" aria-label="Main Navigation" style="background-color: #f5f5eb;">
                     <div class="navbar-brand">
-                        <a class="navbar-item" href="https://bmrc.lib.uchicago.edu/"><img class="nav-brand" src="/static/img/BMRC-Logo.png" alt=""></a>
+                        <a class="navbar-item" href="https://bmrc.lib.uchicago.edu/"><img alt="BMRC, the Black Metropolis Research Consortium" class="nav-brand" src="/static/img/BMRC-Logo.png" alt=""></a>
                         <div class="navbar-burger burger" data-target="navbarExampleTransparentExample" onclick="toggleBurger()">
                             <span></span>
                             <span></span>
@@ -90,8 +90,8 @@
                         <div class="navbar-end">
                             <div class="navbar-item is-search">
                                 <form action="https://bmrc.lib.uchicago.edu/search" method="get">
-                                        <label class="is-sr-only">Site Search</label>
-                                        <input class="input control is-small" placeholder="search website" type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+                                        <label class="is-sr-only" for="site-search-query">Site Search</label>
+                                        <input class="input control is-small" id="site-search-query" placeholder="search website" type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
                                     <button type="submit" value="Search" class="button is-small"><i class="fa fa-search" aria-hidden="true" aria-label="Submit site search"></i></button>
                                 </form>
                             </div>
@@ -105,8 +105,8 @@
             <section class="section portal-search" style="background-color: #e5e7d2;">
                 <form action="/search/" method="get">
                     <div class="field has-addons">
-                        <label class="is-sr-only">Finding Aid Search</label>
-                        <input class="input control is-medium" placeholder="search member collections" type="text" name="q"{% if search_results['q'] %} value="{{ search_results['q'] }}"{% endif %}>
+                        <label class="is-sr-only" for="portal-search-query">Finding Aid Search</label>
+                        <input class="input control is-medium" id="portal-search-query" placeholder="search member collections" type="text" name="q"{% if search_results['q'] %} value="{{ search_results['q'] }}"{% endif %}>
                         <button type="submit" value="Search" class="button is-medium">Search</button>
                     </div>
                 </form>
@@ -143,9 +143,9 @@
         <footer id="footer" class="footer" role="contentinfo">
             <div class="container">
                 <div class="has-text-centered">
-                    <a href="https://www.facebook.com/1BMRC"><i class="fab fa-facebook-square"></i></a>
-                    <a href="https://twitter.com/ChicagoBMRC"><i class="fab fa-twitter-square"></i></a>
-                    <a href="https://instagram.com/black_metropolis/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/1BMRC"><span class="is-sr-only">Visit us on Facebook</span><i class="fab fa-facebook-square"></i></a>
+                    <a href="https://twitter.com/ChicagoBMRC"><span class="is-sr-only">Visit us on Twitter</span><i class="fab fa-twitter-square"></i></a>
+                    <a href="https://instagram.com/black_metropolis/"><span class="is-sr-only">Visit us on Instagram</span><i class="fab fa-instagram"></i></a>
                 </div>
                 <div class="has-text-centered">
                     <div>

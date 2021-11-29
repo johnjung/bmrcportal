@@ -336,6 +336,9 @@ footer.footer {
     padding-left: 1em;
     text-indent: -1em;
 }
+.browse-sidebar ul ul {
+    padding-bottom: 0;
+}
 
 .sort-browse {
     padding-bottom: 1em;

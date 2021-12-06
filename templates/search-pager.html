@@ -3,11 +3,9 @@
     <a class="pagination-next"{% if page == total_pages %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': page + 1}) }}">Next page</a>
 
     <ul class="pagination-list">
-        <li>
-            {% for i in range(min_page_link, max_page_link + 1) %}
-                <a class="button"{% if i == page %} disabled{% endif %} href="/search/?{{ add_to_url_params(search_results, {'page': i}) }}">{{ i }}</a>
-            {% endfor %}
-        </li>
+        {% for i in range(min_page_link, max_page_link + 1) %}
+            <li><a class="button pagination-link{% if i == page %} is-current{% endif %}" href="/search/?{{ add_to_url_params(search_results, {'page': i}) }}">{{ i }}</a></li>
+        {% endfor %}
     </ul>
 </nav>
 {% endif %}

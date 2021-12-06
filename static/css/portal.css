@@ -292,10 +292,23 @@ footer.footer {
     padding-left: 0;
 }
 
+.pagination-link.is-current {
+    background-color: #224e64;
+    border-color: #224e64;
+    color: #fff;
+}
+.pagination-link.is-current:hover {
+    border-color: #224e64;
+    color: #fff;
+}
+ 
+.pagination a {
+    text-decoration: none;
+}
+
 .pagination a:hover {
-    background-color:  #e3ecfa;
-    border-color: transparent;
-    color: #2160c4;
+    border-color: #b5b5b5;
+    color: #777441;
 }
 
 /* See: https://github.com/johnjung/bmrcportal/issues/20

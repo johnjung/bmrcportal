@@ -86,11 +86,9 @@
 
 
                     <ul class="pagination-list">
-                        <li>
-                            {% for i in range(min_page_link, max_page_link + 1) %}
-                                <a class="button"{% if i == page %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a>
-                            {% endfor %}
-                        </li>
+                        {% for i in range(min_page_link, max_page_link + 1) %}
+                            <li><a class="button pagination-link{% if i == page %} is-current{% endif %}" href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a></li>
+                        {% endfor %}
                     </ul>
                 </nav>
             {% endif %}
@@ -110,11 +108,9 @@
                     <a class="pagination-next"{% if page == total_pages %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ page + 1 }}&sort={{ sort }}">Next page</a>
                     
                     <ul class="pagination-list">
-                        <li>
-                            {% for i in range(min_page_link, max_page_link + 1) %}
-                                <a class="button"{% if i == page %} disabled{% endif %} href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a>
-                            {% endfor %}
-                        </li>
+                        {% for i in range(min_page_link, max_page_link + 1) %}
+                            <li><a class="button pagination-link{% if i == page %} is-current{% endif %}" href="/browse/?b={{ b }}&page={{ i }}&sort={{ sort }}">{{ i }}</a></li>
+                        {% endfor %}
                     </ul>
                 </nav>
             {% endif %}

@@ -409,8 +409,11 @@ ul.browse-results {
     font-size: .8rem;
     font-style: italic;
     line-height: 1.4rem;
-}
+} 
 
+p.byline {
+    font-style: italic;
+}
 
 /*
  * Finding Aid Viewer

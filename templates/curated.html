@@ -25,9 +25,13 @@
                 <img src="/static{{ curated_topic['img_src'] }}"/>
                 <p>{{ curated_topic['img_caption'] }}</p>
             </div>
-        
+
             <p>{{ curated_topic['introductory_text'] }}</p>
-        
+
+            {% if curated_topic['byline'] %}
+                <p class="byline">— {{ curated_topic['byline'] }}</p>
+            {% endif %}
+
             <p><a href="{{ curated_topic['search_url'] }}">View search results for this topic  &gt;&gt;</a></p>
             <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
             <p>The BMRC Curated Topics list was created to serve as a subject expert lorum ipsum.</p>

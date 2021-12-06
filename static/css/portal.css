@@ -8,13 +8,13 @@
 }
 
 a {
-    color: #2A5DB0;
+    color: #224e64;
     outline: 0;
     text-decoration: underline;
 }
 
 a:hover, a:focus {
-    color: #487286;
+    color: #777441;
     outline-offset: 1px;
     text-decoration: underline;
     text-decoration-style: dotted;

@@ -206,7 +206,7 @@ app.cli.add_command(browse_people)
 
 @click.command(name='browse-places')
 def browse_places():
-    '''Browse all people in MarkLogic.'''
+    '''Browse all places in MarkLogic.'''
     click.echo(
         json.dumps(
             get_collections(
@@ -218,7 +218,7 @@ app.cli.add_command(browse_places)
 
 @click.command(name='browse-topics')
 def browse_topics():
-    '''Browse all people in MarkLogic.'''
+    '''Browse all topics in MarkLogic.'''
     click.echo(
         json.dumps(
             get_collections(

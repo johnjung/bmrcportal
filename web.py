@@ -1,7 +1,7 @@
 import click, io, jinja2, json, math, os, random, urllib, urllib.parse, re, sys
 import lxml.etree as etree
 import xml.etree.ElementTree as ElementTree
-from flask import current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
+from flask import abort, current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
 from flask.cli import with_appcontext
 from urllib.parse import unquote_plus
 from bmrcportal import (clear_cache, delete_findingaid,
@@ -455,14 +455,33 @@ def contact():
     )
 
 @app.route('/curated/')
-def curated():
-    curated_topics = app.config['CURATED_TOPICS']
-    curated_topic = random.choice(curated_topics)
+def curated_topic_index():
     return render_template(
-        'curated.html', 
+        'curated-topic-index.html', 
         breadcrumbs = [
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
+        ],
+        curated_topics = app.config['CURATED_TOPICS'],
+        search_results = {},
+        title = 'Curated Topics'
+    )
+
+@app.route('/curated/<slug>')
+def curated_topic_entry(slug):
+    curated_topic = None
+    for c in app.config['CURATED_TOPICS']:
+        if c['url_slug'] == slug:
+            curated_topic = c
+    if not curated_topic:
+        abort(404)
+   
+    return render_template(
+        'curated-topic-entry.html', 
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal'),
+            ('/curated/', 'Curated Topics')
         ],
         curated_topic = curated_topic,
         search_results = {},

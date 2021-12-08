@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container section browse-view">
+    <div class="columns is-variable is-8">
+        <div class="column is-one-quarter browse-sidebar">
+            <h2>Browse</h2>
+            <ul>
+                <li><a href="/browse/?b=topics">Topics</a></li>
+                <li><a href="/browse/?b=people">People</a></li>
+                <li><a href="/browse/?b=places">Places</a></li>
+                <li><a href="/browse/?b=organizations">Organizations</a></li>
+                <li><a href="/browse/?b=decades">Decades</a></li>
+                <li><a href="/browse/?b=archives">Archives</a></li>
+            </ul>
+    
+            <h2>Featured Topic</h2>
+            <img class="is-hidden-mobile" src="/static/img/curated_topics/black_studies.jpg"/>
+            <p><a href="/curated/">Black Studies</a></p>
+            <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
+        </div>
+        <div class="column">
+            <h1>{{ title }}</h1>
+
+	    <p>The BMRC's Curated Topics List is a work-in-progress designed to
+help remedy the pervasive invisibility of primary source material documenting
+Black history and culture. We're inviting people who engage with collections on
+Black experiences to tell us what topics are most important in their work, that
+may resonate deeply with users. It will comprise a special vocabulary that
+concisely encapsulates the subject domain as a dynamic body of knowledge—like
+having a subject matter expert at your elbow!</p>
+
+	    <p>The project is in development now–if you are a scholar,
+educator, reference librarian, enthusiast, or researcher in Black Studies, get
+in touch! We need you to help create a robust and relevant resource for
+studying Black history and culture. Want to know more, or join in a working
+group? Email the Portal Archivist, Laurie Lee Moses at <a
+href="mailto:lmoses@uchicago.edu">lmoses@uchicago.edu</a>.</p>
+
+            <ul>
+                {% for curated_topic in curated_topics %}
+                    <li><a href="/curated/{{ curated_topic['url_slug'] }}">{{ curated_topic['title'] }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div> 
+</div>
+
+{% endblock %}

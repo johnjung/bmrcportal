@@ -488,6 +488,19 @@ def curated_topic_entry(slug):
         title = curated_topic['title']
     )
 
+@app.route('/exhibits/')
+def exhibits_index():
+    return render_template(
+        'exhibits-index.html', 
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
+        exhibits = [],
+        search_results = {},
+        title = 'Exhibits'
+    )
+
 @app.route('/facet_view_all/')
 def facet_view_all():
     a = request.args.get('a', default='', type=str)

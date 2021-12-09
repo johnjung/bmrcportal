@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container section browse-view">
+    <div class="columns is-variable is-8">
+        <div class="column is-one-quarter browse-sidebar">
+            <h2>Browse</h2>
+            <ul>
+                <li><a href="/browse/?b=topics">Topics</a></li>
+                <li><a href="/browse/?b=people">People</a></li>
+                <li><a href="/browse/?b=places">Places</a></li>
+                <li><a href="/browse/?b=organizations">Organizations</a></li>
+                <li><a href="/browse/?b=decades">Decades</a></li>
+                <li><a href="/browse/?b=archives">Archives</a></li>
+            </ul>
+        </div>
+        <div class="column">
+            <h1>{{ title }}</h1>
+
+            <p>Coming soon</p>
+
+            <ul>
+                {% for exhibit in exhibits %}
+                    <li><a href="/exhibits/{{ exhibit['url_slug'] }}">{{ curated_topic['title'] }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div> 
+</div>
+
+{% endblock %}

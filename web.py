@@ -1,7 +1,7 @@
 import click, io, jinja2, json, math, os, random, urllib, urllib.parse, re, sys
 import lxml.etree as etree
 import xml.etree.ElementTree as ElementTree
-from flask import current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
+from flask import abort, current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
 from flask.cli import with_appcontext
 from urllib.parse import unquote_plus
 from bmrcportal import (clear_cache, delete_findingaid,
@@ -206,7 +206,7 @@ app.cli.add_command(browse_people)
 
 @click.command(name='browse-places')
 def browse_places():
-    '''Browse all people in MarkLogic.'''
+    '''Browse all places in MarkLogic.'''
     click.echo(
         json.dumps(
             get_collections(
@@ -218,7 +218,7 @@ app.cli.add_command(browse_places)
 
 @click.command(name='browse-topics')
 def browse_topics():
-    '''Browse all people in MarkLogic.'''
+    '''Browse all topics in MarkLogic.'''
     click.echo(
         json.dumps(
             get_collections(
@@ -455,18 +455,50 @@ def contact():
     )
 
 @app.route('/curated/')
-def curated():
-    curated_topics = app.config['CURATED_TOPICS']
-    curated_topic = random.choice(curated_topics)
+def curated_topic_index():
     return render_template(
-        'curated.html', 
+        'curated-topic-index.html', 
         breadcrumbs = [
             ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
             ('/', 'Collections Portal')
         ],
+        curated_topics = app.config['CURATED_TOPICS'],
+        search_results = {},
+        title = 'Curated Topics'
+    )
+
+@app.route('/curated/<slug>')
+def curated_topic_entry(slug):
+    curated_topic = None
+    for c in app.config['CURATED_TOPICS']:
+        if c['url_slug'] == slug:
+            curated_topic = c
+    if not curated_topic:
+        abort(404)
+   
+    return render_template(
+        'curated-topic-entry.html', 
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal'),
+            ('/curated/', 'Curated Topics')
+        ],
         curated_topic = curated_topic,
         search_results = {},
         title = curated_topic['title']
+    )
+
+@app.route('/exhibits/')
+def exhibits_index():
+    return render_template(
+        'exhibits-index.html', 
+        breadcrumbs = [
+            ('https://bmrc.lib.uchicago.edu/', 'Black Metropolis Research Consortium'),
+            ('/', 'Collections Portal')
+        ],
+        exhibits = [],
+        search_results = {},
+        title = 'Exhibits'
     )
 
 @app.route('/facet_view_all/')

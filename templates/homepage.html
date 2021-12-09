@@ -71,13 +71,16 @@ research help</a>.</p>
                 <div class="column is-full-tablet is-three-fifths-desktop">
                     <div class="columns">
                         <div class="column is-narrow">
-                            <img alt="" class="is-square" src="http://placekitten.com/150/150"/>
+                            <div style="width: 6rem;">
+                                <img alt="" class="is-square" src="/static/{{ member_spotlight_img }}" style="height: auto; width: 100%;"/>
+                            </div>
                         </div>
                         <div class="column">
-                            <h2>Member Spotlight</h2>
+                            <h2>Member Highlight</h2>
                             <h3>{{ member_spotlight_title }}</h3>
                             {{ member_spotlight_html|safe }}
-                            <a href="#">View collections from {{ member_spotlight_title }}</a>
+                            {% set u = 'https://bmrc.lib.uchicago.edu/archives/' + quote_plus(member_spotlight_title) %}
+                            <a href="/search/?f={{ u|urlencode }}">View collections from {{ member_spotlight_title }}</a>
                         </div>
                     </div>
                 </div>

@@ -552,10 +552,12 @@ def help():
 def homepage():
     member_spotlight_title = ''
     member_spotlight_html = ''
+    member_spotlight_img = ''
     for a in app.config['ARCHIVES']:
-       if a['finding_aid_prefix'] == 'BMRC.CCARO': 
+       if a['finding_aid_prefix'] == 'BMRC.NIU': 
            member_spotlight_title = a['name']
            member_spotlight_html = a['member_spotlight_html']
+           member_spotlight_img = a['archivebox_logo']
 
     facet = random.choice((
         'https://bmrc.lib.uchicago.edu/topics/',
@@ -582,6 +584,7 @@ def homepage():
         discover_more_facet = discover_more_facet,
         member_spotlight_title = member_spotlight_title,
         member_spotlight_html = member_spotlight_html,
+        member_spotlight_img = member_spotlight_img,
         search_results = {},
         title = 'Collections Portal'
     )

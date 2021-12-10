@@ -20,28 +20,21 @@
             <p><a href="/curated/">Explore all curated topics &gt;&gt;</a></p>
         </div>
         <div class="column">
-            <h1>{{ title }}</h1>
+            <h1>BMRC Curated Topics List – a work-in-progress</h1>
 
-	    <p>The BMRC's Curated Topics List is a work-in-progress designed to
-help remedy the pervasive invisibility of primary source material documenting
-Black history and culture. We're inviting people who engage with collections on
-Black experiences to tell us what topics are most important in their work, that
-may resonate deeply with users. It will comprise a special vocabulary that
-concisely encapsulates the subject domain as a dynamic body of knowledge—like
-having a subject matter expert at your elbow!</p>
+            <p>The BMRC's Curated Topics List is a subject list with a focus designed to help remedy the pervasive invisibility of primary source material documenting Black history and culture. We're inviting people who engage with collections on Black experiences to tell us what topics are most important in their work, that may resonate deeply with users. Each topic will include a note about its significance to Black studies, and all collections information in the BMRC Portal will eventually be tagged with one or more of these topics. The set of about 100 or so topics will comprise a special vocabulary that concisely encapsulates the subject domain as a dynamic body of knowledge--like having a subject matter expert at your elbow!</p>
 
-	    <p>The project is in development now–if you are a scholar,
-educator, reference librarian, enthusiast, or researcher in Black Studies, get
-in touch! We need you to help create a robust and relevant resource for
-studying Black history and culture. Want to know more, or join in a working
-group? Email the Portal Archivist, Laurie Lee Moses at <a
-href="mailto:lmoses@uchicago.edu">lmoses@uchicago.edu</a>.</p>
+            <h2>Candidate Topics for the BMRC List – 2021</h2>
 
             <ul>
                 {% for curated_topic in curated_topics %}
                     <li><a href="/curated/{{ curated_topic['url_slug'] }}">{{ curated_topic['title'] }}</a></li>
                 {% endfor %}
             </ul>
+
+            <h2>Help Curate the List!</h2>
+
+            <p>The project is in development now–if you are a scholar, educator, reference librarian, enthusiast, or researcher in Black Studies, get in touch! We need you to help create a robust and relevant resource for studying Black history and culture. Want to know more, or join in a working group? Email the Portal Archivist, Laurie Lee Moses at <a href="mailto:lmoses@uchicago.edu">lmoses@uchicago.edu</a>.</p>
 
         </div>
     </div> 

@@ -263,7 +263,7 @@ class TestBMRCPortalFindingAidTransformation(unittest.TestCase):
                     etree.fromstring('''<ead:div xmlns:ead="urn:isbn:1-931666-22-9"><ead:c>1</ead:c></ead:div>''')
                 )
             ).decode('utf-8'),
-            '<div class="ead_div"><div class="ead_c ead_c01">1</div></div>'
+            '<div class="ead_div"><div class="ead_c ead_c01 ">1</div></div>'
         )
 
         self.assertEqual(
@@ -562,7 +562,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html/>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul/></div>'
+            '<ul/>'
         )
 
     def test_navigation_single_level(self):
@@ -573,7 +573,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li></ul></div>'
+            '<ul><li><a href="#t1">1</a></li></ul>'
         )
 
         # two <h2>s
@@ -583,7 +583,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h2 id="t2">2</h2></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a></li></ul></div>'
+            '<ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a></li></ul>'
         )
 
     def test_navigation_two_levels(self):
@@ -594,7 +594,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li></ul>'
         )
 
         # h2, h2, h3
@@ -604,7 +604,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h2 id="t2">2</h2><h3 id="t3">3</h3></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></div>'
+            '<ul><li><a href="#t1">1</a></li><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul>'
         )
 
 
@@ -615,7 +615,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h3 id="t3">3</h3></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li><li><a href="#t3">3</a></li></ul></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li><li><a href="#t3">3</a></li></ul></li></ul>'
         )
 
         # h2, h3, h2
@@ -625,7 +625,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h2 id="t3">3</h2></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a></li></ul>'
         )
 
         # h2, h3, h2, h3
@@ -635,7 +635,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h2 id="t3">3</h2><h3 id="t4">4</h3></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a><ul><li><a href="#t4">4</a></li></ul></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a></li></ul></li><li><a href="#t3">3</a><ul><li><a href="#t4">4</a></li></ul></li></ul>'
         )
 
     def test_navigation_three_levels(self):
@@ -646,7 +646,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li></ul>'
         )
 
         # h2, h3, h4, h2
@@ -656,7 +656,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4><h2 id="t4">4</h2></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li><li><a href="#t4">4</a></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li></ul></li></ul></li><li><a href="#t4">4</a></li></ul>'
         )
 
         # h2, h3, h4, h4, h2
@@ -666,7 +666,7 @@ class TestBMRCPortalNavigation(unittest.TestCase):
                     etree.fromstring('''<html><h2 id="t1">1</h2><h3 id="t2">2</h3><h4 id="t3">3</h4><h4 id="t4">4</h4><h2 id="t5">5</h2></html>''')
                 )
             ).decode('utf-8'),
-            '<div><h2>Contents</h2><ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li><li><a href="#t4">4</a></li></ul></li></ul></li><li><a href="#t5">5</a></li></ul></div>'
+            '<ul><li><a href="#t1">1</a><ul><li><a href="#t2">2</a><ul><li><a href="#t3">3</a></li><li><a href="#t4">4</a></li></ul></li></ul></li><li><a href="#t5">5</a></li></ul>'
         )
 
 

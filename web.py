@@ -1,7 +1,7 @@
 import click, io, jinja2, json, math, os, random, urllib, urllib.parse, re, sys
 import lxml.etree as etree
 import xml.etree.ElementTree as ElementTree
-from flask import abort, current_app, Flask, jsonify, redirect, render_template, request, send_from_directory
+from flask import abort, current_app, Flask, jsonify, redirect, render_template, request, Response, send_from_directory
 from flask.cli import with_appcontext
 from urllib.parse import unquote_plus
 from bmrcportal import (clear_cache, delete_findingaid,
@@ -792,6 +792,12 @@ def view():
         name = name,
         title = title
     )
+
+@app.route('/robots.txt')
+def robots():
+    r = Response(response='User-Agent: *\nDisallow: /\n', status=200, mimetype='text/plain')
+    r.headers['Content-Type'] = 'text/plain; charset=utf-8'
+    return r
 
 @app.route('/css/<path:path>')
 def css(path):

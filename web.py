@@ -731,6 +731,9 @@ def search():
 def view():
     id = request.args.get('id')
 
+    if id == None:
+        abort(404)
+
     def t(filename):
         return etree.XSLT(
             etree.parse(
@@ -747,11 +750,16 @@ def view():
     tr = t('regularize.xsl')
     tv = t('view.xsl')
 
+    try:
+        xml = get_findingaid(*server_args + (id,))
+    except ValueError:
+        abort(404)
+
     findingaid = tv(
         tr(
             etree.fromstring(
                 ElementTree.tostring(
-                    get_findingaid(*server_args + (id,)),
+                    xml,
                     encoding='utf8', 
                     method='xml'
                 )
@@ -810,6 +818,13 @@ def img(path):
 @app.route('/js/<path:path>')
 def js(path):
     return send_from_directory('js', path)
+
+@app.errorhandler(404)
+def invalid_route(e):
+    return render_template(
+        '404.html',
+        search_results = []
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -92,5 +92,5 @@ the sidebar. Search for "John Cage". The "Jazz" facet should be gone.
 Confirm that the sort interface works correctly. The current selected sort
 should be displayed as a button, and the inactive sorts should displayed as
 text. On hover, the inactive sorts should be displayed as buttons. Confirm
-that this works the same on the "view all facet overlay", the browse display,
+that this works the same on the "view all facet overlay", the browse display
 and on the search display.
